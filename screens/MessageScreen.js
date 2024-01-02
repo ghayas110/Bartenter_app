@@ -82,7 +82,7 @@ const sendMessage = () => {
 <ScrollView>
 {messages.map((msg, index) => (
     <View key={index} style={msg.sender === parseInt(userId) ? styles.rightMsg : styles.leftMsg}>
-    <Text>{msg.message}</Text>
+    <Text style={{color:'black'}}>{msg.message}</Text>
     </View>
     ))}
     </ScrollView>

@@ -4,10 +4,12 @@ import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { RadioButton } from 'react-native-paper';
-
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { Checkbox } from 'react-native-paper';
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
+  const [checked, setChecked] = useState(false);
   const data = [
     { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg') },
     { id: 2, name: 'Bartinder', role: 'Bartender', image: require('../assets/userpic.jpg') },
@@ -16,15 +18,14 @@ const ProfileScreen = () => {
   const Item = ({ id, name, role, image, selectedId, setSelectedId, onPress }) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    <RadioButton
-    value={id}
-    status={ selectedId === id ? 'checked' : 'unchecked' }
-    onPress={() => setSelectedId(id)}
-    />
+    <BouncyCheckbox onPress={(isChecked) => {}} innerIconStyle={{
+      borderRadius: 0, // to make it a little round increase the value accordingly
+    }} />
+
     <Image source={image} style={{ width: 50, height: 50 }} />
     <View style={{marginLeft:15}}>
-    <Text>{name}</Text>
-    <Text>{role}</Text>
+    <Text style={{color:'black'}}>{name}</Text>
+    <Text style={{color:'black'}}>{role}</Text>
     </View>
     </View>
     <View>

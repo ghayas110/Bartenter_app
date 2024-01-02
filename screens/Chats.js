@@ -56,8 +56,8 @@ const navigation = useNavigation();
    
     
     <View style={{marginLeft:15}}>
-    <Text>{name}</Text>
-    <Text>{email}</Text>
+    <Text style={{color:'black'}}>{name}</Text>
+    <Text style={{color:'black'}}>{email}</Text>
     </View>
     </View>
     <View>
