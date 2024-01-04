@@ -7,57 +7,60 @@ import { useNavigation } from '@react-navigation/native';
 
 const Chats = () => {
 const [userId, setuserId] = useState()
-const [data, setdata] = useState()
+// const [data, setdata] = useState()
 const navigation = useNavigation();
-  AsyncStorage.getItem("user").then((value) => {
-    setuserId(value)});
-  
-  const AllChats = async () => {
-    // Your existing login logic
-    if (userId) {
 
-      try {
+  
+  // const AllChats = async () => {
+  //   // Your existing login logic
+  //   if (userId) {
+
+  //     try {
         
      
-          fetch('http://192.168.1.122:3000/alluser/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({userId}),
-          })
-          .then(response => response.json())
-          .then(chat => {
-            if (chat.success) {
-              console.log(chat)
-            setdata(chat.user)
+  //         fetch('http://192.168.1.122:3000/alluser/', {
+  //           method: 'POST',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //           },
+  //           body: JSON.stringify({userId}),
+  //         })
+  //         .then(response => response.json())
+  //         .then(chat => {
+  //           if (chat.success) {
+  //             console.log(chat)
+  //           setdata(chat.user)
 
-              // navigation.navigate('OtpS')
-            } else {
-              Alert.alert("Chat","No Cat Found")
-            }
-          });
+  //             // navigation.navigate('OtpS')
+  //           } else {
+  //             Alert.alert("Chat","No Cat Found")
+  //           }
+  //         });
         
   
-      } catch (error) {
-      console.log('An error occurred while processing your request.',error);
-      }
-    } else {
-      console.log('Please fill in all fields');
-    }
-  };
-
-  useEffect(() => {
-    AllChats()
-      }, [userId])
-  const Item = ({ id, name, email,onPress}) => (
+  //     } catch (error) {
+  //     console.log('An error occurred while processing your request.',error);
+  //     }
+  //   } else {
+  //     console.log('Please fill in all fields');
+  //   }
+  // };
+  const data = [
+    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"03002661456" },
+    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"03002661456" },
+    
+  ];
+  // useEffect(() => {
+  //   AllChats()
+  //     }, [userId])
+  const Item = ({ id, name, role,onPress}) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
    
     
     <View style={{marginLeft:15}}>
     <Text style={{color:'black'}}>{name}</Text>
-    <Text style={{color:'black'}}>{email}</Text>
+    <Text style={{color:'black'}}>{role}</Text>
     </View>
     </View>
     <View>
@@ -66,18 +69,22 @@ const navigation = useNavigation();
     </TouchableOpacity>
   );
   const renderItem = ({ item }) => (
-    <Item name={item.name} email={item.Email} image={item.image} onPress={()=>navigation.navigate('Message',item)}/>
+    <Item name={item.name} role={item.role} image={item.image} onPress={()=>navigation.navigate('Message',item)}/>
   );
   return (
     <SafeAreaView>
     <Header title="Chat" headerShown={true}/>
   
-    
+    <View style={styles.container}>
     <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+    data={data}
+    renderItem={renderItem}
+    keyExtractor={(item) => item.id}
     />
+    <TouchableOpacity style={styles.button}>
+    <Icon name="add" size={30} color="#fff" />
+    </TouchableOpacity>
+    </View>
 
     </SafeAreaView>
   )
@@ -88,9 +95,7 @@ export default Chats
 const styles = StyleSheet.create({
   container: {
    width:'auto',
-   height:"87%",
-    justifyContent: 'center',
-    alignItems: 'center',
+   height:"78.5%",
     backgroundColor: '#fff',
   },
   text: {
@@ -101,7 +106,7 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     right: 20,
-    bottom: 20,
+    bottom: 10,
     backgroundColor:'#F2994A',
     borderRadius:30,
     width :60,height :60, 

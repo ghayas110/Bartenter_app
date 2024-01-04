@@ -76,7 +76,7 @@ const sendMessage = () => {
 
   return (
 <>
-<HeaderDetails/>
+<HeaderDetails title={item.route.params.name} />
 <View style={styles.container}>
 
 <ScrollView>
@@ -115,7 +115,7 @@ leftMsg: {
 },
 rightMsg: {
   alignSelf: 'flex-end',
-  backgroundColor: '#007aff',
+  backgroundColor:'#FFA500',
   borderRadius: 10,
   marginBottom: 10,
   padding: 10,
