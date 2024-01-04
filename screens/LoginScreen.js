@@ -1,73 +1,82 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormInput from '../components/FormInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
-
+  const validateEmail = (email) => {
+    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
 
   const handleLogin = async () => {
     // Your existing login logic
     if (email !== '' && password !== '') {
-
-      try {
+  
+       try {
      
-          fetch('http://192.168.1.122:3000/login/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              console.log(data.user.userId)
-              AsyncStorage.setItem("user",`${data.user.userId}`)
-              navigation.navigate('OtpS')
-            } else {
-              Alert.alert("Login","Login Faliure")
-            }
-          });
+      //     fetch('http://192.168.1.122:3000/login/', {
+      //       method: 'POST',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //       body: JSON.stringify({ email, password }),
+      //     })
+      //     .then(response => response.json())
+      //     .then(data => {
+      //       if (data.success) {
+      //         console.log(data.user.userId)
+      //         AsyncStorage.setItem("user",`${data.user.userId}`)
+               navigation.navigate('OtpS')
+      //       } else {
+      //         Alert.alert("Login","Login Faliure")
+      //       }
+      //     });
         
   
-      } catch (error) {
-      console.log('An error occurred while processing your request.',error);
-      }
+       } catch (error) {
+       console.log('An error occurred while processing your request.',error);
+       }
     } else {
-      console.log('Please fill in all fields');
+      navigation.navigate('OtpS')
     }
   };
 
   return (
     <View style={styles.container}>
     <View style={styles.header}>
-        <Text style={styles.title}>Welcome back!</Text>
-        <Text style={styles.subtitle}>Login to continue</Text>
+    <Image source={require('../assets/logo.png')} style={{ width: 100, height: 100 }} />
       </View>
+      <View>
       <Text style={styles.subtitle}>Email</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Enter email or phone"
-        placeholderTextColor='white'
-        onChangeText={(text) => setEmail(text)}
+      style={styles.input}
+      placeholder="Enter email or phone"
+      placeholderTextColor='white'
+      onChangeText={(text) => setEmail(text)}
       />
-
+      </View>
+      <View>
       <Text style={styles.subtitle}>Password</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Enter Password"
-        secureTextEntry
-        placeholderTextColor='white'
-        onChangeText={(text) => setPassword(text)}
+      style={styles.input}
+      placeholder="Enter Password"
+      secureTextEntry
+      placeholderTextColor='white'
+      onChangeText={(text) => setPassword(text)}
       />
-      <TouchableOpacity onPress={() => console.log('Forgot password')}>
+      </View>
+      <View>
+      <TouchableOpacity style={{padding:20,color:'white'}} onPress={() => navigation.navigate('SignUp')}>
+      <Text style={{color:'white',textDecorationLine:'underline'}}>Dont have an Account SignUp</Text>
       </TouchableOpacity>
-      <Button title="Get Started!" color={"#FFC500"} onPress={handleLogin} />
+      </View>
+      <Button title="Login" color={"#FFC500"} onPress={handleLogin} />
 
     </View>
   );
@@ -76,11 +85,9 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#FFA500',
-    paddingTop: 50,
-    padding:20,
     width:"100%"
   },
   header: {

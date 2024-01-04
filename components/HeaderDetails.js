@@ -22,7 +22,7 @@ const HeaderDetails = ({title, headerShown}) => {
           <Text style={{color: '#fff', fontSize: 17}}>Back</Text>
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Brown</Text>
+        <Text style={styles.headerText}>{title}</Text>
       </View>
     </SafeAreaView>
   );

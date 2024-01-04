@@ -8,15 +8,35 @@ export default function Card() {
         <Text style={styles.title}>New Years Eve</Text>
         <Text style={styles.title}>16 – 30</Text>
       </ImageBackground>
-      <Text style={styles.text}>Host Email: cesigary@gmail.com</Text>
-      <Text style={styles.text}>Theme: Red and White</Text>
-      <Text style={styles.text}>Phone Number: 9193363336</Text>
-      <Text style={styles.text}>Date and Time: November 7, 2020 at 9:00 AM</Text>
+      <View style={styles.cardtext}>
+      <Text style={styles.text1}>Host Email: </Text>
+      <Text style={styles.text}> csjguy@gmail.com</Text>
+      </View>
+      <View style={styles.cardtext}>
+      <Text style={styles.text}>Theme:</Text>
+      <Text style={styles.text}> Red and White</Text>
+
+      </View>
+      <View style={styles.cardtext}>
+      <Text style={styles.text}>Phone Number:</Text>
+      <Text style={styles.text}> 9193363336</Text>
+
+      </View>
+      <View style={styles.cardtext}>
+      <Text style={styles.text}>Date and Time:</Text>
+      <Text style={styles.text}>November 7, 2020 at 9:00 AM</Text>
+
+      </View>
+   
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  cardtext:{
+display:'flex',
+flexDirection:'column',
+  },
   card: {
     borderRadius: 6,
     elevation: 3,
@@ -46,6 +66,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
+    color: 'black', // white color for better visibility on image
+    marginBottom: 5
+  },
+  text1: {
+    fontSize: 14,
     color: 'black', // white color for better visibility on image
     marginBottom: 5
   }

@@ -1,58 +1,41 @@
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View ,ScrollView} from 'react-native'
 import React from 'react'
 import Header from '../components/Header'
-import Icon from 'react-native-vector-icons/Entypo';
-import Card from '../components/Card';
-const BookedEvents = () => {
+import { useNavigation } from '@react-navigation/native';
 
+const MyCalender = () => {
+const navigation =useNavigation()
   const data = [
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"15 or Less",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
 
     
   ];
   const Item = ({ PhoneNumber, name,email, DateTime,theme, image, onPress }) => (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={onPress} style={styles.card}>
     <ImageBackground source={image} style={styles.image}>
-      <Text style={styles.title}>{name}</Text>
-      <Text style={styles.title}>16 – 30</Text>
+      
     </ImageBackground>
-    
-    <TouchableOpacity style={styles.cardtext2}>
-    <View  style={styles.cardtext}>
-    <Text style={styles.text1}>Host Email: </Text>
-    <Text style={styles.text}>{email}</Text>
-    </View>
-    <View style={{width:40,height:40,borderRadius:50,backgroundColor:'#F4E8D6',display:'flex',alignItems:'center',justifyContent:'center'
-  }}>
-    <Icon name="mail" color="#FFA500" size={20}/>
-    </View>
-    </TouchableOpacity>
+
+    <Text style={styles.text1}>{name}</Text>
+
+
  
-    <TouchableOpacity style={styles.cardtext}>
-    <Text style={styles.text1}>Theme:</Text>
     <Text style={styles.text}>{theme}</Text>
 
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.cardtext}>
-    <Text style={styles.text1}>Phone Number:</Text>
-    <Text style={styles.text}>{PhoneNumber}</Text>
 
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.cardtext}>
-    <Text style={styles.text1}>Date and Time:</Text>
+
     <Text style={styles.text}>{DateTime}</Text>
 
-    </TouchableOpacity>
    
  
-  </View>
+  </TouchableOpacity>
   );
   const renderItem = ({ item }) => (
-    <Item name={item.name} email={item.email} image={item.image} theme={item.theme} PhoneNumber={item.PhoneNumber} DateTime={item.DateTime}/>
+    <Item name={item.name} email={item.email} image={item.image} theme={item.theme} PhoneNumber={item.PhoneNumber} DateTime={item.DateTime} onPress={() => navigation.navigate('BookedDetails', {item})}/>
   );
   return (
     <View>
@@ -70,7 +53,7 @@ const BookedEvents = () => {
   )
 }
 
-export default BookedEvents
+export default MyCalender
 
 const styles = StyleSheet.create({
   cardtext:{
@@ -113,11 +96,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'black', // white color for better visibility on image
         marginBottom: 5,
-        fontWeight:"600"
+
       },
       text1: {
         fontSize: 14,
-        color: 'black', // white color for better visibility on image
+        color: 'orange', // white color for better visibility on image
    
       },
     container: {

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RadioButton } from 'react-native-paper';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Checkbox } from 'react-native-paper';
-const ProfileScreen = () => {
+const AdminProfileScreen = () => {
   const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
   const [checked, setChecked] = useState(false);
@@ -36,11 +36,11 @@ const ProfileScreen = () => {
     </TouchableOpacity>
   );
   const renderItem = ({ item }) => (
-    <Item name={item.name} role={item.role} image={item.image}  onPress={() => navigation.navigate('Details', {item})}/>
+    <Item name={item.name} role={item.role} image={item.image}  onPress={() => navigation.navigate('AdminDetailsScreen', {item})}/>
   );
   return (
     <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
-    <Header title="Profile" headerShown={true}/>
+    <Header title="Admin" headerShown={true}/>
   
     
     <FlatList
@@ -53,7 +53,7 @@ const ProfileScreen = () => {
   )
 }
 
-export default ProfileScreen
+export default AdminProfileScreen
 
 const styles = StyleSheet.create({
   container: {
