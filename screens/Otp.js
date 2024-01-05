@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useRef } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import ButtonInput from '../components/ButtonInput';
 
 const Otp = ({ onLogin }) => {
   const [otp, setOtp] = useState(['', '', '', '']);
@@ -76,9 +77,9 @@ const Otp = ({ onLogin }) => {
           />
         ))}
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleSubmit} >
-        <Text style={styles.buttonText}>Continue</Text>
-      </TouchableOpacity>
+      <ButtonInput title={"Continue"} onPress={handleSubmit}/>
+   
+      
     </View>
   );
 };
@@ -86,20 +87,20 @@ const Otp = ({ onLogin }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: '#FFA500',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
     paddingTop: 40,
     padding:20
   },
   title: {
     fontSize: 24,
-    color: 'white',
+    color: 'orange',
     marginBottom: 20,
   },
   subtitle: {
     fontSize: 16,
-    color: 'white',
+    color: 'orange',
     marginBottom: 20,
   },
   inputContainer: {
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     textAlign: 'center',
-    color: 'white',
+    color: 'orange',
   },
   button: {
     backgroundColor: '#FFC500',

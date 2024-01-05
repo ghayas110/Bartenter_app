@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Imag
 import { useNavigation } from '@react-navigation/native';
 import FormInput from '../components/FormInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ButtonInput from '../components/ButtonInput';
 
 
 const SignUp = () => {
@@ -27,46 +28,48 @@ const SignUp = () => {
   return (
     <View style={styles.container}>
     <View style={styles.header}>
-    <Image source={require('../assets/logo.png')} style={{ width: 100, height: 100 }} />
+    <Image source={require('../assets/mainlogo.png')} style={{ width: 200, height: 100 }} />
       </View>
       <View>
-      <Text style={styles.subtitle}>Email</Text>
-      <TextInput
-      style={styles.input}
-      placeholder="Enter email or phone"
-      placeholderTextColor='white'
-      onChangeText={(text) => setEmail(text)}
+      <FormInput 
+      placeholder={"Please enter Email address"}
+      placeholderColor={"black"}
+      icon={"mail"}
+      setValues={(text) => setEmail(text)}
+      
       />
       </View>
       <View>
-      <Text style={styles.subtitle}>Password</Text>
-      <TextInput
-      style={styles.input}
-      placeholder="Enter Password"
-      secureTextEntry
-      placeholderTextColor='white'
-      onChangeText={(text) => setPassword(text)}
+      <FormInput 
+      placeholder={"Please enter Password"}
+      placeholderColor={"black"}
+      icon={"lock-closed"}
+      setValues={(text) => setPassword(text)}
+      pass={true}
+      
       />
       </View>
       <View>
-      <Text style={styles.subtitle}>FullName</Text>
-      <TextInput
-      style={styles.input}
-      placeholder="Enter Full Name"
-      placeholderTextColor='white'
-      onChangeText={(text) => setName(text)}
+    
+      <FormInput 
+      placeholder={"Enter Full Name"}
+      placeholderColor={"black"}
+      icon={"mail"}
+      setValues={(text) => setName(text)}
+      
       />
       </View>
       <View>
-      <Text style={styles.subtitle}>Role</Text>
-      <TextInput
-      style={styles.input}
-      placeholder="Enter Role"
-      placeholderTextColor='white'
-      onChangeText={(text) => setRole(text)}
+   
+      <FormInput 
+      placeholder={"Enter Role"}
+      placeholderColor={"black"}
+      icon={"mail"}
+      setValues={(text) => setRole(text)}
+      
       />
       </View>
-      <Button title="Get Started!" color={"#FFC500"} onPress={handleLogin} />
+      <ButtonInput title={"Get Started!"} onPress={handleLogin}/>
 
     </View>
   );
@@ -77,7 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFA500',
+    backgroundColor: 'white',
     width:"100%"
   },
   header: {
