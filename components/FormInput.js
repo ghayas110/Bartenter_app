@@ -5,8 +5,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const FormInput = ({placeholder,placeholderColor,setValues,icon,pass,textcolor}) => {
   return (
+
     <View style={styles.searchContainer}>
-    <Icon name={icon} size={20} color="#fff" />
+  
+    <Icon name={icon} size={20} color="orange" />
 
     <TextInput
     style={styles.input}
@@ -26,15 +28,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#D98100',
+       
         paddingHorizontal: 5,
         width:"80%",
         marginTop: 10,
-        borderRadius:20
+        borderRadius:20,
+        borderColor:'black',
+        borderWidth:StyleSheet.hairlineWidth
       },
       input: {
         marginLeft: 10,
         flex: 1,
-        color:'white'
+        color:'black'
       },
 })

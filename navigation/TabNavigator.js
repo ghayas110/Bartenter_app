@@ -6,25 +6,26 @@ import ProfileScreen from "../screens/ProfileScreen";
 import ShopingCart from "../screens/ShopingCart";
 import PendingEvents from "../screens/PendingEvents";
 import BookedEvents from "../screens/BookedEvents";
-import Chats from "../screens/Chats";
-import Foundation from 'react-native-vector-icons/Foundation'
-import UserHomeScreen from "../screens/UserHomeScreen";
+import PendingIcons from '../assets/svg/1-04.svg'
+import BookedIcons from '../assets/svg/1-05.svg'
 import Job from "../screens/Job";
-import MyCalender from "../screens/MyCalender";
-
+import ProfileIcon from '../assets/svg/profileicon.svg';
+import ChatIcon from '../assets/svg/1-02.svg'
+import { SvgXml } from "react-native-svg";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
+
   return (
     <Tab.Navigator screenOptions={{
       headerShown: false
       }}>
       <Tab.Screen name="Profile" component={MainStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
-   
-          <Icon name="person" color={color} size={size}/>
+   <ProfileIcon width={size} height={size} fill={color} />
         ),
       }}/>
+
       <Tab.Screen name="Job" component={Job}   options={{
         tabBarIcon: ({ color, size }) => (    
           <Icon name="hourglass" color={color} size={size}  />
@@ -41,19 +42,19 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="PendingEvents" component={PendingEvents} options={{
         tabBarIcon: ({ color, size }) => (
        
-          <Icon name="scale" color={color} size={size}/>
+          <PendingIcons width={size} height={size} fill={color}/>
         ),
       }}/>
       <Tab.Screen name="BookedEvents" component={BookedEvents} options={{
         tabBarIcon: ({ color, size }) => (
        
-          <Icon name="calendar-number-outline" color={color} size={size}/>
+          <BookedIcons width={size} height={size} fill={color}/>
         ),
       }}/>
       <Tab.Screen name="Chats" component={ContactStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
        
-          <Icon name="chatbubbles" color={color} size={size}/>
+          <ChatIcon width={size} height={size} fill={color} />
         ),
       }}/>
       <Tab.Screen name="Admins" component={AdminStackNavigator} options={{
