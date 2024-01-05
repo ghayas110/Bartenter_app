@@ -4,10 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 import FormInput from '../components/FormInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonInput from '../components/ButtonInput';
+import { RadioButton } from 'react-native-paper'
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [checked, setChecked] = React.useState('user');
 
   const navigation = useNavigation();
   const validateEmail = (email) => {
@@ -20,7 +22,7 @@ const LoginScreen = () => {
     if (email !== '' && password !== '') {
   
        try {
-
+     AsyncStorage.setItem("type",`${checked}`)
       //     fetch('http://192.168.1.122:3000/login/', {
       //       method: 'POST',
       //       headers: {
@@ -44,7 +46,7 @@ const LoginScreen = () => {
        console.log('An error occurred while processing your request.',error);
        }
     } else {
-
+      AsyncStorage.setItem("type",checked)
       navigation.navigate('OtpS')
     }
   };
@@ -74,7 +76,12 @@ const LoginScreen = () => {
       pass={true}
       
       />
+      <RadioButton.Group  onValueChange={value => setChecked(value)} value={checked}>
+      <RadioButton.Item color='orange' label="User" value="user" />
+      <RadioButton.Item color='orange' label="Bartender" value="bartender" />
+      <RadioButton.Item color='orange' label="Admin" value="admin" />
 
+    </RadioButton.Group>
       </View>
       <View>
       <TouchableOpacity style={{padding:20,color:'white'}} onPress={() => navigation.navigate('SignUp')}>
