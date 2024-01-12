@@ -6,11 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 const MyCalender = () => {
 const navigation =useNavigation()
   const data = [
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"15 or Less",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"15 or Less",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/map.png') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/map.png') },
 
     
   ];

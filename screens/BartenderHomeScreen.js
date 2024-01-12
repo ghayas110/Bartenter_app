@@ -2,11 +2,12 @@ import { StyleSheet, Text, View,Button,Linking,Image } from 'react-native'
 import React from 'react'
 import HeaderDetails from '../components/HeaderDetails'
 import AboutHeader from '../components/AboutHeader'
+import MainHeader from '../components/MainHeader'
 
 const BartenderHomeScreen = () => {
   return (
  <View>
-    <AboutHeader screen={"about"}/>
+<MainHeader/>
  <View style={{  justifyContent: 'center', alignItems: 'center',height:'60%' }}>
  <Image source={require('../assets/logo1.png')} style={{ width: 50, height: 50 }} />
 

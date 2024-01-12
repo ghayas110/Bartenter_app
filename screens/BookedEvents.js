@@ -6,11 +6,11 @@ import Card from '../components/Card';
 const BookedEvents = () => {
 
   const data = [
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
+    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "November 7 2024", image: require('../assets/userpic.jpg') },
 
     
   ];

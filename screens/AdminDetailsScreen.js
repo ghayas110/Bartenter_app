@@ -8,8 +8,8 @@ const AdminDetailsScreen = ({route}) => {
 
   return (
     <View>
-    <HeaderDetails title={"John Brown"}/>
- <AdminProfileDetails name={route.params.item.name} email={route.params.item.email} PhoneNumber={route.params.item.PhoneNumber}/>
+    <HeaderDetails title={route.params.item.name}/>
+ <AdminProfileDetails name={route.params.item.name} email={route.params.item.email} number={route.params.item.number} signature_drink={route.params.item.signature_drink} payment_link={route.params.item.payment_link} speciality={route.params.item.speciality} />
     </View>
   )
 }

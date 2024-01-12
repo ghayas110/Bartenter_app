@@ -16,6 +16,8 @@ import MyCalender from "../screens/MyCalender";
 import CommentScreen from "../screens/CommentScreen";
 import AdminProfileScreen from "../screens/AdminProfileScreen";
 import AdminDetailsScreen from "../screens/AdminDetailsScreen";
+import AddJobScreen from "../screens/AddJobScreen";
+import JobDetailsScreen from "../screens/JobDetailsScreen";
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -90,4 +92,18 @@ const AdminStackNavigator = () => {
     </Stack.Navigator>
   );
 };
-export { CalenderStackNavigator,ContactStackNavigator,MainStackNavigator,AdminStackNavigator };
+const JobStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+      }}>
+      <Stack.Screen name="Jobs" component={Job} screenOptions={{
+        headerShown: false
+        }} />
+      <Stack.Screen name="AddJob" component={AddJobScreen} />
+      <Stack.Screen name="JobDetail" component={JobDetailsScreen} />
+    
+    </Stack.Navigator>
+  );
+};
+export { CalenderStackNavigator,ContactStackNavigator,MainStackNavigator,AdminStackNavigator,JobStackNavigator };

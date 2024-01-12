@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
-import { AdminStackNavigator, CalenderStackNavigator, ContactStackNavigator, MainStackNavigator} from "./StackNavigator";
+import { AdminStackNavigator, CalenderStackNavigator, ContactStackNavigator, JobStackNavigator, MainStackNavigator} from "./StackNavigator";
 import ProfileScreen from "../screens/ProfileScreen";
 import ShopingCart from "../screens/ShopingCart";
 import PendingEvents from "../screens/PendingEvents";
@@ -12,6 +12,8 @@ import Job from "../screens/Job";
 import ProfileIcon from '../assets/svg/profileicon.svg';
 import ChatIcon from '../assets/svg/1-02.svg'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Image } from "react-native";
+import { SvgXml } from "react-native-svg";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,7 +27,11 @@ const BottomTabNavigator = () => {
     });
   return (
     <Tab.Navigator
-    
+    tabBarOptions={{
+      activeTintColor: 'tomato',
+      inactiveTintColor: 'gray',
+     
+    }}
     
     screenOptions={{
       headerShown: false,
@@ -33,40 +39,39 @@ const BottomTabNavigator = () => {
       }}>
       <Tab.Screen name="Profile" component={MainStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
-          <Icon name="hourglass" color={color} size={size}  />
+          // <SvgXml xml={PendingIcons} color={color} />
+           <Image source={require('../assets/png/1-01.png')} style={{ width: 25, height: 20 ,objectFit:'contain' }} />
         ),
       }}/>
-{state == "bartender"?(
-      <Tab.Screen name="Job" component={Job}   options={{
+
+      <Tab.Screen name="Job" component={JobStackNavigator}   options={{
         tabBarIcon: ({ color, size }) => (    
           <Icon name="hourglass" color={color} size={size}  />
+
         ),
       }}/>
       
-      )
-      :state == "admin"?(
-        <>
+
         <Tab.Screen name="PendingEvents" component={PendingEvents} options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="hourglass" color={color} size={size}  />
+            <Image source={require('../assets/png/1-04.png')} style={{ width: 25, height: 20 ,objectFit:'contain' }} />
             
             ),
           }}/>
           <Tab.Screen name="BookedEvents" component={BookedEvents} options={{
             tabBarIcon: ({ color, size }) => (
-              <Icon name="hourglass" color={color} size={size}  />
+              <Image source={require('../assets/png/1-05.png')} style={{ width: 25, height: 20 ,objectFit:'contain' }} />
               
               ),
             }}/>
-            </>
+      
    
-      ):null
-    }   
+   
     
     <Tab.Screen name="Shop" component={ShopingCart}   options={{
       tabBarIcon: ({ color, size }) => (    
-        <Icon name="hourglass" color={color} size={size}  />
-      ),
+        <Image source={require('../assets/png/1-03.png')} style={{ width: 25, height: 20 ,objectFit:'contain' }} />
+        ),
     }}/>
       <Tab.Screen name="Calender" component={CalenderStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
@@ -78,10 +83,10 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="Chats" component={ContactStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
        
-          <Icon name="people-outline" color={color} size={size}/>
+          <Image source={require('../assets/png/1-02.png')} style={{ width: 25, height: 20 ,objectFit:'contain' }} />
         ),
       }}/>
-      {state == "admin"?
+      
 
       
       <Tab.Screen name="Admins" component={AdminStackNavigator} options={{
@@ -90,8 +95,7 @@ const BottomTabNavigator = () => {
           <Icon name="people-outline" color={color} size={size}/>
         ),
       }}/>
-      :null
-    }
+    
 
     </Tab.Navigator>
   );

@@ -6,15 +6,19 @@ import { useNavigation } from '@react-navigation/native';
 import { RadioButton } from 'react-native-paper';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Checkbox } from 'react-native-paper';
+import { useSelector } from 'react-redux'
+import { decrement, increment } from './counterSlice'
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
+  const count = useSelector((state) => state.auth.user)
   const [checked, setChecked] = useState(false);
   const data = [
-    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"03002661456" },
-    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"03002661456" },
+    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
+    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
     
   ];
+  console.log(count,"useresssee")
   const Item = ({ id, name, role, image, onPress }) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>

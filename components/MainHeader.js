@@ -9,62 +9,35 @@ import {
   import SearchInput from './SearchInput';
   import Icon from 'react-native-vector-icons/AntDesign';
   import {useNavigation} from '@react-navigation/native';
-  const AboutHeader = ({screen,name,onPress}) => {
+  const MainHeader = ({screen,name,onPress}) => {
     const navigation = useNavigation();
   
     return (
       <SafeAreaView>
         <View style={styles.headerContainer}>
-        {screen=="qr"?
-        <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={{display: "flex",flexDirection: "row"}}>
-            <Icon name="infocirlceo" size={24} color="#fff" />
-      </TouchableOpacity>:screen=="about"?
+   
           <TouchableOpacity
             onPress={() => navigation.navigate("QRScreen")}
             style={{display: "flex",flexDirection: "row"}}>
                 <Icon name="qrcode" size={24} color="#fff" />
           </TouchableOpacity>
-          :
-          <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{display: "flex",flexDirection: "row"}}>
-              <Icon name="left" size={24} color="#fff" />
-        </TouchableOpacity>
-
-        }
+      
   
-          <Text style={styles.headerText}>{name}</Text>
-          {screen=="comment"?
-          <TouchableOpacity
-          onPress={onPress}
-          style={{display: "flex",flexDirection: "row"}}>
-          <Text style={styles.headerText}>Post</Text>
-          </TouchableOpacity>
-          :null}
-          {screen=="SignOut"?
-          <TouchableOpacity
-          onPress={onPress}
-        
-          style={{display: "flex",flexDirection: "row"}}>
-          <Text style={styles.headerText}>Sign Out</Text>
-          </TouchableOpacity>
-      :null}
-{screen == "qr"?
+          <Text style={styles.headerText}>About</Text>
+       
             <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={{display: "flex",flexDirection: "row"}}>
             <Text style={styles.headerText}>Done</Text>
             </TouchableOpacity>
-:null}
+          
           
         </View>
       </SafeAreaView>
     );
   };
   
-  export default AboutHeader;
+  export default MainHeader;
   
   const styles = StyleSheet.create({
     headerContainer: {

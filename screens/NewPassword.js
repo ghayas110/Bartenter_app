@@ -7,10 +7,11 @@ import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 
-const LoginScreen = () => {
-  const [email, setEmail] = useState('');
+const NewPassword = ({route}) => {
+    const [email, setEmail] = useState(route?.params?.bodys?.email);
   const [password, setPassword] = useState('');
-  const [user_type, setUser_type] = React.useState(0);
+  const [cpassword, setcpassword] = useState('');
+  const [user_type, setuser_type] = useState(route?.params?.bodys?.user_type)
 
   const navigation = useNavigation();
   const validateEmail = (email) => {
@@ -18,43 +19,34 @@ const LoginScreen = () => {
     return re.test(email);
   };
 
-  const handleLogin = async () => {
-    if (email != '' && password != '') {
-      if (!validateEmail(email)) {
-        Alert.alert('Invalid Email', 'Please enter a valid email address');
-        return;
-      }
+  const handleSubmit = async () => {
+    if ( password != '' && password == cpassword) {
       console.log(email,password,user_type)
       const bodys= {email:email,password:password,user_type:user_type}
       try {
-        fetch('https://bartender.logomish.com/users/Login', {
-          method: 'POST',
+        fetch('https://bartender.logomish.com/users/FogetPassword', {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'x-api-key':'BarTenderAPI'
           },
-          body: JSON.stringify({ email:email, password:password,user_type:user_type }),
+          body: JSON.stringify({ email:email, password:password,user_type:0 }),
         })
         .then(response => response.json())
         .then(data => {
-          if(data){
-            if (data.message==="Success") {
-              Alert.alert("Login","Otp have been send to your email")
-              navigation.navigate('OtpS',{bodys})
-            } else {
-              Alert.alert("Login","Login Faliure")
-            }
-          }else{
+          console.log(data)
+          if (data.message==="Success") {
+            Alert.alert("Login","Password Changed Successfully")
+            navigation.navigate('Login')
+          } else {
             Alert.alert("Login","Login Faliure")
           }
-          console.log(data)
-     
         });
       } catch (error) {
         console.log('An error occurred while processing your request.',error);
       }
     } else {
-      Alert.alert('Please Fill All Fields')
+      Alert.alert('Please Match Password and Confirm Password')
     }
   };
   
@@ -65,14 +57,8 @@ const LoginScreen = () => {
     <Image source={require('../assets/logomain.png')} style={{ width: 200, height: 100 }} />
       </View>
       <View>
+
    
-      <FormInput 
-      placeholder={"Please enter Email address"}
-      placeholderColor={"black"}
-      icon={"mail"}
-      setValues={(text) => setEmail(text)}
-      
-      />
       </View>
       <View>
     
@@ -84,23 +70,21 @@ const LoginScreen = () => {
       pass={true}
       type={"password"}
       />
-      <TouchableOpacity style={{padding:20,color:'white'}} onPress={() => navigation.navigate('ForgotPassScreen')}>
-      <Text style={{color:'orange',textDecorationLine:'underline'}}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <RadioButton.Group  onValueChange={value => setUser_type(value)} value={user_type}>
-      <RadioButton.Item color='orange' label="Admin" value={0} />
-      <RadioButton.Item color='orange' label="Bartender" value={1} />
-      <RadioButton.Item color='orange' label="User" value={2} />
-      <RadioButton.Item color='orange' label="Buisness" value={3} />
-    </RadioButton.Group>
+      <PasswordInput 
+      placeholder={"Please Confirm Password"}
+      placeholderColor={"black"}
+      icon={"lock"}
+      setValues={(text) => setcpassword(text)}
+      pass={true}
+      type={"password"}
+      />
+   
       </View>
       <View>
-      <TouchableOpacity style={{padding:20,color:'white'}} onPress={() => navigation.navigate('SignUp')}>
-      <Text style={{color:'orange',textDecorationLine:'underline'}}>Dont have an Account SignUp</Text>
-      </TouchableOpacity>
+
       </View>
 
-      <ButtonInput title={"Login"} onPress={handleLogin}/>
+      <ButtonInput title={"Change Password"} onPress={handleSubmit}/>
     </View>
   );
 };
@@ -149,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default NewPassword;

@@ -5,49 +5,45 @@ import FormInput from '../components/FormInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
-import PasswordInput from '../components/PasswordInput';
 
 
-const SignUp = () => {
+const ForgotPassScreen =  ()=> {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
   const [user_type, setUser_type] = useState(0);
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('')
+
   
   const navigation = useNavigation();
-  const validateEmail = (email) => {
-    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
+  // const validateEmail = (email) => {
+  //   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //   return re.test(email);
+  // };
 
-  const handleLogin = async () => {
+  const handleSubmit = async () => {
     // Your existing login logic
-    if (email !== '' && password !== ''&& number!='' && name != '' ) {
-      if (!validateEmail(email)) {
-        Alert.alert('Invalid Email', 'Please enter a valid email address');
-        return;
-      }
+    if (email !== '' ) {
+      
       try {
+        const bodys = {email:email,user_type:user_type}
 
-          fetch('https://bartender.logomish.com/users/CreateUser', {
+          fetch('https://bartender.logomish.com/users/ForgetPasswordEmailVerify', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'x-api-key':'BarTenderAPI'
             },
-            body: JSON.stringify({name:name, email:email,number:number, password:password,user_type:user_type}),
+            body: JSON.stringify({ email:email,user_type:user_type}),
 
           })
           .then(response => response.json())
           .then(data => {
             if(data.message=="Success"){
-              Alert.alert('SignUp Successfull')
+              Alert.alert('otp sent Successfull')
  
-               navigation.navigate('Login')
+               navigation.navigate('OtpForget',{bodys})
             }
             else{
-              Alert.alert('SignUp Failed Please try Again')
+              Alert.alert('ForgotPassScreen Failed Please try Again')
             }
           
          
@@ -79,35 +75,10 @@ const SignUp = () => {
       
       />
       </View>
-      <View>
-      <PasswordInput 
-      placeholder={"Please enter Password"}
-      placeholderColor={"black"}
-      icon={"lock"}
-      setValues={(text) => setPassword(text)}
-      pass={true}
-      
-      />
-
-      </View>
+    
       <View>
     
-      <FormInput 
-      placeholder={"Enter Full Name"}
-      placeholderColor={"black"}
-      icon={"user"}
-      setValues={(text) => setName(text)}
-      
-      />
-      </View>
-      <View>
-         <FormInput 
-      placeholder={"Please enter Phone Number"}
-      placeholderColor={"black"}
-      icon={"phone"}
-      setValues={(text) => setNumber(text)}
-      
-      />
+   
       <RadioButton.Group  onValueChange={value => setUser_type(value)} value={user_type}>
       <RadioButton.Item color='orange' label="Admin" value={0} />
       <RadioButton.Item color='orange' label="Bartender" value={1} />
@@ -115,7 +86,7 @@ const SignUp = () => {
       <RadioButton.Item color='orange' label="Buisness" value={3} />
     </RadioButton.Group>
       </View>
-      <ButtonInput title={"Get Started!"} onPress={handleLogin}/>
+      <ButtonInput title={"Get Started!"} onPress={handleSubmit}/>
 
     </View>
   );
@@ -159,10 +130,10 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 20,
   },
-  signup: {
+  ForgotPassScreen: {
     color: 'white',
     marginTop: 20,
   },
 });
 
-export default SignUp;
+export default ForgotPassScreen;

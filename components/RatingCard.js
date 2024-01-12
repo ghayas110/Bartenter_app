@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React,{useState} from 'react'
 import StarRating from 'react-native-star-rating-widget'
 
-const RatingCard = ({rating,text}) => {
-  
+const RatingCard = ({ratingx,text}) => {
+  const [rating, setRating] = useState(0);
   return (
     <View style={styles.ratingcard}>
     <StarRating
     rating={rating}
-    
-    starSize={20}
-   />
+    onChange={setRating}
+    starSize={23}
+  />
     <Text style={{color:'black'}}>{text}</Text>
     </View>
   )

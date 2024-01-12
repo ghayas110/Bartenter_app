@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 const BookedDetails = () => {
     const navigation = useNavigation()
     const data = [
-        { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"03002661456" },
+        { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
         
       ];
       const commentData = [

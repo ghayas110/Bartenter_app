@@ -4,13 +4,13 @@ import React,{useState} from 'react'
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icons from './Icons';
 
+const PasswordInput = ({placeholder,placeholderColor,setValues,icon,pass}) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-const FormInput = ({placeholder,placeholderColor,setValues,icon,pass,currentvalue,edit,title,keyboardType}) => {
- 
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
   return (
-    <>
-
- 
 
     <View style={styles.searchContainer}>
   
@@ -21,18 +21,17 @@ const FormInput = ({placeholder,placeholderColor,setValues,icon,pass,currentvalu
     placeholder={placeholder}
     placeholderTextColor={placeholderColor}
     onChangeText={setValues}
-    value={currentvalue}
-    keyboardType={keyboardType}
-    secureTextEntry={pass}
-    editable={edit}
+    secureTextEntry={!isPasswordVisible}
+    
   />
-
+  <TouchableOpacity style={styles.icon} onPress={togglePasswordVisibility}>
+  <Icons.MaterialCommunityIcons name={isPasswordVisible ? 'eye' : 'eye-off'} size={20} color="#000" />
+</TouchableOpacity>
   </View>
-  </>
   )
 }
 
-export default FormInput
+export default PasswordInput
 
 const styles = StyleSheet.create({
     searchContainer: {

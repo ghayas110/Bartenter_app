@@ -4,7 +4,7 @@ import Header from './Header';
 import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
 
-export default function AdminProfileDetails({name,email,PhoneNumber}) {
+export default function AdminProfileDetails({name,email,number,signature_drink,payment_link,speciality}) {
   const [rating, setRating] = useState(0);
   
   return (
@@ -25,19 +25,19 @@ export default function AdminProfileDetails({name,email,PhoneNumber}) {
  </View>
  <View style={styles.section}>
  <Text>Speciality</Text>
- <Text>Shots</Text>
+ <Text>{speciality}</Text>
  </View>
  <View style={styles.section}>
  <Text>Phone</Text>
- <Text style={{color:'#FFA500'}}>{PhoneNumber}</Text>
+ <Text style={{color:'#FFA500'}}>{number}</Text>
  </View>
  <View style={styles.section}>
  <Text>Signature Drink</Text>
- <Text>Shots</Text>
+ <Text>{signature_drink}</Text>
  </View>
  <View style={styles.section}>
  <Text>Personal Payment Link</Text>
- <Text>cashapp/cashapp</Text>
+ <Text>{payment_link}</Text>
  </View>
  <View style={styles.rating}>
  <Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>Rating and Reviews</Text>

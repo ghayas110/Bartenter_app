@@ -1,12 +1,13 @@
 import React from 'react';
 import { TouchableOpacity, Text, Dimensions, StyleSheet } from 'react-native';
-
+import Icon from 'react-native-vector-icons/AntDesign';
 const { width, height } = Dimensions.get('window');
 
-const MyButton = ({onPress,title}) => {
+const ButtonInput = ({onPress,title,icon}) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+      <Text style={styles.text}>{title} </Text>
+      <Icon name={icon} size={20} color="white"/>
     </TouchableOpacity>
   );
 };
@@ -16,6 +17,7 @@ const styles = StyleSheet.create({
     width: width * 0.5, // 80% of screen width
     height: height * 0.06, // 10% of screen height
     backgroundColor: 'orange',
+    flexDirection:'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 40,
@@ -27,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyButton;
+export default ButtonInput;

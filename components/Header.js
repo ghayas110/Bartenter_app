@@ -3,14 +3,22 @@ import React,{useState} from 'react'
 import SearchInput from './SearchInput';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-const Header = ({title,headerShown}) => {
+const Header = ({title,headerShown,onPress}) => {
     const navigation = useNavigation();
   return (
     <SafeAreaView>
     <View style={styles.headerContainer}>
-    <TouchableOpacity onPress={()=>navigation.openDrawer()}>
+    <View style={styles.siders}>
+    <TouchableOpacity onPress={()=>navigation.openDrawer("helloo")}>
     <Icon name="menu" size={24} color="#fff" />
     </TouchableOpacity>
+    {title=="Job"?
+    <TouchableOpacity style={styles.siders} onPress={onPress}>
+    
+    <Icon name="add" size={24} color="#fff" />
+    <Text style={{color:'white',fontSize:14}}>Add Job</Text>
+    </TouchableOpacity>:null}
+    </View>
     <Text style={styles.headerText}>{title}</Text>
     {headerShown?
     <SearchInput/>:""}
@@ -23,6 +31,11 @@ const Header = ({title,headerShown}) => {
 export default Header
 
 const styles = StyleSheet.create({
+  siders:{
+display:'flex',
+alignItems:'center',justifyContent:'space-between',
+flexDirection:'row'
+  },
     headerContainer: {
         backgroundColor: '#FFA500',
         paddingTop: 40,
