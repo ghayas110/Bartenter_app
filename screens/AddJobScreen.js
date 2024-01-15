@@ -52,29 +52,35 @@ const AddJobScreen = () => {
     });
   };
   const handleSubmit = async (e) => {
+    // console.log(,"ghfhfghfghfghfghfgfghf")
+    // return
     const formData = new FormData();
-    const file = {
-      uri: imageUri,
-      type: 'image/jpeg', // or the correct MIME type for your image
-      name: `${new Date()}event_image.jpg`, // you can give any name
-    };
-    formData.append('file', file);
+    
     formData.append("post_type", post_type);
     formData.append("post_title", post_title)
     formData.append("post_description", post_description)
     formData.append("contact_email", contact_email)
     formData.append('contact_phone', contact_phone)
-    formData.append("event_date",event_date)
-    formData.append("event_time",event_time)
+    formData.append("event_date",new Date(event_date).toISOString().split('T')[0])
+    formData.append("event_time",new Date(event_time).toISOString().split('T')[1].split('.')[0])
     formData.append("event_duration", event_duration)
     formData.append("event_location", event_location)
     formData.append("event_lat", '31.968599')
     formData.append("event_lng", '-99.901810')
     formData.append("no_of_people","12")
     formData.append("theme","Red and White")
-    fetch('https://bartender.logomish.com/posts/CreatePost', {
+    const file = {
+      uri: imageUri,
+      type: 'image/jpeg', // or the correct MIME type for your image
+      name: `${new Date()}event_image.jpg`, // you can give any name
+    };
+    formData.append('file', file);
+    try {
+      fetch('https://bartender.logomish.com/posts/CreatePost', {
+     
           method: 'POST',
           headers: {
+            'Accept': 'application/json',
             'Content-Type': 'multipart/form-data',
             'accesstoken': `Bearer ${count?.access_token}`,
             'x-api-key': 'BarTenderAPI',
@@ -83,25 +89,28 @@ const AddJobScreen = () => {
         })
         .then(response => response.json())
         .then(data => {
-        if(data?.message == "Success" ){
+          console.log(data)
+        if(data.message=="Success"){
             Alert.alert("Job Created")
             navigation.goBack()
         }else{
             Alert.alert("Job Not Created")
         }
         });
+    } catch (error) {
+      console.log('An error occurred while processing your request.', error);
+    }
+  
   };
   const onChangeEnd = (event, selectedDate) => {
-    const currentDate = selectedDate || event_date;
+    const currentDate = selectedDate || event;
     setShowPicker(Platform.OS === 'ios');
     setevent_date(currentDate);
-    console.log('End Date:', currentDate);
   };
   const onChangeStart = (event, selectedDate) => {
     const currentDate = selectedDate || event_time;
     setShowTimePicker(Platform.OS === 'ios');
     setevent_time(currentDate);
-    console.log('End Date:', currentDate);
   };
   return (
     <View>
@@ -161,7 +170,7 @@ const AddJobScreen = () => {
             <FormInput
               placeholder={'Please enter event time'}
               placeholderColor={'black'}
-              currentvalue={event_time.toLocaleString()}
+              currentvalue={new Date(event_time).toISOString().split('T')[1].split('.')[0]}
               edit={false}
             />
           </TouchableOpacity>

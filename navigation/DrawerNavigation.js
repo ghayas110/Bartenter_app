@@ -12,12 +12,12 @@ import { useSelector } from "react-redux";
 import Icons from "../components/Icons";
 const Drawer = createDrawerNavigator();
 
-function CustomDrawer(props) {
-  const count = useSelector((state) => state.auth.user)
+function CustomDrawer(props) {  const count = useSelector((state) => state.auth.user)
+
   const navigation =useNavigation()
   const [data, setdata] = useState()
   const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${count.user_data.image}`);
-  console.log("get props",props)
+
   const handleSubmit = async () => {
 
     try {
@@ -31,7 +31,6 @@ function CustomDrawer(props) {
       })
       .then(response => response.json())
       .then(dataa => {
-        console.log(dataa?.users)
         setImageUri(`https://bartender.logomish.com/${dataa?.users[0].image}`)
        setdata(dataa?.users[0])
       });
@@ -41,7 +40,7 @@ function CustomDrawer(props) {
  
 };
   useEffect(() => {
-    console.log("han khul rha h")
+   
     handleSubmit()
   }, [props])
 

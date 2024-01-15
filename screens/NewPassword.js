@@ -21,7 +21,7 @@ const NewPassword = ({route}) => {
 
   const handleSubmit = async () => {
     if ( password != '' && password == cpassword) {
-      console.log(email,password,user_type)
+   
       const bodys= {email:email,password:password,user_type:user_type}
       try {
         fetch('https://bartender.logomish.com/users/FogetPassword', {
@@ -30,11 +30,10 @@ const NewPassword = ({route}) => {
             'Content-Type': 'application/json',
             'x-api-key':'BarTenderAPI'
           },
-          body: JSON.stringify({ email:email, password:password,user_type:0 }),
+          body: JSON.stringify({ email:email, password:password,user_type:user_type }),
         })
         .then(response => response.json())
         .then(data => {
-          console.log(data)
           if (data.message==="Success") {
             Alert.alert("Login","Password Changed Successfully")
             navigation.navigate('Login')

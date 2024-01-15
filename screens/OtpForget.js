@@ -56,7 +56,7 @@ const bodys ={email:email,user_type:user_type}
                  'Content-Type': 'application/json',
                  'x-api-key':'BarTenderAPI'
                },
-               body: JSON.stringify({ otp:enteredOtp,email:email,user_type:0 }),
+               body: JSON.stringify({ otp:enteredOtp,email:email,user_type:user_type }),
              })
              .then(response => response.json())
              .then(data => {

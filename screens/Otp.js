@@ -47,7 +47,7 @@ const Otp = ({ onLogin,route }) => {
 
     const enteredOtp = otp.join('');
     console.log('Entered OTP:',parseInt(enteredOtp) );
-    // Add your logic here to handle the entered OTP (e.g., send to server)
+   
     try {
       if (otp) {
 
@@ -59,7 +59,7 @@ const Otp = ({ onLogin,route }) => {
                  'Content-Type': 'application/json',
                  'x-api-key':'BarTenderAPI'
                },
-               body: JSON.stringify({ otp:enteredOtp,email:email,user_type:0 }),
+               body: JSON.stringify({ otp:enteredOtp,email:email,user_type:user_type }),
              })
              .then(response => response.json())
              .then(data => {

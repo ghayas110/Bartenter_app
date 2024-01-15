@@ -18,10 +18,8 @@ const ChangePassword = () => {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   };
-console.log( 'accesstoken',count?.user_data[0]?.email)
   const handleSubmit = async () => {
     if ( password != '' ) {
-      console.log(count?.user_data[0]?.email,password,count?.user_data[0]?.user_type)
       const bodys= {email:email,password:password,user_type:user_type}
       try {
         fetch('https://bartender.logomish.com/users/ChangePassword', {
@@ -35,7 +33,6 @@ console.log( 'accesstoken',count?.user_data[0]?.email)
         })
         .then(response => response.json())
         .then(data => {
-          console.log(data)
           if (data.message==="Success") {
             Alert.alert("Login","Password Changed Successfully")
             navigation.navigate('Login')
