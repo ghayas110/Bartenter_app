@@ -126,7 +126,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="Notification" component={Notification} options={{
         tabBarIcon: ({ color, size }) => (
        
-          <Icon name="play" color={color} size={size}/>
+          <Icon name="notifications" color={color} size={size}/>
         ),
       }}/>
     </Tab.Navigator>

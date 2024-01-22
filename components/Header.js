@@ -13,6 +13,9 @@ const Header = ({title,headerShown,onPress}) => {
     <TouchableOpacity onPress={()=>navigation.openDrawer("helloo")}>
     <Icon name="menu" size={24} color="#fff" />
     </TouchableOpacity>
+    {
+      title=="Notification"?<Icon name="settings-outline" size={24} color="#fff" />:""
+    }
     {title=="Job"?
     <TouchableOpacity style={styles.siders} onPress={onPress}>
     
