@@ -30,7 +30,6 @@ const navigation = useNavigation();
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
      setData(data.users)
       });
     } catch (error) {

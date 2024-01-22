@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-const Chats = () => {
+const Notification = () => {
 const [userId, setuserId] = useState()
 // const [data, setdata] = useState()
 const navigation = useNavigation();
@@ -46,26 +46,27 @@ const navigation = useNavigation();
   //   }
   // };
   const data = [
-    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999",message:"Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999",message:"Do you have an Idea of what type of Drink..." },
-    
+    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds ', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999",message:"Do you have an Idea of what type of Drink..." },
+    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds ', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999",message:"Do you have an Idea of what type of Drink..." },
+
   ];
   // useEffect(() => {
   //   AllChats()
   //     }, [userId])
   const Item = ({ id, name,message, role,onPress}) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10,borderBottomWidth: 1, borderBottomColor: 'whitesmoke'   }}>
+    <View>
+    <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:50 }} />
+        </View>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
    
-    <View style={{marginLeft:15}}>
-    <Text style={{color:'black',fontWeight:'bold'}}>{message}</Text>
+    <View style={{padding:10}}>
+  
     <Text style={{color:'grey'}}>{name}</Text>
-    <Text style={{color:'grey',fontSize:12}}>{role}</Text>
+
     </View>
     </View>
-    <View>
-    <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
-        </View>
+  
     </TouchableOpacity>
   );
   const renderItem = ({ item }) => (
@@ -73,7 +74,7 @@ const navigation = useNavigation();
   );
   return (
     <SafeAreaView>
-    <Header title="Chat" headerShown={true}/>
+    <Header title="Notification" headerShown={false}/>
   
     <View style={styles.container}>
     <FlatList
@@ -88,7 +89,7 @@ const navigation = useNavigation();
   )
 }
 
-export default Chats
+export default Notification
 
 const styles = StyleSheet.create({
   container: {

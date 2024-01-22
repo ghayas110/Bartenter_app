@@ -5,7 +5,6 @@ import Header from '../components/Header'
 import HeaderDetails from '../components/HeaderDetails'
 
 const DetailsScreen = ({route}) => {
-  console.log(route.params.item)
 
   return (
     <View>

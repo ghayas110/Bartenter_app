@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get('window');
 
 const ButtonInput = ({onPress,title,icon}) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity style={title === "Create Event" || title === "Take Job" || title === "Start Chat"? styles.buttons : styles.button} onPress={onPress}>
       <Text style={styles.text}>{title} </Text>
       <Icon name={icon} size={20} color="white"/>
     </TouchableOpacity>
@@ -21,7 +21,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 40,
-    marginTop:15
+    marginTop:15,
+    marginBottom:5
+  },
+  buttons: {
+    width: width * 0.9, // 80% of screen width
+    height: height * 0.06, // 10% of screen height
+    backgroundColor: 'orange',
+    flexDirection:'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginTop:10,
+    marginBottom:10
   },
   text: {
     color: '#FFFFFF',

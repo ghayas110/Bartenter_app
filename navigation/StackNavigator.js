@@ -37,6 +37,7 @@ const MainStackNavigator = () => {
         headerShown: false
         }} />
       <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name="AddJob" component={AddJobScreen} />
       <Stack.Screen name="QRScreen" component={QrScreen} screenOptions={{
         headerShown: false
         }}/>
@@ -100,7 +101,6 @@ const JobStackNavigator = () => {
       <Stack.Screen name="Jobs" component={Job} screenOptions={{
         headerShown: false
         }} />
-      <Stack.Screen name="AddJob" component={AddJobScreen} />
       <Stack.Screen name="JobDetail" component={JobDetailsScreen} />
     
     </Stack.Navigator>

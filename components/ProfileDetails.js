@@ -1,31 +1,42 @@
 import React,{useState} from 'react';
-import { View, Text, StyleSheet, ImageBackground,TouchableOpacity,ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground,TouchableOpacity,ScrollView, Switch } from 'react-native';
 import Header from './Header';
 import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
 
-export default function ProfileDetails({name,email,PhoneNumber}) {
+export default function ProfileDetails({name,email,PhoneNumber,speciality,signatureDrink}) {
   const [rating, setRating] = useState(0);
-  
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
   return (
 
     <ScrollView style={styles.card}>
   
       <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
-        <Text style={styles.title}>{name}</Text>
         
       </ImageBackground>
+      <View style={styles.maintitle}>
+      <Text style={styles.titlemain}>Welcome Bartender.</Text>
+      <Text style={styles.titlemain}>You are a Bartender!</Text>
+      </View>
  <View style={styles.section}>
- <Text>Name</Text>
- <Text>{name}</Text>
+ <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>
+ <Text style={{color:'grey',fontWeight:"700"}}>Shots</Text>
  </View>
  <View style={styles.section}>
- <Text>Email</Text>
- <Text style={{color:'#FFA500'}}>{email}</Text>
+ <Text style={{color:'black',fontWeight:"700"}}>Signature Drink</Text>
+ <Text style={{color:'grey',fontWeight:"700"}}>Cocktail Drink</Text>
  </View>
  <View style={styles.section}>
- <Text>Phone</Text>
- <Text style={{color:'#FFA500'}}>{PhoneNumber}</Text>
+ <Text style={{color:'black',fontWeight:"700"}}>Available</Text>
+ <Switch
+        trackColor={{false: '#767577', true: 'orange'}}
+        thumbColor={"white"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+      />
  </View>
 
  <View style={styles.rating}>
@@ -33,7 +44,7 @@ export default function ProfileDetails({name,email,PhoneNumber}) {
 
 <RatingCard rating={2} text="Great work"/>
 <RatingCard rating={5} text="Great work"/>
-<RatingCard rating={4.5} text="Great work"/>
+
 
 
 
@@ -43,6 +54,18 @@ export default function ProfileDetails({name,email,PhoneNumber}) {
 }
 
 const styles = StyleSheet.create({
+  maintitle: {
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  titlemain:{
+    fontSize:22,
+    fontWeight:'bold',
+    fontFamily:'Lato, BlinkMacSystemFont, Roboto, sans-serif',
+    color:'black',
+
+  },
   card: {
     borderRadius: 6,
     elevation: 3,
@@ -66,15 +89,18 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent:'space-between',
     padding:5,
-    paddingVertical:15
+    paddingVertical:15,
+    borderBottomWidth: 1, // This adds a border at the bottom
+    borderBottomColor: 'whitesmoke' // This sets the color of the border
   },
+  
   rating:{
     padding:10,
     paddingVertical:15
   },
   image: {
     width: '100%', // specify the width
-    height: 200, // specify the height
+    height: 400, // specify the height
     justifyContent: "flex-end",
     alignItems: 'flex-start', // center the text horizontally
     marginBottom: 20,

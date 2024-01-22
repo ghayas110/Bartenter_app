@@ -23,6 +23,7 @@ const HeaderDetails = ({title, headerShown}) => {
         </TouchableOpacity>
 
         <Text style={styles.headerText}>{title}</Text>
+        
       </View>
     </SafeAreaView>
   );

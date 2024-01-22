@@ -4,7 +4,6 @@ import HeaderDetails from '../components/HeaderDetails'
 import AdminProfileDetails from '../components/AdminProfileDetails'
 
 const AdminDetailsScreen = ({route}) => {
-  console.log(route.params.item)
 
   return (
     <View>

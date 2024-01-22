@@ -3,6 +3,7 @@ import React,{useState} from 'react'
 import SearchInput from './SearchInput';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Icons from './Icons';
 const Header = ({title,headerShown,onPress}) => {
     const navigation = useNavigation();
   return (
@@ -16,7 +17,11 @@ const Header = ({title,headerShown,onPress}) => {
     <TouchableOpacity style={styles.siders} onPress={onPress}>
     
     <Icon name="add" size={24} color="#fff" />
-    <Text style={{color:'white',fontSize:14}}>Add Job</Text>
+    <Text style={{color:'white',fontSize:14}}>Add Jobs</Text>
+    </TouchableOpacity>:null}
+    {title=="Profile"?
+    <TouchableOpacity onPress={()=>navigation.navigate("EditProfile")}>
+    <Icons.AntDesign name="edit" size={24} color="#fff" />
     </TouchableOpacity>:null}
     </View>
     <Text style={styles.headerText}>{title}</Text>

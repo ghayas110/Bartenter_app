@@ -26,7 +26,12 @@ import {
             style={{display: "flex",flexDirection: "row"}}>
                 <Icon name="qrcode" size={24} color="#fff" />
           </TouchableOpacity>
-          :
+          :screen=="Form"|| name == "Edit Item"?
+          <TouchableOpacity
+onPress={() => navigation.goBack()}
+style={{display: "flex",flexDirection: "row"}}>
+<Text style={styles.headerText}>Cancel</Text>
+</TouchableOpacity>:
           <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{display: "flex",flexDirection: "row"}}>
@@ -58,7 +63,20 @@ import {
             <Text style={styles.headerText}>Done</Text>
             </TouchableOpacity>
 :null}
-          
+{name=="Edit Item"?
+<TouchableOpacity
+onPress={() => navigation.goBack()}
+style={{display: "flex",flexDirection: "row"}}>
+<Text style={styles.headerText}>Done</Text>
+</TouchableOpacity>
+:null}
+{name=="Form"?
+<TouchableOpacity
+onPress={() => navigation.goBack()}
+style={{display: "flex",flexDirection: "row"}}>
+<Text style={styles.headerText}>Submit</Text>
+</TouchableOpacity>
+:null}
         </View>
       </SafeAreaView>
     );
@@ -77,9 +95,10 @@ import {
       paddingBottom: 10,
     },
     headerText: {
-      color: '#fff',
+      color: 'whitesmoke',
       fontSize: 17,
       fontWeight: 'bold',
+
     },
   });
   

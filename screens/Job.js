@@ -5,16 +5,18 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import Icons from '../components/Icons';
+import MapComponent from '../components/MApComponent';
 
 const Job = () => {
   const navigation =useNavigation()
   const [data, setData] = useState();
   const count = useSelector((state) => state.auth.user)
-  // const data = [
-  //   { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
-  //   { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
+  const userState = count.user_data[0].user_type
+  const datas = [
+    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
+    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
     
-  // ];
+  ];
 
   const handleSubmit = async () => {
 
@@ -65,19 +67,12 @@ const Job = () => {
   );
   return (
     <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
-    <Header title="Job" headerShown={true} onPress={()=>navigation.navigate('AddJob')}/>
-  {data?
-    <FlatList
-  data={data}
-  renderItem={renderItem}
-  keyExtractor={(item) => item.id}
-/>:
-    <View style={styles.container}>
-    <Icons.MaterialCommunityIcons name="glass-cocktail" size={80} color="#ccc" />
-    <Text style={styles.text}>No Jobs Avalible</Text>
+    <Header title="Jobs" headerShown={true} onPress={()=>navigation.navigate('AddJob')}/>
+   
+<View>
+<MapComponent onPress={()=>navigation.navigate('JobDetail')}/>
+</View>
  
-  </View>
-  }
  
     </SafeAreaView>
   )

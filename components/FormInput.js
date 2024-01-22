@@ -5,13 +5,13 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Icons from './Icons';
 
 
-const FormInput = ({placeholder,placeholderColor,setValues,icon,pass,currentvalue,edit,title,keyboardType}) => {
+const FormInput = ({titleName,placeholder,placeholderColor,setValues,icon,pass,currentvalue,edit,iconss,title,keyboardType}) => {
  
   return (
     <>
 
- 
-
+{ titleName?
+<Text style={{marginTop:15,color:placeholderColor}}>{titleName}</Text>:null}
     <View style={styles.searchContainer}>
   
     <Icon name={icon} size={20} color="orange" />
@@ -26,8 +26,10 @@ const FormInput = ({placeholder,placeholderColor,setValues,icon,pass,currentvalu
     secureTextEntry={pass}
     editable={edit}
   />
+  <Icon name={iconss} size={20} color={placeholderColor} />
 
   </View>
+
   </>
   )
 }
@@ -39,11 +41,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-       
         paddingHorizontal: 5,
-        width:"80%",
         marginTop: 10,
-        borderRadius:20,
+        borderRadius:10,
         borderColor:'black',
         borderWidth:StyleSheet.hairlineWidth
       },

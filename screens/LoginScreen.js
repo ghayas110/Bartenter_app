@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
+import LoginInput from '../components/LoginInput';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -24,10 +25,9 @@ const LoginScreen = () => {
         Alert.alert('Invalid Email', 'Please enter a valid email address');
         return;
       }
-      console.log(email,password,user_type)
       const bodys= {email:email,password:password,user_type:user_type}
       try {
-        fetch('https://bartender.logomish.com/users/Login', {
+     fetch('https://bartender.logomish.com/users/Login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -38,6 +38,7 @@ const LoginScreen = () => {
         .then(response => response.json())
         .then(data => {
           if(data){
+            console.log(data)
             if (data.message==="Success") {
               Alert.alert("Login","Otp have been send to your email")
               navigation.navigate('OtpS',{bodys})
@@ -47,17 +48,17 @@ const LoginScreen = () => {
           }else{
             Alert.alert("Login","Login Faliure")
           }
-          console.log(data)
-     
+          
         });
+     
       } catch (error) {
-        console.log('An error occurred while processing your request.',error);
+        console.log('An error occurred while processing your request.',error[0]);
       }
     } else {
       Alert.alert('Please Fill All Fields')
     }
   };
-  
+
 
   return (
     <View style={styles.container}>
@@ -65,14 +66,14 @@ const LoginScreen = () => {
     <Image source={require('../assets/logomain.png')} style={{ width: 200, height: 100 }} />
       </View>
       <View>
-   
-      <FormInput 
-      placeholder={"Please enter Email address"}
+      <LoginInput 
+      placeholder={"Please enter Email addres"}
       placeholderColor={"black"}
       icon={"mail"}
       setValues={(text) => setEmail(text)}
-      
+      type={"email"}
       />
+
       </View>
       <View>
     

@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
+import LoginInput from '../components/LoginInput';
 
 
 const SignUp = () => {
@@ -41,6 +42,7 @@ const SignUp = () => {
           })
           .then(response => response.json())
           .then(data => {
+            console.log(data)
             if(data.message=="Success"){
               Alert.alert('SignUp Successfull')
  
@@ -71,7 +73,7 @@ const SignUp = () => {
     <Image source={require('../assets/mainlogo.png')} style={{ width: 200, height: 100 }} />
       </View>
       <View>
-      <FormInput 
+      <LoginInput 
       placeholder={"Please enter Email address"}
       placeholderColor={"black"}
       icon={"mail"}
@@ -92,7 +94,7 @@ const SignUp = () => {
       </View>
       <View>
     
-      <FormInput 
+      <LoginInput 
       placeholder={"Enter Full Name"}
       placeholderColor={"black"}
       icon={"user"}
@@ -101,7 +103,7 @@ const SignUp = () => {
       />
       </View>
       <View>
-         <FormInput 
+         <LoginInput 
       placeholder={"Please enter Phone Number"}
       placeholderColor={"black"}
       icon={"phone"}

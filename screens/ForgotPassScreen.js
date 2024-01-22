@@ -5,6 +5,7 @@ import FormInput from '../components/FormInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
+import LoginInput from '../components/LoginInput';
 
 
 const ForgotPassScreen =  ()=> {
@@ -67,7 +68,7 @@ const ForgotPassScreen =  ()=> {
     <Image source={require('../assets/mainlogo.png')} style={{ width: 200, height: 100 }} />
       </View>
       <View>
-      <FormInput 
+      <LoginInput 
       placeholder={"Please enter Email address"}
       placeholderColor={"black"}
       icon={"mail"}
