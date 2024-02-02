@@ -1,32 +1,83 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { View, Text, StyleSheet, ImageBackground,TouchableOpacity,ScrollView, Switch } from 'react-native';
 import Header from './Header';
 import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation,useIsFocused } from '@react-navigation/native';
 
-export default function ProfileDetails({name,email,PhoneNumber,speciality,signatureDrink}) {
+
+export default function ProfileDetails({name,user_type,email,PhoneNumber,speciality,signatureDrink}) {
+  const isFocused = useIsFocused();
   const [rating, setRating] = useState(0);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const[userState,setuserState]=useState(11)
+  const [users,setusers]=useState("")
+  const [data, setdata] = useState()
+  const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users?.image}`||'');
 
+
+  useEffect(() => {
+    async function replacementFunction(){        
+      const value =  await AsyncStorage.getItem('data');
+        AsyncStorage.setItem('data',value)
+          setusers(JSON.parse(value));
+          setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+          handleSubmit(JSON.parse(value));
+  }
+  replacementFunction()
+  }, [userState,isFocused]);
+
+  const handleSubmit = async (userss) => {
+    try {
+     await fetch(`https://bartender.logomish.com/users/GetUserById/${userss.user_data[0].id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.user_data[0].access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+        if(dataa?.users){
+          setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
+          setdata(dataa?.users[0])
+       
+        }
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+ 
+};
   return (
 
     <ScrollView style={styles.card}>
   
-      <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
+ 
+      {
+    data?.image==""?
+    <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
         
       </ImageBackground>
+      :
+      <ImageBackground source={{uri: imageUri}} style={styles.image}>
+        
+      </ImageBackground>
+  }
       <View style={styles.maintitle}>
-      <Text style={styles.titlemain}>Welcome Bartender.</Text>
-      <Text style={styles.titlemain}>You are a Bartender!</Text>
+      <Text style={styles.titlemain}>Welcome {data?.name}.</Text>
+      <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartender":""}!</Text>
       </View>
  <View style={styles.section}>
  <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>
- <Text style={{color:'grey',fontWeight:"700"}}>Shots</Text>
+ <Text style={{color:'grey',fontWeight:"700"}}>{data?.speciality}</Text>
  </View>
  <View style={styles.section}>
  <Text style={{color:'black',fontWeight:"700"}}>Signature Drink</Text>
- <Text style={{color:'grey',fontWeight:"700"}}>Cocktail Drink</Text>
+ <Text style={{color:'grey',fontWeight:"700"}}>{data?.signature_drink}</Text>
  </View>
  <View style={styles.section}>
  <Text style={{color:'black',fontWeight:"700"}}>Available</Text>

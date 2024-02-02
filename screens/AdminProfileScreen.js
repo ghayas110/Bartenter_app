@@ -5,9 +5,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { RadioButton } from 'react-native-paper';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Checkbox } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-const AdminProfileScreen = () => {
+
+const AdminProfileScreen = ({ route }) => {
 const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
   const [data, setData] = useState();
@@ -17,6 +19,15 @@ const navigation = useNavigation();
   //   { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
     
   // ];
+  const [users,setusers]=useState("")
+  useEffect(()=>{
+    async function replacementFunction(){
+    const value = await AsyncStorage.getItem("data");
+      setusers(JSON.parse(value))
+    }
+    replacementFunction()
+
+  },[route])
   const handleSubmit = async () => {
 
     try {
@@ -25,7 +36,7 @@ const navigation = useNavigation();
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
-          'accesstoken':`Bearer ${count?.access_token}`
+          'accesstoken':`Bearer ${users.access_token}`
         },
       })
       .then(response => response.json())
@@ -39,7 +50,7 @@ const navigation = useNavigation();
 };
   useEffect(() => {
     handleSubmit()
-  }, [])
+  }, [route ])
 
   const Item = ({ id, name,user_type,image, onPress }) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>

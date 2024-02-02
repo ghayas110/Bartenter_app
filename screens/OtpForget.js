@@ -10,7 +10,6 @@ const OtpForget = ({route}) => {
   const navigation = useNavigation()
   const inputRefs = useRef(Array(4).fill(0).map((_, i) => i));
 
-  console.log(route.params.bodys.email);
   const handleInputChange = (index, value) => {
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -60,10 +59,8 @@ const bodys ={email:email,user_type:user_type}
              })
              .then(response => response.json())
              .then(data => {
-              console.log(data)
                if (data) {
             navigation.navigate('NewPassword',{bodys})
-             console.log(data)
                } else {
                  Alert.alert("Login","Email UnVerify")
                }

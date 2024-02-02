@@ -7,7 +7,7 @@ import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 
-const NewPassword = ({route}) => {
+const NewPassword = () => {
     const [email, setEmail] = useState(route?.params?.bodys?.email);
   const [password, setPassword] = useState('');
   const [cpassword, setcpassword] = useState('');

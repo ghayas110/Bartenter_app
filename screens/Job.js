@@ -6,17 +6,23 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import Icons from '../components/Icons';
 import MapComponent from '../components/MApComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Job = () => {
+const Job = ({route}) => {
+  const [users,setusers]=useState("")
+  useEffect(()=>{
+    async function replacementFunction(){
+    const value = await AsyncStorage.getItem("data");
+      setusers(JSON.parse(value))
+    }
+    replacementFunction()
+
+  },[route])
   const navigation =useNavigation()
   const [data, setData] = useState();
   const count = useSelector((state) => state.auth.user)
-  const userState = count.user_data[0].user_type
-  const datas = [
-    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
-    { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
-    
-  ];
+  const userState = users.user_type
+ 
 
   const handleSubmit = async () => {
 
@@ -26,12 +32,11 @@ const Job = () => {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
-          'accesstoken':`Bearer ${count?.access_token}`
+          'accesstoken':`Bearer ${users?.user_data[0]?.access_token}`
         },
       })
       .then(response => response.json())
       .then(data => {
-
      setData(data.posts)
       });
     } catch (error) {
@@ -41,7 +46,7 @@ const Job = () => {
 };
   useEffect(() => {
     handleSubmit()
-  }, [data])
+  }, [route])
 
   const Item = ({ id, post_title,post_type,image, onPress }) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
@@ -70,7 +75,7 @@ const Job = () => {
     <Header title="Jobs" headerShown={true} onPress={()=>navigation.navigate('AddJob')}/>
    
 <View>
-<MapComponent onPress={()=>navigation.navigate('JobDetail')}/>
+<MapComponent onPress={() => navigation.navigate('JobDetail')} dataSend={data} />
 </View>
  
  

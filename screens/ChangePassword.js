@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormInput from '../components/FormInput';
@@ -7,11 +7,20 @@ import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 import { useSelector } from 'react-redux'
-const ChangePassword = () => {
-    const [email, setEmail] = useState(count?.user_data[0]?.email);
+const ChangePassword = ({route}) => {
+  const [users,setusers]=useState("")
+  useEffect(()=>{
+    async function replacementFunction(){
+    const value = await AsyncStorage.getItem("data");
+      setusers(JSON.parse(value))
+    }
+    replacementFunction()
+
+  },[route])
+    const [email, setEmail] = useState(users.email);
   const [password, setPassword] = useState('');
   const [cpassword, setcpassword] = useState('');
-  const [user_type, setuser_type] = useState(count?.user_data[0]?.user_type)
+  const [user_type, setuser_type] = useState(users.user_type)
   const count = useSelector((state) => state.auth.user)
   const navigation = useNavigation();
   const validateEmail = (email) => {
@@ -27,9 +36,9 @@ const ChangePassword = () => {
           headers: {
             'Content-Type': 'application/json',
             'x-api-key':'BarTenderAPI',
-            'accesstoken':`Bearer ${count?.access_token}`
+            'accesstoken':`Bearer ${users.access_token}`
           },
-          body: JSON.stringify({ email:count?.user_data[0]?.email, password:password,user_type:count?.user_data[0]?.user_type,newpassword:cpassword }),
+          body: JSON.stringify({ email:users.email, password:password,user_type:users.user_type,newpassword:cpassword }),
         })
         .then(response => response.json())
         .then(data => {

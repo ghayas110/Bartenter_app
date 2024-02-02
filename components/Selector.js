@@ -24,7 +24,7 @@ const SpecialtySelector = ({ specialties, onSpecialtySelected }) => {
         ]}
         onPress={() => handlePress(specialty)}
       >
-        <Text style={[selectedSpecialty === specialty ? styles.selected : styles.unselected]}>{specialty}</Text>
+        <Text style={[selectedSpecialty === specialty ? styles.selected : styles.unselected]}>{'$'+specialty}</Text>
       </TouchableOpacity>
     ))}
     </View>
