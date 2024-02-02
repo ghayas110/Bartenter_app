@@ -6,49 +6,59 @@ import { View, Text, Image } from 'react-native';
 import BartenderHomeScreen from "../screens/BartenderHomeScreen";
 import BottomTabNavigator from "./TabNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,useIsFocused } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import Icons from "../components/Icons";
 const Drawer = createDrawerNavigator();
 
-function CustomDrawer(props) {  const count = useSelector((state) => state.auth.user)
+function CustomDrawer(props) {  
+  const count =users
+  const isFocused = useIsFocused();
 
-  const navigation =useNavigation()
+  const[userState,setuserState]=useState(11)
+  const [users,setusers]=useState("")
   const [data, setdata] = useState()
-  const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${count.user_data.image}`);
+  const [imageUri, setImageUri] = useState('');
+    useEffect(() => {
+    async function replacementFunction(){        
+      const value =  await AsyncStorage.getItem('data');
+        AsyncStorage.setItem('data',value)
+          setusers(JSON.parse(value));
+          setImageUri(`https://bartender.logomish.com/${JSON.parse(value).user_data[0].image}`)
+          setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+          handleSubmit(JSON.parse(value));
+  }
+  replacementFunction()
+  }, [userState,props]);
+  const navigation =useNavigation()
 
   const handleSubmit = async () => {
 
     try {
-      fetch(`https://bartender.logomish.com/users/GetUserById/${count.user_data[0].id}`, {
+       fetch(`https://bartender.logomish.com/users/GetUserById/${users?.user_data[0]?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
-          'accesstoken':`Bearer ${count?.access_token}`
+          'accesstoken':`Bearer ${users.access_token}`
         },
       })
       .then(response => response.json())
       .then(dataa => {
-        setImageUri(`https://bartender.logomish.com/${dataa?.users[0].image}`)
+        setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
        setdata(dataa?.users[0])
       });
     } catch (error) {
-      console.log('An error occurred while processing your request.',error);
     }
  
 };
-  useEffect(() => {
-   
-    handleSubmit()
-  }, [props])
+
 
   return (
     <DrawerContentScrollView {...props}>
- 
       <View style={{marginTop:-10, flex: 1, backgroundColor: 'orange', padding: 25 }}>
-      {imageUri? (<Image source={{ uri: imageUri }} style={{width: 50, height: 50,borderRadius:50}} />):(<Icons.AntDesign name="user" size={70} />)}
+      {imageUri.split('.com/')[1]!=''&&imageUri.split('.com/')[1]!=null&&imageUri.split('.com/')[1]!=undefined? (<Image source={{ uri: imageUri }} style={{width: 50, height: 50,borderRadius:50}} />):(<Image source={require('../assets/cardimg.png')} style={{width: 50, height: 50,borderRadius:50}} />)}
         <View style={{paddingTop:15}}>
         <Text style={{color:"white",fontSize:20,fontWeight:'700'}}>{data?.name}</Text>
         <Text style={{color:'white'}}>{data?.email}</Text>

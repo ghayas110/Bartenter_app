@@ -62,19 +62,19 @@ const BookedDetails = () => {
       <View >
       <View
       style={styles.section}>
-        <Text style={{marginBottom: 10}}># of people</Text>
-        <Text style={{fontWeight: 'bold'}}> 15 or Less</Text>
+        <Text style={{marginBottom: 10,color:"black"}}># of people</Text>
+        <Text style={{fontWeight: 'bold',color:"black"}}> 15 or Less</Text>
       </View>
 
       <View
       style={styles.section}>
-        <Text style={{marginBottom: 10}}>Date and time</Text>
-        <Text>7 November 2024 12:23:23 PM </Text>
+        <Text style={{marginBottom: 10,color:"black"}}>Date and time</Text>
+        <Text style={{color:"black"}}>7 November 2024 12:23:23 PM </Text>
       </View>
       <View
       style={styles.section}>
-        <Text style={{marginBottom: 10}}>Event Duration</Text>
-        <Text>7 hours </Text>
+        <Text style={{marginBottom: 10,color:"black"}}>Event Duration</Text>
+        <Text style={{color:"black"}}>7 hours </Text>
       </View>
 
       <View
@@ -85,8 +85,8 @@ const BookedDetails = () => {
           width: '100%',
           padding: 10,
         }}>
-        <Text style={{marginBottom: 10}}>Phone Number</Text>
-        <Text>999-999-999 </Text>
+        <Text style={{marginBottom: 10,color:"black"}}>Phone Number</Text>
+        <Text style={{color:"black"}}>999-999-999 </Text>
       </View>
       </View>
       <View style={{padding:10}}>

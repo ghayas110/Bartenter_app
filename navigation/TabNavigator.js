@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
-import { AdminStackNavigator, CalenderStackNavigator, ContactStackNavigator, JobStackNavigator, MainStackNavigator} from "./StackNavigator";
+import { AdminStackNavigator, CalenderStackNavigator, ContactStackNavigator, JobStackNavigator, MainStackNavigator, PendingStackNavigator} from "./StackNavigator";
 import ProfileScreen from "../screens/ProfileScreen";
 import ShopingCart from "../screens/ShopingCart";
 import PendingEvents from "../screens/PendingEvents";
@@ -23,6 +23,17 @@ const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   const [state, setstate] = useState()
+  const [userState,setuserState]=useState()
+  const [users,setusers]=useState("")
+  useEffect(()=>{
+    async function replacementFunction(){
+    const value = await AsyncStorage.getItem("data");
+      setusers(JSON.parse(value))
+      setuserState(JSON.parse(value)?.user_data[0]?.user_type)
+    }
+    replacementFunction()
+
+  },[])
 
   AsyncStorage.getItem("type").then((value) => {
     setstate(value)
@@ -31,8 +42,7 @@ const BottomTabNavigator = () => {
     //do something else
     });
     const count = useSelector((state) => state.auth.user)
-    const userState = count.user_data[0].user_type
-    console.log(userState)
+    
   return (
     <Tab.Navigator
     tabBarOptions={{
@@ -54,7 +64,7 @@ const BottomTabNavigator = () => {
       }}/>
     {userState == 1?
       <>
-      <Tab.Screen name="Job" component={JobStackNavigator}   options={{
+      <Tab.Screen name="Job" component={JobStackNavigator}  initialParams={true} options={{
         tabBarIcon: ({ color, size }) => (    
           <Icon name="hourglass" color={color} size={size}  />
           
@@ -72,29 +82,45 @@ const BottomTabNavigator = () => {
               <Icons.AntDesign name="wechat" color={color} size={size}/>
             ),
           }}/>
-          <Tab.Screen name="Subscription" component={Subscription} options={{
+          {/* <Tab.Screen name="Subscription" component={Subscription} options={{
             tabBarIcon: ({ color, size }) => (
            
               <Icon name="play" color={color} size={size}/>
             ),
-          }}/>
-        
+          }}/> */}
+       <Tab.Screen
+  name="BookedEvents"
+  component={BookedEvents}
+  initialParams={{ prop: true }} // Pass your prop as initialParams
+  options={{
+    tabBarIcon: ({ color, size }) => (
+      <Image source={require('../assets/png/1-05.png')} style={{ width: 25, height: 20, objectFit: 'contain' }} />
+    ),
+  }}
+/>
           </>
       :
       <>
-      <Tab.Screen name="PendingEvents" component={PendingEvents} options={{
+      <Tab.Screen  initialParams={{ prop: true }} name="PendingEvents"  component={PendingStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
           <Image source={require('../assets/png/1-04.png')} style={{ width: 25, height: 20 ,objectFit:'contain' }} />
           
           ),
         }}/>
+
+{/* <Tab.Screen name="Subscription" component={Subscription} options={{
+            tabBarIcon: ({ color, size }) => (
+           
+              <Icon name="play" color={color} size={size}/>
+            ),
+          }}/> */}
       
-        <Tab.Screen name="BookedEvents" component={BookedEvents} options={{
+        {/* <Tab.Screen name="BookedEvents" component={BookedEvents} options={{
           tabBarIcon: ({ color, size }) => (
             <Image source={require('../assets/png/1-05.png')} style={{ width: 25, height: 20 ,objectFit:'contain' }} />
             
             ),
-          }}/>
+          }}/> */}
           <Tab.Screen name="Chats" component={ContactStackNavigator} options={{
             tabBarIcon: ({ color, size }) => (
            

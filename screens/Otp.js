@@ -4,16 +4,17 @@ import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Alert } fr
 import ButtonInput from '../components/ButtonInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../redux/reducers/authReducer';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 const Otp = ({ onLogin,route }) => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const dispatch=useDispatch()
-
+  const navigation = useNavigation();
   const [email, setEmail] = useState(route?.params?.bodys?.email);
   const [user_type, setuser_type] = useState(route?.params?.bodys?.user_type)
   const inputRefs = useRef(Array(4).fill(0).map((_, i) => i));
-  console.log(route?.params?.bodys?.user_type,"sss")
   const handleInputChange = (index, value) => {
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -61,11 +62,15 @@ const Otp = ({ onLogin,route }) => {
                },
                body: JSON.stringify({ otp:enteredOtp,email:email,user_type:user_type }),
              })
-             .then(response => response.json())
-             .then(data => {
-          
+             .then(
+              
+              response => response.json()
+              
+             )
+             .then(async data => {
                if (data.message == "Success") {
                 dispatch(loginSuccess(data))
+                AsyncStorage.setItem('data', JSON.stringify(data));
                  onLogin()
                } else {
                  Alert.alert("Login","Login Faliure")
@@ -83,10 +88,7 @@ const Otp = ({ onLogin,route }) => {
     }catch (error) {
         console.log('An error occurred while processing your request.');
       }
-
-   
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>OTP Verification</Text>
@@ -97,6 +99,7 @@ const Otp = ({ onLogin,route }) => {
             key={index}
             ref={(ref) => (inputRefs.current[index] = ref)}
             style={styles.input}
+            keyboardType='numeric'
             maxLength={1}
             value={digit}
             placeholderTextColor='white'

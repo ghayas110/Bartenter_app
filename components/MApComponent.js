@@ -3,7 +3,7 @@ import { Button, StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import Icons from './Icons';
 import MapView, { Marker } from 'react-native-maps';
 
-const MapComponent = ({onPress}) => {
+const MapComponent = ({onPress,dataSend}) => {
   return (
     <View style={styles.container}>
       <MapView
@@ -15,14 +15,17 @@ const MapComponent = ({onPress}) => {
           longitudeDelta: 0.0421,
         }}
       >
-        <Marker
+        {dataSend?.map(item =>(
+          <Marker
           coordinate={{
-            latitude: 35.7796,
-            longitude: -78.6382,
+            latitude: item.event_lat,
+            longitude: item.event_lng,
           }}
-          title={"Marker Title"}
+          title={item.post_name}
           description={"Marker Description"}
         />
+        ))}
+        
       </MapView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={{width:50}}>

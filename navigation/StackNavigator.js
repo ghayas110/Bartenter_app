@@ -17,7 +17,8 @@ import CommentScreen from "../screens/CommentScreen";
 import AdminProfileScreen from "../screens/AdminProfileScreen";
 import AdminDetailsScreen from "../screens/AdminDetailsScreen";
 import AddJobScreen from "../screens/AddJobScreen";
-import JobDetailsScreen from "../screens/JobDetailsScreen";
+import JobDetailsScreen from "../components/JobDetails";
+import PendingEvents from "../screens/PendingEvents";
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -33,7 +34,7 @@ const MainStackNavigator = () => {
     <Stack.Navigator screenOptions={{
       headerShown: false
       }}>
-      <Stack.Screen name="Home" component={ProfileScreen} screenOptions={{
+      <Stack.Screen name="Home" initialParams={{prop:true}} component={ProfileScreen} screenOptions={{
         headerShown: false
         }} />
       <Stack.Screen name="Details" component={DetailsScreen} />
@@ -106,4 +107,18 @@ const JobStackNavigator = () => {
     </Stack.Navigator>
   );
 };
-export { CalenderStackNavigator,ContactStackNavigator,MainStackNavigator,AdminStackNavigator,JobStackNavigator };
+const PendingStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+      }}>
+      <Stack.Screen name="Pending" component={PendingEvents} screenOptions={{
+        headerShown: false
+        }}/>
+         <Stack.Screen name="JobDetail" component={JobDetailsScreen} />
+
+         
+    </Stack.Navigator>
+  );
+};
+export { CalenderStackNavigator,ContactStackNavigator,MainStackNavigator,AdminStackNavigator,JobStackNavigator,PendingStackNavigator };

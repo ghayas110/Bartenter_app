@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import FormInput from '../components/FormInput';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
@@ -42,7 +40,6 @@ const SignUp = () => {
           })
           .then(response => response.json())
           .then(data => {
-            console.log(data)
             if(data.message=="Success"){
               Alert.alert('SignUp Successfull')
  

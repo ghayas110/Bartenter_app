@@ -38,7 +38,6 @@ const LoginScreen = () => {
         .then(response => response.json())
         .then(data => {
           if(data){
-            console.log(data)
             if (data.message==="Success") {
               Alert.alert("Login","Otp have been send to your email")
               navigation.navigate('OtpS',{bodys})

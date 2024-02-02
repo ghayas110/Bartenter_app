@@ -1,20 +1,70 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { View, Text, StyleSheet, ImageBackground,TouchableOpacity,ScrollView } from 'react-native';
 import ButtonInput from './ButtonInput';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useIsFocused } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function UserDetails({name,email,PhoneNumber,speciality,signatureDrink}) {
+
+export default function UserDetails({route}) {
+  console.log(route,"prookeokeokreknk")
 const navigation= useNavigation()
+const isFocused = useIsFocused();
+
+const[userState,setuserState]=useState(11)
+const [users,setusers]=useState("")
+const [data, setdata] = useState()
+const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users?.image}`||'');
+
+
+useEffect(() => {
+  async function replacementFunction(){        
+    const value =  await AsyncStorage.getItem('data');
+      AsyncStorage.setItem('data',value)
+        setusers(JSON.parse(value));
+        setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+        handleSubmit(JSON.parse(value));
+}
+replacementFunction()
+}, [userState,isFocused]);
+
+const handleSubmit = async (userss) => {
+  try {
+    fetch(`https://bartender.logomish.com/users/GetUserById/${userss.user_data[0].id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key':'BarTenderAPI',
+        'accesstoken':`Bearer ${userss.user_data[0].access_token}`
+      },
+    })
+    .then(response => response.json())
+    .then(dataa => {
+      if(dataa?.users){
+        setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
+        setdata(dataa?.users[0])     
+      }
+    });
+  } catch (error) {
+    Alert.alert('An error occurred while processing your request.');
+  }
+
+};
 
   return (
 
     <ScrollView style={styles.card}>
-  
-      <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
+  {
+    data?.image==""?
+    <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
         
       </ImageBackground>
+      :
+      <ImageBackground source={{uri: imageUri}} style={styles.image}>
+        
+      </ImageBackground>
+  }
       <View style={styles.maintitle}>
-      <Text style={styles.titlemain}>Welcome New User,</Text>
+      <Text style={styles.titlemain}>Welcome {data?.name},</Text>
       <Text style={styles.titlemain}>you are a Host!</Text>
       </View>
 

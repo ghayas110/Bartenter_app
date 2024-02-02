@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
@@ -20,11 +20,26 @@ import OtpForget from './screens/OtpForget';
 import NewPassword from './screens/NewPassword';
 import ChangePassword from './screens/ChangePassword';
 import EditProfileScreen from './screens/EditProfileScreen';
+import {useNavigation} from '@react-navigation/native';
 const AuthStack = createStackNavigator();
 const App = () => {
+  // const navigation1 = useNavigation();
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   const Drawer = createDrawerNavigator();
+  const [users,setusers]=useState("")
+  useEffect(() => {
+    async function checkLoginStatus() {
+      const value = await AsyncStorage.getItem("data");
+      if (value !== null) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    }
+
+    checkLoginStatus();
+  }, []);
 
   return (
     <Provider store={store}>
@@ -36,12 +51,15 @@ const App = () => {
       <Drawer.Screen name="Home" component={BottomTabNavigator} />
         <Drawer.Screen name="About" component={BartenderHomeScreen} />
         <Drawer.Screen name="SignOut" >
-        {(props) => <SignOut {...props} onLogin={() => setIsLoggedIn(false)}/>}
+        {(props) => <SignOut {...props}  onLogin={
+          setIsLoggedIn(false)
+        }/>}
         </Drawer.Screen>
-        <Drawer.Screen name='ChangePassword' component={ChangePassword}/>
-        <Drawer.Screen name='EditProfile' component={EditProfileScreen}/>
+        <Drawer.Screen name='ChangePassword' component={ChangePassword} initialParams={true}/>
+        <Drawer.Screen name='EditProfile' initialParams={true} component={EditProfileScreen}/>
       </Drawer.Navigator>
-    ) : (
+    ) 
+    :(
       <AuthStack.Navigator screenOptions={{
         headerShown: false
         }}>
@@ -50,17 +68,17 @@ const App = () => {
         
         </AuthStack.Screen>
 
-        <AuthStack.Screen name="Login">
-        {(props) => <LoginScreen />}
         
-        </AuthStack.Screen>
         <AuthStack.Screen name="ForgotPassScreen" component={ForgotPassScreen}/>
      
         <AuthStack.Screen name="OtpForget" component={OtpForget}/>
       
         <AuthStack.Screen name="NewPassword" component={NewPassword}/>
-   
+        <AuthStack.Screen name="Login">
+        {(props) => <LoginScreen />}
         
+        </AuthStack.Screen>
+     
   
       <AuthStack.Screen name="OtpS">
       {(props) => <Otp {...props} onLogin={() => setIsLoggedIn(true)}/>}
