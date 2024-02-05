@@ -2,7 +2,6 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import HeaderDetails from './HeaderDetails'
 import MapView, { Marker } from 'react-native-maps'
-import ButtonInput from './ButtonInput'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const JobDetailsScreen = ({route}) => {
@@ -17,7 +16,6 @@ const JobDetailsScreen = ({route}) => {
     replacementFunction()
 
   }, [])
-   console.log(parseFloat(route.params?.event_lat),"typepeppeppeepp")
    var latitude=parseFloat(route.params?.event_lat)
    var longitude=parseFloat(route.params?.event_lng)
   return (

@@ -88,7 +88,7 @@ const BottomTabNavigator = () => {
               <Icon name="play" color={color} size={size}/>
             ),
           }}/> */}
-       <Tab.Screen
+       {/* <Tab.Screen
   name="BookedEvents"
   component={BookedEvents}
   initialParams={{ prop: true }} // Pass your prop as initialParams
@@ -97,7 +97,7 @@ const BottomTabNavigator = () => {
       <Image source={require('../assets/png/1-05.png')} style={{ width: 25, height: 20, objectFit: 'contain' }} />
     ),
   }}
-/>
+/> */}
           </>
       :
       <>

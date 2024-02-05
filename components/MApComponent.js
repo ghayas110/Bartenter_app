@@ -2,8 +2,10 @@ import React from 'react';
 import { Button, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import Icons from './Icons';
 import MapView, { Marker } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
 
 const MapComponent = ({onPress,dataSend}) => {
+  var navigation=useNavigation()
   return (
     <View style={styles.container}>
       <MapView
@@ -34,7 +36,7 @@ const MapComponent = ({onPress,dataSend}) => {
             source={require('../assets/mapIcon.png')} // replace with your image path
           />
         </TouchableOpacity>
-        <TouchableOpacity style={{marginLeft:10,width:50,height:50,backgroundColor:'orange',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:50}} onPress={onPress}>
+        <TouchableOpacity style={{marginLeft:10,width:50,height:50,backgroundColor:'orange',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:50}} onPress={()=>navigation.navigate('BookedEvents')}>
           <Icons.AntDesign name="menuunfold" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
