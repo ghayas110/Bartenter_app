@@ -78,8 +78,45 @@ const BookedEvents = ({ route }) => {
     }
   }
 
+  const handleBookEvent = async(postId)=>{
+    const JsonBody ={post_id:postId}
+    console.log(fetch('https://bartender.logomish.com/posts/BookPost', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'accesstoken': `Bearer ${users.access_token}`,
+      'x-api-key': 'BarTenderAPI',
+    },
+    body: JSON.stringify(JsonBody),
+  }))
+    try {
+      fetch('https://bartender.logomish.com/posts/BookPost', {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'accesstoken': `Bearer ${users.access_token}`,
+          'x-api-key': 'BarTenderAPI',
+        },
+        body: JSON.stringify(JsonBody),
+      })
+        .then(response => 
+          response.json()
+       )
+        .then(data => {
+          console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",data,"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
+          // if (data.message == "Created") {
+          //   Alert.alert("You have booked this event")
+           
+          // } else {
+          //   Alert.alert("Job Not Created")
+          // }
+        });
+    } catch (error) {
+    }
+  }
   
-  const Item = ({ EventDate, name, contact, EventTime, theme, EventLocation,NoOfPeople, onPress }) => (
+  const Item = ({ EventDate,postId, name, contact, EventTime, theme, EventLocation,NoOfPeople, onPress }) => (
     <View style={styles.card}>
       {/* <ImageBackground source={image} style={styles.image}> 
         <Text style={styles.title}>{name}</Text>
@@ -128,13 +165,20 @@ const BookedEvents = ({ route }) => {
         <Text style={styles.text}>{NoOfPeople}</Text>
 
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.cardtext} onPress={()=>onPress(postId)}>
+        <Text style={styles.BookEventButton}>
+            Book Event
+        </Text>
+
+      </TouchableOpacity>
     
       
 
     </View>
   );
   const renderItem = ({ item }) => (
-    <Item name={item?.post_title} contact={item?.contact_phone} image={item?.image} theme={item?.theme} EventDate={item?.event_date} EventTime={item?.event_time} EventLocation={item?.event_location} NoOfPeople={item?.no_of_people}/>
+    <Item postId={item?.post_id} name={item?.post_title} contact={item?.contact_phone} image={item?.image} theme={item?.theme} EventDate={item?.event_date} EventTime={item?.event_time} EventLocation={item?.event_location} NoOfPeople={item?.no_of_people} onPress={handleBookEvent}/>
   );
   return (
     <>
@@ -175,6 +219,18 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  BookEventButton:{
+    backgroundColor: '#FFA500',
+    height:38,
+    color:'#fff',
+    width:190,
+    marginLeft:65,
+    paddingTop:9,
+    textAlign:'center',
+    fontSize:16,
+    borderRadius:10
+
   },
   card: {
     borderRadius: 6,
