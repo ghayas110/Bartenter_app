@@ -1,11 +1,55 @@
 import {StyleSheet, Text, View,TouchableOpacity,FlatList,Image} from 'react-native';
-import React from 'react';
+import React ,{useState,useEffect}from 'react';
 import HeaderDetails from '../components/HeaderDetails';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-const BookedDetails = () => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const baseUrl = require('../global')
+const BookedDetails = ({route}) => {
+  const [userState, setuserState] = useState(11)
+  const [users, setusers] = useState("")
+  const [data2, setdata] = useState()
+
+  const [imageUri, setImageUri] = useState('');
+
+  useEffect(() => {
+    async function replacementFunction() {
+      const value = await AsyncStorage.getItem('data');
+      AsyncStorage.setItem('data', value)
+      setusers(JSON.parse(value));
+      setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+      handleSubmit(JSON.parse(value));
+    }
+    replacementFunction()
+  }, [userState,route]);
+
+  const handleSubmit = async (userss) => {
+    try {
+      await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${userss.access_token}`
+        },
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          console.log("USERRRRRRRRRRRRRRR",dataa,"USERRRRRRRRRRRRRRR")
+          if (dataa?.users.length > 0) {
+            setImageUri(`https://bartender.logomish.com${dataa?.users[0]?.image}`)
+            setdata(dataa?.users)
+          }
+        });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+
+  };
     const navigation = useNavigation()
-    const data = [
+    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",route.params)
+    const data = route.params.item
+    const datas = [
         { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
         
       ];
@@ -17,8 +61,8 @@ const BookedDetails = () => {
         <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
      
-    
-        <Image source={image} style={{ width: 50, height: 50,borderRadius:50 }} />
+        {console.log(imageUri,"uriiiiiiii")}
+        <Image source={imageUri==''?{uri:imageUri}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:50 }} />
         <View style={{marginLeft:15}}>
         <Text style={{color:'black'}}>{name}</Text>
         <Text style={{color:'black'}}>{role}</Text>
@@ -54,7 +98,7 @@ const BookedDetails = () => {
         />
       );
       const renderItem = ({ item }) => (
-        <Item name={item.name} role={item.role} image={item.image} onPress={() => navigation.navigate('DetailScreen', {item})}/>
+        <Item name={item.name} role='Bartender' image={imageUri} onPress={() => navigation.navigate('DetailScreen', {item})}/>
       );
   return (
     <View style={styles.container}>
@@ -63,18 +107,18 @@ const BookedDetails = () => {
       <View
       style={styles.section}>
         <Text style={{marginBottom: 10,color:"black"}}># of people</Text>
-        <Text style={{fontWeight: 'bold',color:"black"}}> 15 or Less</Text>
+        <Text style={{fontWeight: 'bold',color:"black"}}> {data.no_of_people} or Less</Text>
       </View>
 
       <View
       style={styles.section}>
         <Text style={{marginBottom: 10,color:"black"}}>Date and time</Text>
-        <Text style={{color:"black"}}>7 November 2024 12:23:23 PM </Text>
+        <Text style={{color:"black"}}>{data.event_date} </Text>
       </View>
       <View
       style={styles.section}>
         <Text style={{marginBottom: 10,color:"black"}}>Event Duration</Text>
-        <Text style={{color:"black"}}>7 hours </Text>
+        <Text style={{color:"black"}}>{data.event_duration} </Text>
       </View>
 
       <View
@@ -86,13 +130,13 @@ const BookedDetails = () => {
           padding: 10,
         }}>
         <Text style={{marginBottom: 10,color:"black"}}>Phone Number</Text>
-        <Text style={{color:"black"}}>999-999-999 </Text>
+        <Text style={{color:"black"}}>{data.contact_phone} </Text>
       </View>
       </View>
       <View style={{padding:10}}>
       <Text style={{fontWeight:'bold',color:'black'}}>Confirmed Bartender</Text>
       <FlatList
-      data={data}
+      data={data2}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
     />

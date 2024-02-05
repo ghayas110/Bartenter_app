@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View,Image,TouchableOpacity,FlatList } from 'react-native'
+import { StyleSheet, Text, View,Image,TouchableOpacity,FlatList ,ActivityIndicator } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import Header from '../components/Header'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation ,useIsFocused} from '@react-navigation/native';
 const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -11,6 +11,8 @@ const PendingEvents = ({ route }) => {
   const [data, setdata] = useState()
   const [myEvents, setMyEvents] = useState([])
   const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
+  const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(false);
 
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const PendingEvents = ({ route }) => {
       getAllPosts()
     }
     replacementFunction()
-  }, [userState,route]);
+  }, [userState,route,isFocused]);
 
   const handleSubmit = async (userss) => {
     try {
@@ -32,7 +34,7 @@ const PendingEvents = ({ route }) => {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${userss.user_data[0].access_token}`
+          'accesstoken': `Bearer ${userss.access_token}`
         },
       })
         .then(response => response.json())
@@ -52,17 +54,19 @@ const PendingEvents = ({ route }) => {
 
   const getAllPosts = async () => {
     try {
+      setIsLoading(true)
       await fetch(`${baseUrl}/posts/GetAllPostCreatedByUser`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${users.user_data[0].access_token}`
+          'accesstoken': `Bearer ${users.access_token}`
         }
       }).then(response => response.json())
         .then(data => {
           if (data.data.length > 0) {
             setMyEvents([...data.posts])
+            setIsLoading(false)
           }
           else {
             setMyEvents([])
@@ -97,18 +101,26 @@ const navigation =useNavigation()
     <Item name={item.post_title} eventdate={item.event_date} role={userState} image={item.image} onPress={()=>navigation.navigate('JobDetail',item)}/>
   );
   return (
-    <View style={styles.FlatList}>
-    <Header title="Pending Events" headerShown={false}/>
-   {
-    myEvents.length>0?
-    <FlatList
-    data={myEvents}
-    renderItem={renderItem}
-    keyExtractor={(item) => item.id}
-    />
-    :<Text style={{color:"black",textAlign:"center",fontSize:20}}>No Pending events</Text>
-   }
-    </View>
+    <>
+    {isLoading?
+     <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
+     <ActivityIndicator size="large" />
+   </View> :
+     <View style={styles.FlatList}>
+     <Header title="Pending Events" headerShown={false}/>
+    {
+     myEvents.length>0?
+     <FlatList
+     data={myEvents}
+     renderItem={renderItem}
+     keyExtractor={(item) => item.id}
+     />
+     :<Text style={{color:"black",textAlign:"center",fontSize:20}}>No Pending events</Text>
+    }
+     </View>
+    }
+    </>
+   
   )
 }
 
@@ -139,5 +151,23 @@ const styles = StyleSheet.create({
        FlatList:{
         paddingBottom:40
        },
-       DetailButton:{color:'black',justifyContent:'center',textAlign:'center',paddingTop:15}
+       DetailButton:{color:'black',
+       justifyContent:'center',
+       textAlign:'center',
+       paddingTop:15
+      },
+       
+  containerSpinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  horizontalSpinner: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 20, 
+    borderRadius: 10,
+    backgroundColor: '#fff', 
+  }
 })

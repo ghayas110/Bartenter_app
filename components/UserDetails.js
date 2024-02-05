@@ -1,15 +1,14 @@
 import React,{useState,useEffect} from 'react';
-import { View, Text, StyleSheet, ImageBackground,TouchableOpacity,ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground,ActivityIndicator,ScrollView } from 'react-native';
 import ButtonInput from './ButtonInput';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function UserDetails({route}) {
-  console.log(route,"prookeokeokreknk")
 const navigation= useNavigation()
 const isFocused = useIsFocused();
-
+const [isLoading, setIsLoading] = useState(false);
 const[userState,setuserState]=useState(11)
 const [users,setusers]=useState("")
 const [data, setdata] = useState()
@@ -28,17 +27,21 @@ replacementFunction()
 }, [userState,isFocused]);
 
 const handleSubmit = async (userss) => {
+  setIsLoading(true)
+
   try {
     fetch(`https://bartender.logomish.com/users/GetUserById/${userss.user_data[0].id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key':'BarTenderAPI',
-        'accesstoken':`Bearer ${userss.user_data[0].access_token}`
+        'accesstoken':`Bearer ${userss.access_token}`
       },
     })
     .then(response => response.json())
     .then(dataa => {
+      setIsLoading(false)
+
       if(dataa?.users){
         setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
         setdata(dataa?.users[0])     
@@ -51,32 +54,41 @@ const handleSubmit = async (userss) => {
 };
 
   return (
-
-    <ScrollView style={styles.card}>
-  {
-    data?.image==""?
-    <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
-        
-      </ImageBackground>
+<>
+    {
+      isLoading?
+    <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
+     <ActivityIndicator size="large" />
+    </View>
       :
-      <ImageBackground source={{uri: imageUri}} style={styles.image}>
-        
-      </ImageBackground>
-  }
-      <View style={styles.maintitle}>
-      <Text style={styles.titlemain}>Welcome {data?.name},</Text>
-      <Text style={styles.titlemain}>you are a Host!</Text>
-      </View>
-
-
- <View style={styles.rating}>
-
- <ButtonInput title={"Create Event"} onPress={()=>navigation.navigate('AddJob')}/>
-
-
-
- </View>
-    </ScrollView>
+      <ScrollView style={styles.card}>
+      {
+        data?.image==""?
+        <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
+            
+          </ImageBackground>
+          :
+          <ImageBackground source={{uri: imageUri}} style={styles.image}>
+            
+          </ImageBackground>
+      }
+          <View style={styles.maintitle}>
+          <Text style={styles.titlemain}>Welcome {data?.name},</Text>
+          <Text style={styles.titlemain}>you are a Host!</Text>
+          </View>
+    
+    
+     <View style={styles.rating}>
+    
+     <ButtonInput title={"Create Event"} onPress={()=>navigation.navigate('AddJob')}/>
+    
+    
+    
+     </View>
+        </ScrollView>
+    }
+</>
+   
   );
 }
 
@@ -121,10 +133,10 @@ alignItems:'center',
 justifyContent:'center'
   },
   image: {
-    width: '100%', // specify the width
-    height: 350, // specify the height
+    width: '100%', 
+    height: 350, 
     justifyContent: "flex-end",
-    alignItems: 'flex-start', // center the text horizontally
+    alignItems: 'flex-start',
     marginBottom: 10,
     opacity:1,
     background: "#000"
@@ -139,5 +151,18 @@ justifyContent:'center'
     fontSize: 16,
     color: 'black', // white color for better visibility on image
     marginBottom: 5
+  },
+  containerSpinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  horizontalSpinner: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 20, 
+    borderRadius: 10,
+    backgroundColor: '#fff', 
   }
 });

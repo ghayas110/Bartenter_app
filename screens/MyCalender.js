@@ -1,19 +1,80 @@
-import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View ,ScrollView} from 'react-native'
-import React from 'react'
+import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry} from 'react-native'
+import React ,{useState,useEffect} from 'react'
 import Header from '../components/Header'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation ,useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const baseUrl = require('../global')
 
-const MyCalender = () => {
+const MyCalender = ({route}) => {
+  const [userState, setuserState] = useState(11)
+  const [users, setusers] = useState("")
+  const [data, setdata] = useState()
+  const [bookedEvents, setBookedEvents] = useState([])
+  const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
+  const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    async function replacementFunction() {
+      const value = await AsyncStorage.getItem('data');
+      AsyncStorage.setItem('data', value)
+      setusers(JSON.parse(value));
+      setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+      handleSubmit(JSON.parse(value));
+      getAllPosts()
+    }
+    replacementFunction()
+  }, [userState,route,isFocused]);
+
+  const handleSubmit = async (userss) => {
+    try {
+      await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${userss.access_token}`
+        },
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          if (dataa?.users.length > 0) {
+            setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
+            setdata(dataa?.users[0])
+          }
+        });
+    } catch (error) {
+      // Alert.alert('An error occurred while processing your request.');
+    }
+
+  };
+  const getAllPosts = async () => {
+    try {
+      setIsLoading(true)
+      await fetch(`${baseUrl}/posts/GetAllBookedPosts`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${users.access_token}`
+        }
+      }).then(response => response.json())
+        .then(data => {
+          setIsLoading(false)
+          console.log("***********************************",data,"-------------------------------------")
+          if (data.data.length > 0) {
+            setBookedEvents([...data.data])
+          }
+          else{
+            setBookedEvents([])
+          }
+        })
+    } catch (error) {
+      // Alert.alert('An error occurred while processing your request.');
+
+    }
+  }
 const navigation =useNavigation()
-  const data = [
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "2/13/2024 5:30 PM", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'999-999-999',DateTime: "2/14/2024 5:30 PM", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Thanksgiving",PhoneNumber:'999-999-999',DateTime: "2/15/2024 5:30 PM", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"VDay",PhoneNumber:'999-999-999',DateTime: "2/16/2024 5:30 PM", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Res",PhoneNumber:'999-999-999',DateTime: "2/17/2024 5:30 PM", image: require('../assets/map.png') },
-
-    
-  ];
+ 
   const Item = ({ PhoneNumber, name,email, DateTime,theme, image, onPress }) => (
     <TouchableOpacity onPress={onPress} style={styles.card}>
 
@@ -37,21 +98,40 @@ const navigation =useNavigation()
   </TouchableOpacity>
   );
   const renderItem = ({ item }) => (
-    <Item name={item.name} email={item.email} image={item.image} theme={item.theme} PhoneNumber={item.PhoneNumber} DateTime={item.DateTime} onPress={() => navigation.navigate('BookedDetails', {item})}/>
+    <Item name={item.post_title} email={item.email} image={item.image} theme={item.theme} PhoneNumber={item.contact_phone} DateTime={item.event_date} onPress={() => navigation.navigate('BookedDetails', {item})}/>
   );
   return (
     <>
-    <Header title="My Calender" headerShown={true}/>
+      {
+        isLoading  ?
+        <>
+          <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
+            <ActivityIndicator size="large" />
+          </View> 
+        </>:
+         <>
+         {
 
-<FlatList
-data={data}
-renderItem={renderItem}
-keyExtractor={(item) => item.id}
-/>
-
-
-    
-
+         
+         bookedEvents.length > 0?
+         <>
+          <Header title="My Calender" headerShown={true}/>
+        <FlatList
+        data={bookedEvents}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        />
+         </>
+        
+        :
+        <>
+        <Header title="My Calender" headerShown={true}/>
+        <Text style={{color:"black",textAlign:"center",fontSize:20}}>No booked events</Text>
+        </>
+         }
+        </>      
+      }
+     
     </>
   )
 }
@@ -122,5 +202,19 @@ const styles = StyleSheet.create({
          borderRadius:30,
          width :60,height :60, 
          justifyContent:'center',alignItems:'center'
-       }
+       },
+       containerSpinner: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center', 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      },
+      horizontalSpinner: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 20, 
+        borderRadius: 10,
+        backgroundColor: '#fff', 
+        
+      }
 })

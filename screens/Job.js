@@ -1,15 +1,17 @@
-import { StyleSheet, Text, View,FlatList,TouchableOpacity,SafeAreaView } from 'react-native'
+import { StyleSheet, Text, View,TouchableOpacity,SafeAreaView } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation ,useIsFocused} from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import Icons from '../components/Icons';
 import MapComponent from '../components/MApComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Job = ({route}) => {
+  const isFocused = useIsFocused();
   const [users,setusers]=useState("")
+
   useEffect(()=>{
     async function replacementFunction(){
     const value = await AsyncStorage.getItem("data");
@@ -17,7 +19,7 @@ const Job = ({route}) => {
     }
     replacementFunction()
 
-  },[route])
+  },[route,isFocused])
   const navigation =useNavigation()
   const [data, setData] = useState();
   const count = useSelector((state) => state.auth.user)
@@ -25,14 +27,13 @@ const Job = ({route}) => {
  
 
   const handleSubmit = async () => {
-
     try {
       fetch('https://bartender.logomish.com/posts/GetAllPost', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
-          'accesstoken':`Bearer ${users?.user_data[0]?.access_token}`
+          'accesstoken':`Bearer ${users?.access_token}`
         },
       })
       .then(response => response.json())
@@ -46,7 +47,7 @@ const Job = ({route}) => {
 };
   useEffect(() => {
     handleSubmit()
-  }, [route])
+  }, [route,isFocused])
 
   const Item = ({ id, post_title,post_type,image, onPress }) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>

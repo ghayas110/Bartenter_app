@@ -41,7 +41,7 @@ const ProfileScreen = ({route}) => {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
-          'accesstoken':`Bearer ${userss.user_data[0].access_token}`
+          'accesstoken':`Bearer ${userss.access_token}`
         },
       })
       .then(response => response.json())

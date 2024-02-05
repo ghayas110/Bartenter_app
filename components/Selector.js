@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet,Dimensions } from 'react-native';
-import { black } from 'react-native-paper/lib/typescript/styles/colors';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
-const SpecialtySelector = ({ specialties, onSpecialtySelected }) => {
+
+const SpecialtySelector = ({ specialties, onSpecialtySelected, defaultValue }) => {
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
+
+  useEffect(() => {
+    if (defaultValue) {
+      setSelectedSpecialty(defaultValue);
+      onSpecialtySelected(defaultValue);
+    }
+  }, [defaultValue]);
 
   const handlePress = (specialty) => {
     setSelectedSpecialty(specialty);
@@ -14,34 +20,35 @@ const SpecialtySelector = ({ specialties, onSpecialtySelected }) => {
 
   return (
     <View style={styles.container}>
-    {specialties.map((specialty, index) => (
-      <TouchableOpacity
-        key={specialty}
-        style={[
-          styles.button,
-          selectedSpecialty === specialty ? styles.selected : styles.unselected,
-      
-        ]}
-        onPress={() => handlePress(specialty)}
-      >
-        <Text style={[selectedSpecialty === specialty ? styles.selected : styles.unselected]}>{'$'+specialty}</Text>
-      </TouchableOpacity>
-    ))}
+      {specialties.map((specialty, index) => (
+        <TouchableOpacity
+          key={specialty}
+          style={[
+            styles.button,
+            selectedSpecialty === specialty ? styles.selected : styles.unselected,
+          ]}
+          onPress={() => handlePress(specialty)}
+        >
+          <Text style={[selectedSpecialty === specialty ? styles.selectedText : styles.unselectedText]}>
+            { specialty}
+          </Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-   backgroundColor:'orange',
-   marginRight: 10,
-   marginTop: 10,
-   display:'flex',
-   flexDirection: "row",
-   alignItems:'center',
-   justifyContent: "space-around",
-   borderRadius:10,
-   padding: 10
+    backgroundColor: 'orange',
+    marginRight: 10,
+    marginTop: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    borderRadius: 10,
+    padding: 10,
   },
   button: {
     paddingTop: 10,
@@ -50,16 +57,20 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     borderRadius: 5,
   },
-
-  selected:{
-    backgroundColor:'white',
-    color:"orange",
-    fontWeight:'800'
+  selected: {
+    backgroundColor: 'white',
   },
-  unselected:{
-    backgroundColor:'orange',
-    color:'whitesmoke',fontWeight:'800'
-  }
+  unselected: {
+    backgroundColor: 'orange',
+  },
+  selectedText: {
+    color: 'orange',
+    fontWeight: '800',
+  },
+  unselectedText: {
+    color: 'whitesmoke',
+    fontWeight: '800',
+  },
 });
 
 export default SpecialtySelector;

@@ -19,6 +19,7 @@ import AdminDetailsScreen from "../screens/AdminDetailsScreen";
 import AddJobScreen from "../screens/AddJobScreen";
 import JobDetailsScreen from "../components/JobDetails";
 import PendingEvents from "../screens/PendingEvents";
+import BookedEvents from "../screens/BookedEvents";
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -38,6 +39,7 @@ const MainStackNavigator = () => {
         headerShown: false
         }} />
       <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name="BookedEvents" component={BookedEvents} />
       <Stack.Screen name="AddJob" component={AddJobScreen} />
       <Stack.Screen name="QRScreen" component={QrScreen} screenOptions={{
         headerShown: false

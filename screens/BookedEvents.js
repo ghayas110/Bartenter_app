@@ -1,9 +1,11 @@
-import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
+import { FlatList, ImageBackground,ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Entypo';
 const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation ,useIsFocused} from '@react-navigation/native';
+
 
 const BookedEvents = ({ route }) => {
   const [userState, setuserState] = useState(11)
@@ -11,6 +13,10 @@ const BookedEvents = ({ route }) => {
   const [data, setdata] = useState()
   const [bookedEvents, setBookedEvents] = useState([])
   const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
+  const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
+
+
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem('data');
@@ -21,7 +27,7 @@ const BookedEvents = ({ route }) => {
       getAllPosts()
     }
     replacementFunction()
-  }, [userState,route]);
+  }, [userState,route,isFocused]);
 
   const handleSubmit = async (userss) => {
     try {
@@ -30,7 +36,7 @@ const BookedEvents = ({ route }) => {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${userss.user_data[0].access_token}`
+          'accesstoken': `Bearer ${userss.access_token}`
         },
       })
         .then(response => response.json())
@@ -46,25 +52,28 @@ const BookedEvents = ({ route }) => {
 
   };
   const getAllPosts = async () => {
+    setIsLoading(true)
     try {
-      await fetch(`${baseUrl}/posts/GetAllBookedPosts`, {
+      await fetch(`${baseUrl}/posts/GetAllPost`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${users.user_data[0].access_token}`
+          'accesstoken': `Bearer ${users.access_token}`
         }
       }).then(response => response.json())
         .then(data => {
-          if (data.data.length > 0) {
-            setBookedEvents([...data.data])
+          setIsLoading(false)
+
+          if (data.posts.length > 0) {
+            setBookedEvents([...data.posts])
           }
           else{
             setBookedEvents([])
           }
         })
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
+      // Alert.alert('An error occurred while processing your request.');
 
     }
   }
@@ -128,13 +137,18 @@ const BookedEvents = ({ route }) => {
     <Item name={item?.post_title} contact={item?.contact_phone} image={item?.image} theme={item?.theme} EventDate={item?.event_date} EventTime={item?.event_time} EventLocation={item?.event_location} NoOfPeople={item?.no_of_people}/>
   );
   return (
-    <View>
+    <>
+    {
+      isLoading||bookedEvents.length==0?
+       <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
+      <ActivityIndicator size="large" />
+    </View> :
+      <View>
       <Header title="Booked Events" headerShown={true} />
       <View  style={styles.flatList}>
       {
         bookedEvents.length>0?
         <FlatList
-       
         data={bookedEvents}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -143,6 +157,10 @@ const BookedEvents = ({ route }) => {
 </View>
 
     </View>
+    }
+    </>
+
+    
   )
 }
 
@@ -216,5 +234,20 @@ const styles = StyleSheet.create({
   },
   flatList:{
     paddingBottom: 320,
+  },
+       
+  containerSpinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  horizontalSpinner: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 20, 
+    borderRadius: 10,
+    backgroundColor: '#fff', 
+    
   }
 })
