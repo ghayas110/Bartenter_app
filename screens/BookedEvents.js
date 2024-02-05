@@ -90,10 +90,12 @@ const BookedEvents = ({ route }) => {
           'accesstoken': `Bearer ${users.access_token}`,
           'x-api-key': 'BarTenderAPI',
         },
-        body: JSON.stringify(JsonBody),
+        body: JSON.stringify({"post_id":parseInt(postId)}),
       })
-        .then(response => 
-          response.json()
+        .then(response => {
+          console.log("poooooooo",response)
+          return response.json()
+        }
        )
         .then(data => {
           if (data.message == "Success") {
@@ -106,6 +108,7 @@ const BookedEvents = ({ route }) => {
         });
 
     } catch (error) {
+      console.log("erroror",error)
     }
   }
   
