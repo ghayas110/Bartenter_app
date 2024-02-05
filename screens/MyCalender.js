@@ -60,7 +60,6 @@ const MyCalender = ({route}) => {
       }).then(response => response.json())
         .then(data => {
           setIsLoading(false)
-          console.log("***********************************",data,"-------------------------------------")
           if (data.data.length > 0) {
             setBookedEvents([...data.data])
           }

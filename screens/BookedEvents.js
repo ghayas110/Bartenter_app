@@ -1,4 +1,4 @@
-import { FlatList, ImageBackground,ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
+import { FlatList, ImageBackground,ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView,Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Entypo';
@@ -80,19 +80,11 @@ const BookedEvents = ({ route }) => {
 
   const handleBookEvent = async(postId)=>{
     const JsonBody ={post_id:postId}
-    console.log(fetch('https://bartender.logomish.com/posts/BookPost', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'accesstoken': `Bearer ${users.access_token}`,
-      'x-api-key': 'BarTenderAPI',
-    },
-    body: JSON.stringify(JsonBody),
-  }))
+   
     try {
       fetch('https://bartender.logomish.com/posts/BookPost', {
 
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'accesstoken': `Bearer ${users.access_token}`,
@@ -104,14 +96,15 @@ const BookedEvents = ({ route }) => {
           response.json()
        )
         .then(data => {
-          console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",data,"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
-          // if (data.message == "Created") {
-          //   Alert.alert("You have booked this event")
-           
-          // } else {
-          //   Alert.alert("Job Not Created")
-          // }
+          if (data.message == "Success") {
+            console.log("here")
+            Alert.alert("You have booked this event")
+            getAllPosts()
+          } else {
+            Alert.alert("Something Went Wrong")
+          }
         });
+
     } catch (error) {
     }
   }
