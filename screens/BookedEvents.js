@@ -79,29 +79,20 @@ const BookedEvents = ({ route }) => {
   }
 
   const handleBookEvent = async(postId)=>{
-    const JsonBody ={post_id:postId}
-    console.log(fetch('https://bartender.logomish.com/posts/BookPost', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'accesstoken': `Bearer ${users.access_token}`,
-      'x-api-key': 'BarTenderAPI',
-    },
-    body: JSON.stringify(JsonBody),
-  }))
     try {
-      fetch('https://bartender.logomish.com/posts/BookPost', {
-
-        method: 'POST',
+     await fetch('https://bartender.logomish.com/posts/BookPost', {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'accesstoken': `Bearer ${users.access_token}`,
           'x-api-key': 'BarTenderAPI',
         },
-        body: JSON.stringify(JsonBody),
+        body: JSON.stringify({"post_id":parseInt(postId)}),
       })
-        .then(response => 
-          response.json()
+        .then(response => {
+          console.log("poooooooo",response)
+          return response.json()
+        }
        )
         .then(data => {
           console.log("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",data,"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
@@ -113,6 +104,7 @@ const BookedEvents = ({ route }) => {
           // }
         });
     } catch (error) {
+      console.log("erroror",error)
     }
   }
   
