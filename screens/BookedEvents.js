@@ -90,16 +90,14 @@ const BookedEvents = ({ route }) => {
           'accesstoken': `Bearer ${users.access_token}`,
           'x-api-key': 'BarTenderAPI',
         },
-        body: JSON.stringify({"post_id":parseInt(postId)}),
+        body: JSON.stringify(JsonBody),
       })
         .then(response => {
-          console.log("poooooooo",response)
           return response.json()
         }
        )
         .then(data => {
           if (data.message == "Success") {
-            console.log("here")
             Alert.alert("You have booked this event")
             getAllPosts()
           } else {
