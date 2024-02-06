@@ -13,15 +13,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import io from 'socket.io-client';
 import { ScrollView } from "react-native-gesture-handler";
 import HeaderDetails from "../components/HeaderDetails";
-export default function Messagescreen( item ) {
+import { useNavigation,useIsFocused } from '@react-navigation/native';
+export default function Messagescreen( {route} ) {
 //   const { currentGroupName, currentGroupID } = route.params;
-const [userId, setuserId] = useState()
+console.log(route.params.id,"uteettetettetettetetet")
+const [userId, setuserId] = useState(0)
 const [currentChatMesage, setCurrentChatMessage] = useState()
 const [messages, setMessages] = useState([]);
-AsyncStorage.getItem("user").then((value) => {
-    setuserId(value)});
-  
-    const socket = io('http://192.168.1.122:3000');
+const isFocused = useIsFocused();
+
+useEffect(() => {
+  async function replacementFunction() {
+    const value = await AsyncStorage.getItem('data');
+    AsyncStorage.setItem('data', value)
+    setuserId(JSON.parse(value).user_data[0].id);
+  }
+  replacementFunction()
+}, [isFocused]);
+
+    const socket = io('http://192.168.1.190:3000');
     useEffect(() => {
         socket.on('chat message', (msgs) => {
             console.log("socket working",msgs)
@@ -29,7 +39,9 @@ AsyncStorage.getItem("user").then((value) => {
         });
       }, []);
 const sendMessage = () => {
-    const msgs = { sender: userId, receiver: item.route.params.userId, message:currentChatMesage };
+  console.log("sendMessage")
+    const msgs = { sender: userId, receiver: route.params.id, message:currentChatMesage };
+    console.log('chat message', msgs);
     socket.emit('chat message', msgs);
     setCurrentChatMessage('');
   };
@@ -46,11 +58,11 @@ const sendMessage = () => {
 //     const timeData = {
 //       hr:
 //         new Date().getHours() < 10
-//           ? `0${new Date().getHours()}`
+//           ? 0${new Date().getHours()}
 //           : new Date().getHours(),
 //       mins:
 //         new Date().getMinutes() < 10
-//           ? `0${new Date().getMinutes()}`
+//           ? 0${new Date().getMinutes()}
 //           : new Date().getMinutes(),
 //     };
 
@@ -76,18 +88,18 @@ const sendMessage = () => {
 
   return (
 <>
-<HeaderDetails title={item.route.params.name} />
+<HeaderDetails/>
 <View style={styles.container}>
 
 <ScrollView>
-{messages.map((msg, index) => (
+{messages.filter(data=>(data.receiver==route.params.id&&data.sender==userId)||(data.receiver==userId&&data.sender==route.params.id)).map((msg, index) => (
     <View key={index} style={msg.sender === parseInt(userId) ? styles.rightMsg : styles.leftMsg}>
-    <Text style={{color:'black'}}>{msg.message}</Text>
+    <Text style={{color:msg.sender === parseInt(userId)?"white":"black"}}>{msg.message}</Text>
     </View>
     ))}
     </ScrollView>
     <TextInput
-    
+style={{color:'black'}}
     value={currentChatMesage}
     onChangeText={(value) => setCurrentChatMessage(value)}
     placeholder="Enter your message"
@@ -112,10 +124,12 @@ leftMsg: {
   borderRadius: 10,
   marginBottom: 10,
   padding: 10,
+  color:"black"
 },
 rightMsg: {
   alignSelf: 'flex-end',
-  backgroundColor:'#FFA500',
+  backgroundColor: '#007aff',
+  color:"black",
   borderRadius: 10,
   marginBottom: 10,
   padding: 10,
@@ -131,7 +145,7 @@ rightMsg: {
   messageInput: {
     borderWidth: 1,
     padding: 15,
-   
+
     borderRadius: 50,
     marginRight: 10,
   },
@@ -147,18 +161,3 @@ rightMsg: {
     fontSize: 20,
   },
 });
-// <View
-// style={[styles.wrapper, { paddingVertical: 15, paddingHorizontal: 10 }]}
-// >
-// {allChatMessages && allChatMessages[0] ? (
-//   <FlatList
-//     data={allChatMessages}
-//     renderItem={({ item }) => (
-//       <Messagecomponent item={item} currentUser={currentUser} />
-//     )}
-//     keyExtractor={(item) => item.id}
-//   />
-// ) : (
-//   ""
-// )}
-// </View>

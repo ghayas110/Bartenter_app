@@ -3,57 +3,73 @@ import React,{useEffect, useState} from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useIsFocused } from '@react-navigation/native';
 
 const Chats = () => {
-const [userId, setuserId] = useState()
-// const [data, setdata] = useState()
+const [userId, setuserId] = useState(0)
+ const [data, setdata] = useState()
 const navigation = useNavigation();
+const isFocused = useIsFocused();
 
-  
-  // const AllChats = async () => {
-  //   // Your existing login logic
-  //   if (userId) {
-
-  //     try {
+useEffect(() => {
+  async function replacementFunction() {
+    const value = await AsyncStorage.getItem('data');
+    AsyncStorage.setItem('data', value)
+    console.log(JSON.parse(value).user_data[0].id,"userreridiidid")
+    setuserId(JSON.parse(value).user_data[0].id);
+    AllChats(JSON.parse(value).user_data[0].id)
+  }
+  replacementFunction()
+}, [isFocused]);
+  const AllChats = async (id) => {
+    // Your existing login logic
+    if (id) {
+console.log("hitiitititiititi")
+      try {
         
      
-  //         fetch('http://192.168.1.122:3000/alluser/', {
-  //           method: 'POST',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //           },
-  //           body: JSON.stringify({userId}),
-  //         })
-  //         .then(response => response.json())
-  //         .then(chat => {
-  //           if (chat.success) {
-  //             console.log(chat)
-  //           setdata(chat.user)
+          fetch('http://192.168.1.190:3000/alluser', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"userId":id}),
+          })
+          .then(response => {
+            console.log(response)
+            return response.json()
+          })
+          .then(chat => {
+            console.log(chat,"res chat")
+            if (chat.success) {
+              console.log(chat)
+            setdata(chat.user)
 
-  //             // navigation.navigate('OtpS')
-  //           } else {
-  //             Alert.alert("Chat","No Cat Found")
-  //           }
-  //         });
+              // navigation.navigate('OtpS')
+            } else {
+              Alert.alert("Chat","No Cat Found")
+            }
+          }).catch(err=>{
+            console.log(err,"dddd")
+          })
         
   
-  //     } catch (error) {
-  //     console.log('An error occurred while processing your request.',error);
-  //     }
-  //   } else {
-  //     console.log('Please fill in all fields');
-  //   }
-  // };
-  const data = [
+      } catch (error) {
+      console.log('An error occurred while processing your request.',error);
+      }
+    } else {
+      console.log('Please fill in all fields');
+    }
+  };
+  const dataa = [
     { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999",message:"Do you have an Idea of what type of Drink..." },
     { id: 1, name: 'John Brown', role: 'Host', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999",message:"Do you have an Idea of what type of Drink..." },
     
   ];
   // useEffect(() => {
-  //   AllChats()
+  //   AllChats(userId)
   //     }, [userId])
-  const Item = ({ id, name,message, role,onPress}) => (
+  const Item = ({ id, name,message, role,image,onPress}) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10,borderBottomWidth: 1, borderBottomColor: 'whitesmoke'   }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
    
@@ -64,7 +80,7 @@ const navigation = useNavigation();
     </View>
     </View>
     <View>
-    <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+    <Image source={image!=""?{uri:`https://bartender.logomish.com${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
     </TouchableOpacity>
   );

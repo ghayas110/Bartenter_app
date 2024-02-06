@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image,TouchableOpacity,FlatList ,ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View,Image,TouchableOpacity,FlatList ,ActivityIndicator,Alert } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import Header from '../components/Header'
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
@@ -53,9 +53,10 @@ const PendingEvents = ({ route }) => {
 
 
   const getAllPosts = async () => {
+    const user_id = users.user_data[0].id;
     try {
       setIsLoading(true)
-      await fetch(`${baseUrl}/posts/GetAllPostCreatedByUser`, {
+      await fetch(`${baseUrl}/posts/GetAllPostCreatedByUser/${user_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
