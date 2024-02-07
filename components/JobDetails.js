@@ -1,23 +1,67 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import HeaderDetails from './HeaderDetails'
 import MapView, { Marker } from 'react-native-maps'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+const baseUrl = require('../global')
 
 const JobDetailsScreen = ({route}) => {
   const [users, setusers] = useState("")
   const [usertype,setusertype]=useState(0)
-  useEffect(() => {
-    async function replacementFunction() {
-      const value = await AsyncStorage.getItem("data");
-      setusers(JSON.parse(value))
-      setusertype(JSON.parse(value).user_data[0].user_type)
+  const [data, setdata] = useState()
+  async function replacementFunction() {
+    const value = await AsyncStorage.getItem("data");
+    setusers(JSON.parse(value))
+    console.log(JSON.parse(value),"iiiiiiiiiiiiiiiiiiii")
+    setusertype(JSON.parse(value).user_data[0].user_type)
+    try {
+       console.log("hhhhhhhhhhhhhhhhhhhhhh")
+      await  fetch(`${baseUrl}/posts/GetAllBookedBartenderByPostId/${route?.params?.post_id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${JSON.parse(value).access_token}`
+        },
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          console.log("-------------------------------------",dataa,"******************************")
+setdata(dataa)
+        });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
     }
+  }
+  useEffect(() => {
+    
     replacementFunction()
+  
 
   }, [])
+
+  const handleSubmit = async () => {
+  
+
+  };
    var latitude=parseFloat(route.params?.event_lat)
    var longitude=parseFloat(route.params?.event_lng)
+   const Item = ({ name,image,}) => (
+    <View  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10,borderBottomWidth: 1, borderBottomColor: 'whitesmoke'   }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+   
+    <View style={{marginLeft:15}}>
+    <Text style={{color:'grey'}}>{name}</Text>
+    </View>
+    </View>
+    <View>
+    <Image source={image!=""?{uri:`https://bartender.logomish.com${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+        </View>
+    </View>
+  );
+  const renderItem = ({ item }) => (
+    <Item name={item.name} image={item.image} />
+  );
   return (
   
     <View style={styles.container}>
@@ -79,7 +123,11 @@ const JobDetailsScreen = ({route}) => {
         <Text style={styles.labels}>Unique Id</Text>
         <Text style={{ color: 'black', fontWeight: 'bold' }}>{route.params.post_uuid}  </Text>
       </View>
-
+      <FlatList
+    data={data}
+    renderItem={renderItem}
+    keyExtractor={(item) => item.id}
+    />
       <MapView
         style={styles.map}
         initialRegion={{
@@ -130,6 +178,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'column',
+    width: '100%',
+    paddingTop: 10,
+    paddingHorizontal: 10,
+    margin: 5,
+
+  },
+  sections: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     width: '100%',
     paddingTop: 10,
     paddingHorizontal: 10,
