@@ -1,13 +1,13 @@
 import React from 'react';
 import { TouchableOpacity, Text, Dimensions, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icons from "../components/Icons";
 const { width, height } = Dimensions.get('window');
 
-const ButtonInput = ({onPress,title,icon}) => {
+const ChatInput = ({onPress,title,icon}) => {
   return (
     <TouchableOpacity style={title === "Create Event" || title === "Take Job" || title === "Start Chat " ? styles.buttons : styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title} </Text>
-      <Icon name={icon} size={20} color="white"/>
+      {/* <Text style={styles.text}>{title} </Text> */}
+      <Icons.Ionicons name="send" size={24} color="black" />
     </TouchableOpacity>
   );
 };
@@ -15,26 +15,27 @@ const ButtonInput = ({onPress,title,icon}) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: width * 0.5, // 80% of screen width
-    height: height * 0.06, // 10% of screen height
-    backgroundColor: 'orange',
+    // height: height * 0.06, // 10% of screen height
+    // backgroundColor: 'orange',
     flexDirection:'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 40,
-    marginTop:15,
-    marginBottom:5
+    // borderRadius: 40,
+    // marginTop:15,
+    // marginBottom:5
+    marginLeft:20,
   },
   buttons: {
-    width: width * 0.9, // 80% of screen width
-    height: height * 0.06, // 10% of screen height
-    backgroundColor: 'orange',
+    // width: width * 0.9, // 80% of screen width
+    // height: height * 0.06, // 10% of screen height
+    // backgroundColor: 'orange',
     flexDirection:'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
-    marginTop:10,
-    marginBottom:10
+    // borderRadius: 10,
+    // marginTop:10,
+    // marginBottom:10
+    marginLeft:20,
   },
   text: {
     color: '#FFFFFF',
@@ -42,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ButtonInput
+export default ChatInput

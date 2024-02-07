@@ -7,13 +7,21 @@ import {
   Text,
   TextInput,
   View,
-  Button
+  Button,
+  TouchableOpacity,
+  Dimensions,
+  Alert
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import io from 'socket.io-client';
 import { ScrollView } from "react-native-gesture-handler";
 import HeaderDetails from "../components/HeaderDetails";
 import { useNavigation,useIsFocused } from '@react-navigation/native';
+import ButtonInput from "../components/ButtonInput";
+import ChatInput from "../components/ChatInput";
+import Icons from "../components/Icons";
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 export default function Messagescreen( {route} ) {
 //   const { currentGroupName, currentGroupID } = route.params;
 console.log(route.params.id,"uteettetettetettetetet")
@@ -31,7 +39,7 @@ useEffect(() => {
   replacementFunction()
 }, [isFocused]);
 
-    const socket = io('http://192.168.1.190:3000');
+    const socket = io('https://bartendersocket.logomish.com');
     useEffect(() => {
         socket.on('chat message', (msgs) => {
             console.log("socket working",msgs)
@@ -40,10 +48,12 @@ useEffect(() => {
       }, []);
 const sendMessage = () => {
   console.log("sendMessage")
-    const msgs = { sender: userId, receiver: route.params.id, message:currentChatMesage };
+      if(currentChatMesage!=""){
+        const msgs = { sender: userId, receiver: route.params.id, message:currentChatMesage };
     console.log('chat message', msgs);
     socket.emit('chat message', msgs);
     setCurrentChatMessage('');
+      }
   };
 //   console.log(messages,item.route.params.userId)
 //   const {
@@ -98,13 +108,25 @@ const sendMessage = () => {
     </View>
     ))}
     </ScrollView>
+    
+    <View style={{display:'flex',alignItems:'center',flexDirection:"row"}}>
+    <View style={styles.messageInputContainer}>
+  
     <TextInput
-style={{color:'black'}}
-    value={currentChatMesage}
-    onChangeText={(value) => setCurrentChatMessage(value)}
-    placeholder="Enter your message"
-    />
-    <Button title="Send" onPress={sendMessage} />
+style={{color:'black',borderBottomWidth:0}}
+value={currentChatMesage}
+onChangeText={(value) => setCurrentChatMessage(value)}
+placeholder="Enter your message"
+placeholderTextColor={"black"}
+/>
+</View>
+    {
+      currentChatMesage!=""?<ChatInput title={"Send"} onPress={sendMessage}/>:""
+    }
+      <TouchableOpacity style={{alignItems:'center',justifyContent:'center', marginLeft:20}}>
+      <Icons.Entypo name="attachment" size={24} color="black" />
+      </TouchableOpacity>
+    </View>
     </View>
     </>
     );
@@ -135,10 +157,12 @@ rightMsg: {
   padding: 10,
 },
   messageInputContainer: {
-    width: "100%",
+    width: "70%",
     backgroundColor: "#fff",
-    paddingVertical: 30,
-    paddingHorizontal: 15,
+    borderBottomColor:'black',
+    // borderBottomWidth:1,
+    borderRadius:30,
+ 
     justifyContent: "center",
     flexDirection: "row",
   },

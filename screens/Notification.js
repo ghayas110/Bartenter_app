@@ -20,7 +20,7 @@ const Notification = () => {
   //     try {
 
 
-  //         fetch('http://192.168.1.122:3000/alluser/', {
+  //         fetch('https://bartendersocket.logomish.com/alluser/', {
   //           method: 'POST',
   //           headers: {
   //             'Content-Type': 'application/json',
