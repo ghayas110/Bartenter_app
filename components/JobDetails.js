@@ -14,24 +14,15 @@ const JobDetailsScreen = ({route}) => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem("data");
        setusers(JSON.parse(value))
-      console.log(JSON.parse(value),"iiiiiiiiiiiiiiiiiiii")
-
       setusertype(JSON.parse(value).user_data[0].user_type)
+      handleSubmit(JSON.parse(value))
     }
     replacementFunction()
-    handleSubmit()
-    console.log("USSSSSSSSSSSSSSSSSSSSSSSSS",users,"USSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
   }, [])
 
 
-
-   
-  
-
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (users) => {
     try {
-      console.log("hhhhhhhhhhhhhhhhhhhhhh")
      await  fetch(`${baseUrl}/posts/GetAllBookedBartenderByPostId/${route?.params?.post_id}`, {
        method: 'GET',
        headers: {
@@ -42,32 +33,48 @@ const JobDetailsScreen = ({route}) => {
      })
        .then(response => response.json())
        .then(dataa => {
-         console.log("-------------------------------------",dataa,"******************************")
-setdata(dataa)
+        console.log(dataa)
+        setdata(dataa.posts)
        });
    } catch (error) {
      Alert.alert('An error occurred while processing your request.');
    }
-
   };
+
+
    var latitude=parseFloat(route.params?.event_lat)
    var longitude=parseFloat(route.params?.event_lng)
-   const Item = ({ name,image,}) => (
+   const Item = ({ name,image,number}) => (
+
     <View  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10,borderBottomWidth: 1, borderBottomColor: 'whitesmoke'   }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
    
     <View style={{marginLeft:15}}>
     <Text style={{color:'grey'}}>{name}</Text>
+    <Text style={{color:'grey'}}>{number}</Text>
     </View>
     </View>
     <View>
     <Image source={image!=""?{uri:`https://bartender.logomish.com${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
     </View>
+  
   );
   const renderItem = ({ item }) => (
-    <Item name={item.name} image={item.image} />
+    <>
+
+    <Item name={item.name} image={item.resume} number={item.number} />
+    </>
   );
+
+
+
+
+
+
+
+
+
   return (
   
     <View style={styles.container}>
@@ -125,15 +132,26 @@ setdata(dataa)
         <Text style={{ color: 'black', fontWeight: 'bold' }}>{route.params.event_location}  </Text>
       </View>
       <View
-        style={styles.section}>
-        <Text style={styles.labels}>Unique Id</Text>
-        <Text style={{ color: 'black', fontWeight: 'bold' }}>{route.params.post_uuid}  </Text>
-      </View>
-      <FlatList
-    data={data}
+    style={styles.section}>
+    
+      {
+       data?.length>0?
+       <Text style={{color:"black",fontWeight:"bold"}}>Booked Bartender</Text>:""
+      }
+      
+        <FlatList
+     data={data}
     renderItem={renderItem}
     keyExtractor={(item) => item.id}
     />
+   </View>
+    
+      <View
+        style={styles.section}>
+        <Text style={styles.labels}>Unique Id</Text>
+        <Text style={{ color: 'black', fontWeight: 'bold' }}>{route.params.post_uuid}</Text>
+      </View>
+    
       <MapView
         style={styles.map}
         initialRegion={{

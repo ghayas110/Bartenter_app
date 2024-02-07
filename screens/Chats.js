@@ -28,7 +28,7 @@ console.log("hitiitititiititi")
       try {
         
      
-          fetch('https://bartendersocket.logomish.com/alluser', {
+          fetch('http://192.168.1.190:3000/alluser', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

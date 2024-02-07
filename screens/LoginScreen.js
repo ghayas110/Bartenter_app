@@ -27,6 +27,7 @@ const LoginScreen = () => {
       }
       const bodys= {email:email,password:password,user_type:user_type}
       try {
+  
      fetch('https://bartender.logomish.com/users/Login', {
           method: 'POST',
           headers: {
@@ -37,6 +38,7 @@ const LoginScreen = () => {
         })
         .then(response => response.json())
         .then(data => {
+          console.log("Email",data)
           if(data){
             if (data.message==="Success") {
               Alert.alert("Login","Otp have been send to your email")

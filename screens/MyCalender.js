@@ -1,4 +1,4 @@
-import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry} from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry} from 'react-native'
 import React ,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
