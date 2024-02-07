@@ -9,39 +9,45 @@ const JobDetailsScreen = ({route}) => {
   const [users, setusers] = useState("")
   const [usertype,setusertype]=useState(0)
   const [data, setdata] = useState()
-  async function replacementFunction() {
-    const value = await AsyncStorage.getItem("data");
-    setusers(JSON.parse(value))
-    console.log(JSON.parse(value),"iiiiiiiiiiiiiiiiiiii")
-    setusertype(JSON.parse(value).user_data[0].user_type)
-    try {
-       console.log("hhhhhhhhhhhhhhhhhhhhhh")
-      await  fetch(`${baseUrl}/posts/GetAllBookedBartenderByPostId/${route?.params?.post_id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${JSON.parse(value).access_token}`
-        },
-      })
-        .then(response => response.json())
-        .then(dataa => {
-          console.log("-------------------------------------",dataa,"******************************")
-setdata(dataa)
-        });
-    } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
-    }
-  }
-  useEffect(() => {
-    
-    replacementFunction()
-  
 
+  useEffect(() => {
+    async function replacementFunction() {
+      const value = await AsyncStorage.getItem("data");
+       setusers(JSON.parse(value))
+      console.log(JSON.parse(value),"iiiiiiiiiiiiiiiiiiii")
+
+      setusertype(JSON.parse(value).user_data[0].user_type)
+    }
+    replacementFunction()
+    handleSubmit()
+    console.log("USSSSSSSSSSSSSSSSSSSSSSSSS",users,"USSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
   }, [])
 
-  const handleSubmit = async () => {
+
+
+   
   
+
+
+  const handleSubmit = async () => {
+    try {
+      console.log("hhhhhhhhhhhhhhhhhhhhhh")
+     await  fetch(`${baseUrl}/posts/GetAllBookedBartenderByPostId/${route?.params?.post_id}`, {
+       method: 'GET',
+       headers: {
+         'Content-Type': 'application/json',
+         'x-api-key': 'BarTenderAPI',
+         'accesstoken': `Bearer ${users.access_token}`
+       },
+     })
+       .then(response => response.json())
+       .then(dataa => {
+         console.log("-------------------------------------",dataa,"******************************")
+setdata(dataa)
+       });
+   } catch (error) {
+     Alert.alert('An error occurred while processing your request.');
+   }
 
   };
    var latitude=parseFloat(route.params?.event_lat)
