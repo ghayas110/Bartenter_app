@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  Image,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import io from "socket.io-client";
@@ -16,7 +17,7 @@ import Icons from "../components/Icons";
 import ChatInput from "../components/ChatInput";
 import { launchImageLibrary } from "react-native-image-picker";
 import { configureLayoutAnimations } from "react-native-reanimated/lib/typescript/reanimated2/core";
-
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -30,69 +31,7 @@ export default function Messagescreen({ route }) {
   const [imageUriimage, setImageUriimage] = useState();
   const [files,setFiles]= useState();
 
-  const handleSelectImage = async(setUriFunction,seturi) => {
-    const options = {
-      noData: true,
-      mediaType: 'photo',
-    };
 
-    launchImageLibrary(options, async response => {
-      if (response.didCancel) {
-        console.log('cancel')
-      } else if (response.error) {
-        console.log('error',response)
-      } else {
-        const uri = response.assets[0].uri;
-        const uri2 = response.assets[0];
-        
-        setUriFunction(uri);
-        seturi(uri2)
-        const file = {
-          uri: uri,
-          type: uri2?.type,
-          name: `${new Date()}uri_image.jpg`,
-        };
-         console.log(file,"Resume","Certification")
-   
-         try {
-          console.log("sds")
-          const formData = new FormData();
-          formData.append('file', file) ;
-          console.log(file)
-      await fetch('http://192.168.1.190:3000/sendImage', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'multipart/form-data',
-           
-            },
-            body: formData,
-          })
-            .then(response => response.text()) // <-- log the response text
-            .then(text => {
-              console.log(JSON.parse(text));
-              return JSON.parse(text);
-    
-            })
-            .then(data => {
-              console.log(data);
-              if (data.success === 'success') {
-              console.log(data);
-              
-              } else {
-                Alert.alert(data.data);
-              }
-            });
-    
-        } catch (error) {
-          console.log('An error occurred while processing your request.', error.message);
-        }
-      }
-    });
-  
-  
-    
-  };
   useEffect(() => {
     async function fetchData() {
       const value = await AsyncStorage.getItem("data");
@@ -103,7 +42,7 @@ export default function Messagescreen({ route }) {
   }, []);
 
   // const socket = useRef(io("https://bartendersocket.logomish.com"));
-  const socket = useRef(io("http://192.168.1.190:3000"));
+  const socket = useRef(io("https://bartendersocket.logomish.com"));
   
 
   useEffect(() => {
@@ -114,7 +53,7 @@ export default function Messagescreen({ route }) {
     });
 
    
-  }, []);
+  }, [chatbool]);
 
   const scrollToBottom = () => {
     if (flatListRef.current) {
@@ -122,21 +61,9 @@ export default function Messagescreen({ route }) {
     }
   };
 
-  // const sendMessage = () => {
-  //   if (currentChatMessage !== "") {
-  //     const msgs = {
-  //       sender: userId,
-  //       receiver: route.params.id,
-  //       message: currentChatMessage,
-  //     };
-  //     socket.current.emit("chat message", msgs);
-  //     setCurrentChatMessage("");
-  //   }
-  // };
-
+const[skeleton,setskeleton]=useState(false)
 
   const sendMessage = async () => {
-
     
     // const file = {
     //   uri: imageUri,
@@ -153,7 +80,7 @@ export default function Messagescreen({ route }) {
     // console.log(file,"FFFFFFFFDDDDDDDDDDDDDD")
 
     // try {
-    //   await fetch('http://192.168.1.190:3000/sendImage', {
+    //   await fetch('https://bartendersocket.logomish.com/sendImage', {
     //     method: 'POST',
     //     headers: {
     //       'Content-Type': 'multipart/form-data',
@@ -193,7 +120,9 @@ export default function Messagescreen({ route }) {
       const msgData = {
         sender: userId,
         receiver: route.params.id,
-        message: currentChatMessage
+        message: currentChatMessage,
+        messagebool:true,
+        image:""
       };
       
       socket.current.emit("chat message", msgData);
@@ -201,7 +130,84 @@ export default function Messagescreen({ route }) {
       setImageUri(null); // Reset imageUri after sending
     }
   };
+  const[chatbool,setchatbool]=useState(true)
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const handleSelectImage = async(setUriFunction,seturi) => {
+    const options = {
+      noData: true,
+      mediaType: 'photo',
+    };
 
+    launchImageLibrary(options, async(response) => {
+      if (response.didCancel) {
+        console.log('cancel')
+      } else if (response.error) {
+        console.log('error',response)
+      } else {
+        const uri = response.assets[0].uri;
+        const uri2 = response.assets[0];
+        
+        setUriFunction(uri);
+        seturi(uri2)
+        const file = {
+          uri: uri,
+          type: uri2?.type,
+          name: `${new Date()}msg_image.jpg`,
+        };
+        console.log(file,"Certification")
+        const formData = new FormData();
+        
+        formData.append('file', file);
+        formData.append('sender',userId);
+        formData.append('receiver',route.params.id);
+        //  console.log(file,"Resume","Certification")
+        try {
+          setskeleton(true)
+          await fetch('https://bartender.logomish.com/sendImage', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'multipart/form-data'
+            },
+            body: formData,
+          })
+            .then(response => response.text()) // <-- log the response text
+            .then(text => {
+              return JSON.parse(text);
+    
+            })
+            .then(data => {
+              console.log(data,"datattatatta")
+              const msgData = {
+                sender: userId,
+                receiver: route.params.id,
+                message: "",
+                messagebool:false,
+                image:data?.image
+              };
+              
+              socket.current.emit("chat message", msgData);
+              setTimeout(() => {
+        setskeleton(false)
+              }, 1000);
+            })
+          .catch(error => console.log('Error:', error));
+           // <- Add error handling
+        } catch (error) {
+          console.log('Catch Block Error:', error); // <- Catch block might not catch fetch errors
+        }
+        
+    
+  
+      }
+  
+    
+    
+    });
+       
+  
+    
+  };
   return (
     <>
       <HeaderDetails />
@@ -215,18 +221,47 @@ export default function Messagescreen({ route }) {
           )}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <View
+          
+               item.message!=null ?
+                <View
+                style={
+                  item.sender === parseInt(userId)
+                    ? styles.rightMsg
+                    : styles.leftMsg
+                }
+              >
+              <Text style={{ color: item.sender === parseInt(userId) ? "white" : "black" }}>
+
+               {item?.message} 
+               
+              </Text>
+              </View>
+              :item.image!==null?
+              <View
               style={
                 item.sender === parseInt(userId)
-                  ? styles.rightMsg
-                  : styles.leftMsg
+                  ? styles.rightMsgimg
+                  : styles.leftMsgimg
               }
             >
-              <Text style={{ color: item.sender === parseInt(userId) ? "white" : "black" }}>
-                {item.message}
-              </Text>
+              {
+    skeleton || !item.image && !imageLoaded ? (
+      <SkeletonPlaceholder borderRadius={4}>
+        <View style={{ width: 125, height: 120, borderRadius: 4 }} />
+      </SkeletonPlaceholder>
+    ) : (
+      <Image
+        source={{ uri: `https://bartender.logomish.com${item.image}` }}
+        style={{ width: 125, height: 120, objectFit: 'contain' }}
+        onLoad={() => setImageLoaded(true)}
+      />
+    )
+  }
+           
+              
             </View>
-          )}
+            
+          :null)}
         />
       <View style={{display:'flex',alignItems:'center',flexDirection:"row"}}>
 <View style={styles.messageInputContainer}>
@@ -292,6 +327,20 @@ leftMsg: {
 rightMsg: {
   alignSelf: 'flex-end',
   backgroundColor: '#007aff',
+  color:"black",
+  borderRadius: 10,
+  marginBottom: 10,
+  padding: 10,
+},
+leftMsgimg: {
+  alignSelf: 'flex-start',
+  borderRadius: 10,
+  marginBottom: 10,
+  padding: 10,
+  color:"black"
+},
+rightMsgimg: {
+  alignSelf: 'flex-end',
   color:"black",
   borderRadius: 10,
   marginBottom: 10,

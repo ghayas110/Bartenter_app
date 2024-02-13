@@ -29,12 +29,12 @@ const PendingEvents = ({ route }) => {
 
   const handleSubmit = async (userss) => {
     try {
-      await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
+      await fetch(`${baseUrl}/users/GetUserById/${userss?.user_data[0]?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${userss.access_token}`
+          'accesstoken': `Bearer ${userss?.access_token}`
         },
       })
         .then(response => response.json())
@@ -61,7 +61,7 @@ const PendingEvents = ({ route }) => {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${users.access_token}`
+          'accesstoken': `Bearer ${users?.access_token}`
         }
       }).then(response => response.json())
         .then(data => {

@@ -14,6 +14,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import FormInput from '../components/FormInput';
 import FormTextInput from '../components/FormTextInput';
+import FormTextInputWithLocationAutocomplete from '../components/FormTextInputWithLocationAutocomplete'
 import PasswordInput from '../components/PasswordInput';
 import ButtonInput from '../components/ButtonInput';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -95,6 +96,9 @@ const AddJobScreen = () => {
       bartender_hourly_rate: selectedSpecialty,
       event_duration: event_duration
     }
+
+    console.log(event_location)
+    return
     try {
       fetch('https://bartender.logomish.com/posts/CreatePost', {
 
@@ -203,6 +207,7 @@ const AddJobScreen = () => {
             keyboardType="numeric"
             setValues={text => setevent_duration(text)}
           />
+          
           <FormInput
             titleName={"# no of people"}
             keyboardType="numeric"
@@ -218,19 +223,24 @@ const AddJobScreen = () => {
             setValues={text => setNo_of_bartenders(text)}
           // iconss={"menuunfold"}
           />
+             
 
           <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartender would be enough for 35 people.</Text>
         </View>
+        <FormTextInputWithLocationAutocomplete setValues={setevent_location} />
         <FormTextInput
           placeholder={'Theme'}
           placeholderColor={'grey'}
           setValues={text => setTheme(text)}
         />
+        
+
+{/* 
         <FormTextInput
           placeholder={'Location'}
           placeholderColor={'grey'}
           setValues={text => setevent_location(text)}
-        />
+        /> */}
         <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 10 }}>
           <Text style={{ textAlign: 'center', color: "black", fontWeight: 800 }}>Below Please select the rate you are willing to pay bartender per hour. If you are finding that your event is not being booked by bartender we suggest that you review your hourly rate. </Text>
         </View>
@@ -241,7 +251,9 @@ const AddJobScreen = () => {
             onSpecialtySelected={handleSpecialtySelected}
           />
         </View>
-        {/* <ButtonInput title={"Create Event"} onPress={()=>handleSubmit()}/> */}
+        {/* <ButtonInput title={"Create Event"} onPress={()=>handleSubmit()}/> 
+
+        */}
 
       </View>
     </View>

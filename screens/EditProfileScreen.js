@@ -30,10 +30,11 @@ const EditProfileScreen = ({ route }) => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [newval, setnewVal] = useState(false)
-  const [users, setusers] = useState("")
+  const [users, setusers] = useState({})
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem("data");
+      setuserTypes(JSON.parse(value).user_data[0].user_type)
       setusers(JSON.parse(value))
       setName(JSON.parse(value).user_data[0].name)
       getDefaultData(JSON.parse(value))
@@ -95,8 +96,11 @@ const EditProfileScreen = ({ route }) => {
       }
     });
   };
+  const[userTypes,setuserTypes]=useState(0)
 
   const getDefaultData = async (users) => {
+    setIsLoading(true)
+    setusers(users)
     try {
       await fetch(`https://bartender.logomish.com/users/GetUserById/${users?.user_data[0]?.id}`, {
         method: 'GET',
@@ -110,6 +114,7 @@ const EditProfileScreen = ({ route }) => {
         .then(data => {
           if (data.message === 'Success') {
             setName(data?.users[0]?.name)
+            setuserTypes(data?.users[0]?.user_type)
             var tra = data?.users[0]?.alcohol_serving
             setSelectedTraining(training.filter(data => data == `${tra == "1" ? "Yes" : "No"}`)[0])
             setNumber(data?.users[0]?.number)
@@ -121,6 +126,7 @@ const EditProfileScreen = ({ route }) => {
             setPaymentLink(data?.users[0].payment_link)
             var spe = data?.users[0]?.speciality
             setSelectedSpecialty(specialitys.filter(data => data == `${spe}`)[0])
+            setIsLoading(false)
           } else {
             Alert.alert(data.data);
           }
@@ -196,7 +202,8 @@ const EditProfileScreen = ({ route }) => {
 
   return (
     <>
-      {isLoading ?
+    {console.log(userTypes,"uhuiuiuiuiuiuiuiui")}
+      {isLoading||users=={} ?
         <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
           <ActivityIndicator size="large" />
         </View> :
@@ -286,7 +293,10 @@ const EditProfileScreen = ({ route }) => {
                 title={'Phone'}
                 keyboardType="numeric"
               />
-              <Text style={{ fontWeight: 'bold', color: 'black' }}>
+              {
+                userTypes==2?"":
+               <>
+                <Text style={{ fontWeight: 'bold', color: 'black' }}>
                 Please Select your speciality
               </Text>
               <SpecialtySelector
@@ -294,7 +304,11 @@ const EditProfileScreen = ({ route }) => {
                 onSpecialtySelected={handleSpecialitySelected}
                 defaultValue={selectedSpecialty}
               />
-
+              </>
+              }
+            
+            {
+                userTypes==1?"":
               <FormInput
                 titleName={'Please select your Signature Drink'}
                 placeholder={'Moscow Mule'}
@@ -303,6 +317,10 @@ const EditProfileScreen = ({ route }) => {
                 setValues={text => setsignature_drink(text)}
                 currentvalue={signature_drink}
               />
+            }
+            {
+                userTypes==2?"":
+             <>
               <Text style={{ fontWeight: 'bold', color: 'black', marginTop: 20 }}>
                 Do you have alchohol seller and server training?
               </Text>
@@ -388,6 +406,9 @@ const EditProfileScreen = ({ route }) => {
                 setValues={text => setPaymentLink(text)}
                 currentvalue={paymentLink}
               />
+             </>
+            }
+              
             </View>
           </ScrollView></>
       }
