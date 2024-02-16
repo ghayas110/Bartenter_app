@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
-import { AdminStackNavigator, CalenderStackNavigator, ContactStackNavigator, JobStackNavigator, MainStackNavigator, PendingStackNavigator} from "./StackNavigator";
+import { AdminStackNavigator, BartenderStackNavigator, CalenderStackNavigator, ContactStackNavigator, JobStackNavigator, MainStackNavigator, PendingStackNavigator} from "./StackNavigator";
 import ProfileScreen from "../screens/ProfileScreen";
 import ShopingCart from "../screens/ShopingCart";
 import PendingEvents from "../screens/PendingEvents";
@@ -107,13 +107,12 @@ const BottomTabNavigator = () => {
           
           ),
         }}/>
-
-{/* <Tab.Screen name="Subscription" component={Subscription} options={{
+ <Tab.Screen name="Subscription" component={Subscription} options={{
             tabBarIcon: ({ color, size }) => (
            
               <Icon name="play" color={color} size={size}/>
             ),
-          }}/> */}
+          }}/> 
       
         {/* <Tab.Screen name="BookedEvents" component={BookedEvents} options={{
           tabBarIcon: ({ color, size }) => (
@@ -121,11 +120,17 @@ const BottomTabNavigator = () => {
             
             ),
           }}/> */}
+           <Tab.Screen name="AllBartenders" component={BartenderStackNavigator} options={{
+            tabBarIcon: ({ color, size }) => (
+           
+              <Icons.AntDesign name="user" color={color} size={size}/>            ),
+          }}/>
           <Tab.Screen name="Chats" component={ContactStackNavigator} options={{
             tabBarIcon: ({ color, size }) => (
            
               <Icons.AntDesign name="wechat" color={color} size={size}/>            ),
           }}/>
+          
     
       </>
     }

@@ -20,6 +20,9 @@ import AddJobScreen from "../screens/AddJobScreen";
 import JobDetailsScreen from "../components/JobDetails";
 import PendingEvents from "../screens/PendingEvents";
 import BookedEvents from "../screens/BookedEvents";
+import BartenderProfile from "../screens/BartenderProfile";
+import AllBartenders from "../screens/AllBartenders";
+import AllBartenderProfile from "../screens/AllBartenderProfile";
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -53,12 +56,30 @@ const ContactStackNavigator = () => {
     <Stack.Navigator screenOptions={{
       headerShown: false
       }}>
+      
       <Stack.Screen name="Chats" component={Chats} screenOptions={{
         headerShown: false
         }}/>
         <Stack.Screen name="Message" component={MessageScreen} screenOptions={{
           headerShown: false
           }}/>
+         
+    </Stack.Navigator>
+  );
+};
+const BartenderStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+      }}>
+        <Stack.Screen name="AllBartenders" component={AllBartenders} screenOptions={{
+        headerShown: false
+        }}/>
+           <Stack.Screen name="Bartender" component={AllBartenderProfile} screenOptions={{
+        headerShown: false
+        }}/>
+
+     
          
     </Stack.Navigator>
   );
@@ -119,8 +140,8 @@ const PendingStackNavigator = () => {
         }}/>
          <Stack.Screen name="JobDetail" component={JobDetailsScreen} />
 
-         
+         <Stack.Screen name="BartenderProfile" component={BartenderProfile} />
     </Stack.Navigator>
   );
 };
-export { CalenderStackNavigator,ContactStackNavigator,MainStackNavigator,AdminStackNavigator,JobStackNavigator,PendingStackNavigator };
+export { CalenderStackNavigator,ContactStackNavigator,MainStackNavigator,AdminStackNavigator,JobStackNavigator,PendingStackNavigator,BartenderStackNavigator };

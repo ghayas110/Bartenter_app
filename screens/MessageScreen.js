@@ -185,7 +185,6 @@ const[skeleton,setskeleton]=useState(false)
                 messagebool:false,
                 image:data?.image
               };
-              
               socket.current.emit("chat message", msgData);
               setTimeout(() => {
         setskeleton(false)

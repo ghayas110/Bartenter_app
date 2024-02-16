@@ -88,17 +88,18 @@ const AddJobScreen = () => {
       event_time: new Date(event_time).toISOString().split('T')[1].split('.')[0],
       no_of_people: no_of_people,
       theme: theme,
-      event_location: event_location,
-      event_lng: -99.901810,
-      event_lat: 31.968599,
+      event_location: event_location?.location,
+      event_lng: event_location?.latlng.lng,
+      event_lat: event_location?.latlng.lat,
       no_of_bartenders: no_of_bartenders,
       post_type: post_type,
       bartender_hourly_rate: selectedSpecialty,
-      event_duration: event_duration
+      event_duration: event_duration,
+      zip_code:9999
     }
 
-    console.log(event_location)
-    return
+  
+    
     try {
       fetch('https://bartender.logomish.com/posts/CreatePost', {
 
@@ -115,6 +116,7 @@ const AddJobScreen = () => {
           setIsLoading(false)
           if (data.message == "Created") {
             Alert.alert("Job Created")
+            console.log(data)
             navigation.goBack()
           } else {
             Alert.alert("Job Not Created")
@@ -156,7 +158,10 @@ const AddJobScreen = () => {
       </TouchableOpacity>
     </View>
   </SafeAreaView>
-  <ScrollView>
+  <ScrollView 
+  keyboardShouldPersistTaps='always'
+
+  >
     <View style={{ padding: 15, width: windowWidth }}>
 
       <Text style={styles.title}>THIS IS A BARTENDER BOOKING ONLY. </Text>
@@ -169,6 +174,9 @@ const AddJobScreen = () => {
           placeholderColor={'grey'}
           setValues={text => sethostName(text)}
         />
+
+<FormTextInputWithLocationAutocomplete setValues={setevent_location} />
+
         <FormTextInput
           placeholder={'Phone Number'}
           placeholderColor={'grey'}
@@ -227,14 +235,13 @@ const AddJobScreen = () => {
 
           <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartender would be enough for 35 people.</Text>
         </View>
-        <FormTextInputWithLocationAutocomplete setValues={setevent_location} />
+        
         <FormTextInput
           placeholder={'Theme'}
           placeholderColor={'grey'}
           setValues={text => setTheme(text)}
         />
-        
-
+   
 {/* 
         <FormTextInput
           placeholder={'Location'}

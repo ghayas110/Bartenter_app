@@ -1,15 +1,20 @@
+
+
+
 import React,{useState,useEffect} from 'react';
 import { View, Text, StyleSheet, ImageBackground,ActivityIndicator,ScrollView, Switch } from 'react-native';
-import Header from './Header';
+import Header from '../components/Header';
 import StarRating from 'react-native-star-rating-widget';
-import RatingCard from './RatingCard';
+import RatingCard from '../components/RatingCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
+import HeaderDetails from '../components/HeaderDetails';
 
 
-export default function ProfileDetails({name,user_type,email,PhoneNumber,speciality,signatureDrink}) {
+export default function AllBartenderProfile({route}) {
+    console.log(route.params)
   const isFocused = useIsFocused();
-  const [userAvalible, setuserAvalible] = useState(false);
+  const [rating, setRating] = useState(0);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const[userState,setuserState]=useState(11)
@@ -26,16 +31,14 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
           setusers(JSON.parse(value));
           setuserState(JSON.parse(value)?.user_data[0]?.user_type);
           handleSubmit(JSON.parse(value));
-          
   }
   replacementFunction()
   }, [userState,isFocused]);
 
-
   const handleSubmit = async (userss) => {
     setIsLoading(true)
     try {
-     await fetch(`https://bartender.logomish.com/users/GetUserById/${userss.user_data[0].id}`, {
+     await fetch(`https://bartender.logomish.com/users/GetUserById/${route?.params?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -45,14 +48,13 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
       })
       .then(response => response.json())
       .then(dataa => {
-        console.log(dataa,"i love u")
+
         setIsLoading(false)
         if(dataa?.users){
           setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
-          dataa?.users[0]?.availability==0?
-          setIsEnabled(false):setIsEnabled(true)
-          
+          console.log(dataa?.users[0])
+       
         }
       });
     } catch (error) {
@@ -60,31 +62,9 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
     }
  
 };
-const handleAvalibilaty = async () => {
-  setIsEnabled(previousState => !previousState)
-  console.log(users)
-  try {
-   await fetch(`https://bartender.logomish.com/users/ToggleUserAvailability`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key':'BarTenderAPI',
-        'accesstoken':`Bearer ${users?.access_token}`
-      },
-    })
-    .then(response => response.json())
-    .then(dataa => {
-      console.log(dataa)
-      setIsLoading(false)
-      handleSubmit(users)
-    });
-  } catch (error) {
-    Alert.alert('An error occurred while processing your request.');
-  }
-
-};
   return (
 <>
+<HeaderDetails title={`${data?.name}`}/>
 {
   isLoading?
   <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
@@ -118,16 +98,11 @@ data?.image==""?
 <Text style={{color:'grey',fontWeight:"700"}}>{data?.signature_drink}</Text>
 </View>
 <View style={styles.section}>
-<Text style={{color:'black',fontWeight:"700"}}>Available</Text>
-<Switch
-    trackColor={{false: '#767577', true: 'orange'}}
-    thumbColor={"white"}
-    ios_backgroundColor="#3e3e3e"
-    onValueChange={handleAvalibilaty}
-    value={isEnabled}
-  />
+<Text style={{color:'black',fontWeight:"700"}}>Payment Link</Text>
+<Text style={{color:'grey',fontWeight:"700"}}>{data?.payment_link}</Text>
 </View>
-{console.log(isEnabled)}
+
+
 <View style={styles.rating}>
 <Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>Rating and Reviews</Text>
 

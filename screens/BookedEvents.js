@@ -1,10 +1,12 @@
-import { FlatList, ImageBackground,ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView,Alert } from 'react-native'
+import { FlatList,SafeAreaView, ImageBackground,ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView,Alert, TextInput } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Entypo';
 const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
+import SelectDropdown from 'react-native-select-dropdown';
+import Icons from '../components/Icons';
 
 
 const BookedEvents = ({ route }) => {
@@ -15,6 +17,14 @@ const BookedEvents = ({ route }) => {
   const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
+  const rating = ["1", "2", "3", "4","5"]
+const availabilty = ["No","Yes"]
+const navigation =useNavigation()
+const [speciality, setspeciality] = useState("")
+const handleSearch = (text) => {
+  setspeciality(text);
+
+};
 
 
   useEffect(() => {
@@ -182,7 +192,74 @@ const BookedEvents = ({ route }) => {
       <ActivityIndicator size="large" />
     </View> :
       <View>
-      <Header title="Booked Events" headerShown={true} />
+    <SafeAreaView>
+    <View style={styles.headerContainer}>
+    <View style={styles.siders}>
+    <TouchableOpacity onPress={()=>navigation.openDrawer("helloo")}>
+    <Icon name="menu" size={24} color="#fff" />
+    </TouchableOpacity>
+   
+    </View>
+    <Text style={styles.headerText}>Bartenders</Text>
+
+  <View style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
+
+  
+  <SelectDropdown
+  buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
+  buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
+  defaultButtonText="Avalibilaty"
+	data={availabilty}
+	onSelect={(selectedItem, index) => {
+		console.log(selectedItem, index)
+        setavailabilties(index)
+	}}
+	buttonTextAfterSelection={(selectedItem, index) => {
+		// text represented after item is selected
+		// if data array is an array of objects then return selectedItem.property to render after item is selected
+		return selectedItem
+	}}
+	rowTextForSelection={(item, index) => {
+		// text represented for each item in dropdown
+		// if data array is an array of objects then return item.property to represent item in dropdown
+		return item
+	}}
+/>
+<SelectDropdown
+  buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
+  buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
+  defaultButtonText="Rating"
+	data={rating}
+  onSelect={(selectedItem, index) => {
+		console.log(selectedItem, index)
+        setratings(selectedItem)
+	}}
+	buttonTextAfterSelection={(selectedItem, index) => {
+		// text represented after item is selected
+		// if data array is an array of objects then return selectedItem.property to render after item is selected
+		return selectedItem
+	}}
+	rowTextForSelection={(item, index) => {
+		// text represented for each item in dropdown
+		// if data array is an array of objects then return item.property to represent item in dropdown
+		return item
+	}}
+/>
+
+</View>
+<View style={styles.searchContainer}>
+    <TextInput
+      style={styles.input}
+      placeholder="Speciality"
+      placeholderTextColor={"orange"}
+      value={speciality}
+      onChangeText={handleSearch}
+      
+    />
+  </View>
+    </View>
+ 
+    </SafeAreaView>
       <View  style={styles.flatList}>
       {
         bookedEvents.length>0?
@@ -205,6 +282,32 @@ const BookedEvents = ({ route }) => {
 export default BookedEvents
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    backgroundColor: '#FFA500',
+    paddingTop: 40,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#D98100',
+    paddingHorizontal: 10,
+    marginTop: 10,
+    height:40,
+    borderRadius:10
+  },
+  input: {
+    marginLeft: 10,
+    flex: 1,
+  },
   cardtext: {
     display: 'flex',
     flexDirection: 'column',

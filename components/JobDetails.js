@@ -1,15 +1,16 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import HeaderDetails from './HeaderDetails'
 import MapView, { Marker } from 'react-native-maps'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 const baseUrl = require('../global')
 
 const JobDetailsScreen = ({route}) => {
   const [users, setusers] = useState("")
   const [usertype,setusertype]=useState(0)
   const [data, setdata] = useState()
-
+  const navigation = useNavigation()
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem("data");
@@ -44,9 +45,9 @@ const JobDetailsScreen = ({route}) => {
 
    var latitude=parseFloat(route.params?.event_lat)
    var longitude=parseFloat(route.params?.event_lng)
-   const Item = ({ name,image,number}) => (
+   const Item = ({ name,image,number,onPress}) => (
 
-    <View  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10,borderBottomWidth: 1, borderBottomColor: 'whitesmoke'   }}>
+    <TouchableOpacity onPress={onPress}  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10,borderBottomWidth: 1, borderBottomColor: 'whitesmoke'   }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
    
     <View style={{marginLeft:15}}>
@@ -57,13 +58,13 @@ const JobDetailsScreen = ({route}) => {
     <View>
     <Image source={image!=""?{uri:`https://bartender.logomish.com${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
-    </View>
+    </TouchableOpacity>
   
   );
   const renderItem = ({ item }) => (
     <>
 
-    <Item name={item.name} image={item.resume} number={item.number} />
+    <Item name={item.name} image={item.resume} number={item.number} onPress={()=>navigation.navigate('BartenderProfile',item)} />
     </>
   );
 

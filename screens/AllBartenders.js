@@ -1,27 +1,28 @@
-import { Button, StyleSheet, Text, View,SafeAreaView, TouchableOpacity,FlatList,Image, TextInput } from 'react-native'
+import { Button, StyleSheet, Text, View,SafeAreaView, TouchableOpacity,FlatList,Image, TextInput, Alert } from 'react-native'
 import React,{useEffect, useState} from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
-const Chats = () => {
+import SelectDropdown from 'react-native-select-dropdown'
+import FormTextInput from '../components/FormTextInput';
+const AllBartenders = () => {
 const [userId, setuserId] = useState(0)
  const [data, setdata] = useState()
  const [datas, setdatas] = useState()
+ const [speciality, setspeciality] = useState("")
+ const [availabilties, setavailabilties] = useState("1")
+ const [ratings, setratings] = useState("null")
 const navigation = useNavigation();
 const isFocused = useIsFocused();
 const [users, setusers] = useState("")
+const rating = ["1", "2", "3", "4","5"]
+const availabilty = ["No","Yes"]
 const [searchQuery, setSearchQuery] = useState("");
 const handleSearch = (text) => {
-  setSearchQuery(text);
-  if (text === "") {
-    setdata(datas); 
-  } else {
-    const filteredData = datas.filter(item => item.name.toLowerCase().includes(text.toLowerCase()));
-    setdata(filteredData);
-  }
+  setspeciality(text);
+
 };
 
 
@@ -31,31 +32,34 @@ useEffect(() => {
     AsyncStorage.setItem('data', value)
     setusers(JSON.parse(value))
     setuserId(JSON.parse(value).user_data[0].id);
-    AllChats(JSON.parse(value).user_data[0].id,JSON.parse(value).user_data[0].user_type)
+    AllChats(JSON.parse(value).user_data[0].access_token)
   }
   replacementFunction()
-}, [isFocused]);
-  const AllChats = async (id,type) => {
+}, [isFocused,availabilties,ratings,speciality]);
+  const AllChats = async (access_token) => {
     // Your existing login logic
-    if (id) {
+    // &minRating=0
       try {
-          fetch('https://bartendersocket.logomish.com/alluser', {
-            method: 'POST',
+        console.log(availabilties,"sss")
+        console.log(speciality,"jjj")
+        console.log(ratings,"kkkkk")
+          fetch(`https://bartender.logomish.com/users/GetAllBartenders?availability=${availabilties}&skills=${speciality}&minRating=${ratings}`, {
+            method: 'GET',
             headers: {
               'Content-Type': 'application/json',
+              'x-api-key':'BarTenderAPI',
+              'accesstoken':`Bearer ${access_token}`
             },
-            body: JSON.stringify({
-              "userId":id,
-              "userType":type
-          }),
+            
           })
           .then(response => {
             return response.json()
           })
           .then(chat => {
-            if (chat.success) {
-            setdata(chat.user)
-            setdatas(chat.user)
+            console.log(chat)
+            if (chat.message) {
+            setdata(chat.users)
+            setdatas(chat.users)
               // navigation.navigate('OtpS')
             } else {
               Alert.alert("Chat","No Cat Found")
@@ -66,35 +70,7 @@ useEffect(() => {
       } catch (error) {
       console.log('An error occurred while processing your request.',error);
       }
-    } else {
-      console.log('Please fill in all fields');
-    }
-  };
-  const seenMessage = async (sender) => {
-    console.log("=====++++++++++++++++==========",sender,"xxxx000000000000000000000000000")
-    if(sender!==null)
-      try {
-
-          fetch('https://bartender.logomish.com/messages/ReadMessages', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'accesstoken': `Bearer ${users?.access_token}`,
-              'x-api-key': 'BarTenderAPI',
-            },
-            body: JSON.stringify({"sender":sender}),
-          })
-          .then(response => {
-            return response.json()
-          })
-          .then(chat => {
-          }).catch(err=>{
-          })
-        
-  
-      } catch (error) {
-      console.log('An error occurred while processing your request.',error);
-      }
+   
   };
 
   
@@ -106,11 +82,8 @@ useEffect(() => {
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
     <View style={{marginLeft:15}}>
     <Text style={{color:'grey'}}>{name}</Text>
-   {console.log(sender,userId,message)}
-    { message?.startsWith('/resources/static/assets/uploads/messages/')?
-    <Text style={{color:seen_status==0&&sender!=userId?"black":'grey',fontWeight:seen_status==0&&sender!=userId?'bold':500}}>attachment</Text>:
-    <Text style={{color:seen_status==0&&sender!=userId?"black":'grey',fontWeight:seen_status==0&&sender!=userId?'bold':500}}>{message}</Text>
-}
+  
+  
     <Text style={{color:'grey',fontSize:12}}>{role}</Text>
 
     </View>
@@ -123,7 +96,7 @@ useEffect(() => {
   );
   const renderItem = ({ item }) => (
     // item.seen_status==0 && item.sender !==userId ?
-    <Item name={item.name} sender={item.sender} seen_status={item.seen_status} message={(item.message?item.message:item.message_image)} role={item.role} image={item.image}  onPress={()=>{seenMessage(item.id);navigation.navigate('Message',item)}}/>
+    <Item name={item.name} image={item.image}  onPress={()=>{navigation.navigate('Bartender',item)}}/>
   );
   return (
     <SafeAreaView>
@@ -136,14 +109,60 @@ useEffect(() => {
     </TouchableOpacity>
    
     </View>
-    <Text style={styles.headerText}>Chat</Text>
-    <View style={styles.searchContainer}>
+    <Text style={styles.headerText}>Bartenders</Text>
+
+  <View style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
+
+  
+  <SelectDropdown
+  buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
+  buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
+  defaultButtonText="Avalibilaty"
+	data={availabilty}
+	onSelect={(selectedItem, index) => {
+		console.log(selectedItem, index)
+        setavailabilties(index)
+	}}
+	buttonTextAfterSelection={(selectedItem, index) => {
+		// text represented after item is selected
+		// if data array is an array of objects then return selectedItem.property to render after item is selected
+		return selectedItem
+	}}
+	rowTextForSelection={(item, index) => {
+		// text represented for each item in dropdown
+		// if data array is an array of objects then return item.property to represent item in dropdown
+		return item
+	}}
+/>
+<SelectDropdown
+  buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
+  buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
+  defaultButtonText="Rating"
+	data={rating}
+  onSelect={(selectedItem, index) => {
+		console.log(selectedItem, index)
+        setratings(selectedItem)
+	}}
+	buttonTextAfterSelection={(selectedItem, index) => {
+		// text represented after item is selected
+		// if data array is an array of objects then return selectedItem.property to render after item is selected
+		return selectedItem
+	}}
+	rowTextForSelection={(item, index) => {
+		// text represented for each item in dropdown
+		// if data array is an array of objects then return item.property to represent item in dropdown
+		return item
+	}}
+/>
+
+</View>
+<View style={styles.searchContainer}>
     <Icon name="search" size={20} color="orange" />
     <TextInput
       style={styles.input}
-      placeholder="Search"
+      placeholder="Speciality"
       placeholderTextColor={"orange"}
-      value={searchQuery}
+      value={speciality}
       onChangeText={handleSearch}
       
     />
@@ -164,7 +183,7 @@ useEffect(() => {
   )
 }
 
-export default Chats
+export default AllBartenders
 
 const styles = StyleSheet.create({
   container: {
