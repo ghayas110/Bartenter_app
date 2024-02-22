@@ -23,13 +23,14 @@ import EditProfileScreen from './screens/EditProfileScreen';
 import {useNavigation} from '@react-navigation/native';
 const AuthStack = createStackNavigator();
 const App = () => {
-  // const navigation1 = useNavigation();
+
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   const Drawer = createDrawerNavigator();
   const [users,setusers]=useState("")
   useEffect(() => {
     async function checkLoginStatus() {
+   
       const value = await AsyncStorage.getItem("data");
       if (value !== null) {
         setIsLoggedIn(true);

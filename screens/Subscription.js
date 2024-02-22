@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import ButtonInput from '../components/ButtonInput'
 
 const Subscription = ({navigation}) => {
+  
   return (
     <SafeAreaView>
     <Header title="Subscription" headerShown={false}/>

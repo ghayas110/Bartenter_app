@@ -1,4 +1,4 @@
-import { FlatList,SafeAreaView, ImageBackground,ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView,Alert, TextInput } from 'react-native'
+import { FlatList,SafeAreaView, ImageBackground,ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView,Alert, TextInput, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Entypo';
@@ -7,16 +7,56 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icons from '../components/Icons';
-
-
+import DraggableProgressBar from '../components/DraggableProgressBar';
+import DatePicker from 'react-native-date-picker';
+import DatePickers from '../components/DatePicker';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const BookedEvents = ({ route }) => {
   const [userState, setuserState] = useState(11)
   const [users, setusers] = useState("")
   const [data, setdata] = useState()
+  const [no_of_people, setno_of_people] = useState("null")
+  const [zip_code, setzip_code] = useState("null")
+  const [Distance_Radius, setDistance_Radius] = useState("null")
+  const [Hourly_Rate, setHourly_Rate] = useState("null")
+  const [event_duration, setevent_duration] = useState("null")
   const [bookedEvents, setBookedEvents] = useState([])
   const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
+  const [startDate, setStartDate] = useState("null");
+  const [endDate, setEndDate] = useState("null");
+  const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
+  const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+
+  const showStartDatePicker = () => {
+    setStartDatePickerVisibility(true);
+  };
+
+  const showEndDatePicker = () => {
+    setEndDatePickerVisibility(true);
+  };
+
+  const hideStartDatePicker = () => {
+    setStartDatePickerVisibility(false);
+  };
+
+  const hideEndDatePicker = () => {
+    setEndDatePickerVisibility(false);
+  };
+
+  const handleStartDateConfirm = (date) => {
+    setStartDate(date);
+    hideStartDatePicker();
+  };
+  const handleEndDateConfirm = (date) => {
+    setEndDate(date);
+    hideEndDatePicker();
+  };
+
+
+
   const rating = ["1", "2", "3", "4","5"]
 const availabilty = ["No","Yes"]
 const navigation =useNavigation()
@@ -34,10 +74,10 @@ const handleSearch = (text) => {
       setusers(JSON.parse(value));
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value));
-      getAllPosts()
+      getAllPosts(JSON.parse(value).user_data[0].access_token)
     }
     replacementFunction()
-  }, [userState,route,isFocused]);
+  }, [userState,route,isFocused,event_duration,zip_code,Distance_Radius,startDate,endDate,no_of_people,Hourly_Rate]);
 
   const handleSubmit = async (userss) => {
     try {
@@ -61,18 +101,21 @@ const handleSearch = (text) => {
     }
 
   };
-  const getAllPosts = async () => {
+  const getAllPosts = async (access_token) => {
+    console.log(`https://bartender.logomish.com/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate!="null"?new Date(startDate).toISOString().split("T")[0]:"null"}&date_end=${endDate!="null"?new Date(endDate).toISOString().split("T")[0]:"null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`,"start")
+    // return
     setIsLoading(true)
     try {
-      await fetch(`${baseUrl}/posts/GetAllPost`, {
+      await fetch(`https://bartender.logomish.com/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate!="null"?new Date(startDate).toISOString().split("T")[0]:"null"}&date_end=${endDate!="null"?new Date(endDate).toISOString().split("T")[0]:"null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${users.access_token}`
+          'accesstoken':`Bearer ${access_token}`
         }
       }).then(response => response.json())
         .then(data => {
+          console.log(data)
           setIsLoading(false)
 
           if (data.posts.length > 0) {
@@ -200,63 +243,139 @@ const handleSearch = (text) => {
     </TouchableOpacity>
    
     </View>
-    <Text style={styles.headerText}>Bartenders</Text>
+    <Text style={styles.headerText}>Events</Text>
 
-  <View style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
+  <View style={{display:'flex',alignItems:'center',justifyContent:'space-around',flexDirection:'row'}}>
+    <View>
 
-  
-  <SelectDropdown
-  buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
-  buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
-  defaultButtonText="Avalibilaty"
-	data={availabilty}
-	onSelect={(selectedItem, index) => {
-		console.log(selectedItem, index)
-        setavailabilties(index)
-	}}
-	buttonTextAfterSelection={(selectedItem, index) => {
-		// text represented after item is selected
-		// if data array is an array of objects then return selectedItem.property to render after item is selected
-		return selectedItem
-	}}
-	rowTextForSelection={(item, index) => {
-		// text represented for each item in dropdown
-		// if data array is an array of objects then return item.property to represent item in dropdown
-		return item
-	}}
-/>
-<SelectDropdown
-  buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
-  buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
-  defaultButtonText="Rating"
-	data={rating}
-  onSelect={(selectedItem, index) => {
-		console.log(selectedItem, index)
-        setratings(selectedItem)
-	}}
-	buttonTextAfterSelection={(selectedItem, index) => {
-		// text represented after item is selected
-		// if data array is an array of objects then return selectedItem.property to render after item is selected
-		return selectedItem
-	}}
-	rowTextForSelection={(item, index) => {
-		// text represented for each item in dropdown
-		// if data array is an array of objects then return item.property to represent item in dropdown
-		return item
-	}}
-/>
+    
+  <Text style={{color:'white',fontSize:11}}>Start Date</Text>
+<View style={styles.searchContainers}>
 
-</View>
-<View style={styles.searchContainer}>
+
+  <TouchableOpacity onPress={showStartDatePicker} >
     <TextInput
       style={styles.input}
-      placeholder="Speciality"
-      placeholderTextColor={"orange"}
-      value={speciality}
-      onChangeText={handleSearch}
+      placeholder="Start Date"
+      placeholderTextColor={"white"}
+      value={startDate!="null"?startDate.toDateString():""} // Display the selected date
+      editable={false} // Disable manual input
       
     />
+  </TouchableOpacity>
+
+  <DatePicker
+        modal
+        open={isStartDatePickerVisible}
+        mode="date"
+        date={startDate!="null"?startDate:new Date()}
+        onConfirm={handleStartDateConfirm}
+        onCancel={hideStartDatePicker}
+      />
+</View>
+</View>
+<View>
+ 
+<Text style={{color:'white',fontSize:11}}>End Date</Text>
+<View style={styles.searchContainers}>
+
+
+  <TouchableOpacity onPress={showEndDatePicker} >
+    <TextInput
+      style={styles.input}
+      placeholder="End Date"
+      placeholderTextColor={"white"}
+      value={endDate!="null"?endDate.toDateString():""} // Display the selected date
+      editable={false} // Disable manual input
+      
+    />
+  </TouchableOpacity>
+
+  <DatePicker
+        modal
+        open={isEndDatePickerVisible}
+        mode="date"
+        date={endDate!="null"?endDate:new Date()}
+        onConfirm={handleEndDateConfirm}
+        onCancel={hideEndDatePicker}
+      />
+</View>
+</View>
+
   </View>
+  <View style={{display:'flex',alignItems:'center',justifyContent:'space-around',flexDirection:'row'}}>
+  <View>
+ 
+ <Text style={{color:'white',fontSize:11}}>Event Duration</Text>
+<View style={styles.searchContainers}>
+  <TextInput
+    style={styles.input}
+    placeholder="Event Duration"
+    placeholderTextColor={"white"}
+    value={event_duration}
+    onChangeText={(e)=>setevent_duration(e)}
+    
+  />
+</View>
+</View>
+<View>
+ 
+<Text style={{color:'white',fontSize:11}}>ZipCode</Text>
+<View style={styles.searchContainers}>
+
+  <TextInput
+    style={styles.input}
+    placeholder="Zip code"
+    placeholderTextColor={"white"}
+    value={zip_code}
+    onChangeText={(e)=>setzip_code(e)}
+    
+  />
+</View>
+</View>
+</View>
+<View style={{display:'flex',alignItems:'center',justifyContent:'space-around',flexDirection:'row'}}>
+<View>
+ 
+ <Text style={{color:'white',fontSize:11}}>End Date</Text>
+<View style={styles.searchContainers}>
+  <TextInput
+    style={styles.input}
+    placeholder="No of People"
+    placeholderTextColor={"white"}
+    value={no_of_people}
+    onChangeText={(e)=>setno_of_people(e)}
+    
+  />
+</View>
+</View>
+<View>
+ 
+ <Text style={{color:'white',fontSize:11}}>End Date</Text>
+<View style={styles.searchContainers}>
+  <TextInput
+    style={styles.input}
+    placeholder="Hourly Rate"
+    placeholderTextColor={"white"}
+    value={Hourly_Rate}
+    onChangeText={(e)=>setHourly_Rate(e)}
+    
+  />
+</View>
+</View>
+</View>
+<Text style={{color:'white',fontSize:11}}>Distance Radius</Text>
+<View style={styles.searchContainer}>
+  
+  <TextInput
+    style={styles.input}
+    placeholder="Distance Raduis"
+    placeholderTextColor={"white"}
+    value={Distance_Radius}
+    onChangeText={(e)=>setDistance_Radius(e)}
+    
+  />
+</View>
     </View>
  
     </SafeAreaView>
@@ -304,9 +423,21 @@ const styles = StyleSheet.create({
     height:40,
     borderRadius:10
   },
+  searchContainers: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#D98100',
+    paddingHorizontal: 10,
+    marginTop: 10,
+    height:40,
+    width:windowWidth*0.4,
+    borderRadius:10
+  },
   input: {
     marginLeft: 10,
     flex: 1,
+    color:'white'
   },
   cardtext: {
     display: 'flex',

@@ -1,4 +1,8 @@
 {
   "name": "Bartender_App",
-  "displayName": "Bartender_App"
+  "displayName": "Bartender_App",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-1350577794890014~5543193414"
+
+  }
 }

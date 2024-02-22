@@ -1,10 +1,12 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry} from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry, Alert} from 'react-native'
 import React ,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import messaging from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
 const baseUrl = require('../global')
-
 const MyCalender = ({route}) => {
   const [userState, setuserState] = useState(11)
   const [users, setusers] = useState("")
@@ -13,6 +15,8 @@ const MyCalender = ({route}) => {
   const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
+  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem('data');
@@ -21,9 +25,36 @@ const MyCalender = ({route}) => {
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value));
       getAllPosts()
+     
     }
     replacementFunction()
+  
   }, [userState,route,isFocused]);
+useEffect(() => {
+  getDeviceToken()
+}, [])
+const getDeviceToken =async()=>{
+ 
+  let token = await messaging().getToken();
+  console.log(token,"mytoken")
+
+  }
+  useEffect(() => {
+    const unsubscribeBackground = messaging().onMessage(async remoteMessage => {
+      const notifeeData = remoteMessage;
+      console.log(notifeeData.notification,"data")
+      const permission = await notifee.requestPermission();
+      console.log(permission)
+      if (permission.authorizationStatus === 1) {
+        await notifee.displayNotification(notifeeData);
+      } else {
+        console.log('Notification permission not granted');
+      }
+    });
+
+
+    return unsubscribeBackground;
+  }, []);
 
   const handleSubmit = async (userss) => {
     try {
@@ -115,6 +146,10 @@ const navigation =useNavigation()
          bookedEvents.length > 0?
          <>
           <Header title="My Calender" headerShown={true}/>
+          <BannerAd
+      unitId={adUnitId}
+      size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+    />
         <FlatList
         data={bookedEvents}
         renderItem={renderItem}

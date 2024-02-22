@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1080337234568",
+    "project_id": "bartender-app-c74dd",
+    "storage_bucket": "bartender-app-c74dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080337234568:android:4204a05a6d898cb81b7d3d",
+        "android_client_info": {
+          "package_name": "com.bartender_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGinJSSZ0qRSbav7bIO9nqJjkdNM0xUX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
