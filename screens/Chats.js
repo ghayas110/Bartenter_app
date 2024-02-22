@@ -18,6 +18,7 @@ const handleSearch = (text) => {
   setSearchQuery(text);
   if (text === "") {
     setdata(datas); 
+ 
   } else {
     const filteredData = datas.filter(item => item.name.toLowerCase().includes(text.toLowerCase()));
     setdata(filteredData);

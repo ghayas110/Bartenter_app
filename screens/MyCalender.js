@@ -44,12 +44,10 @@ const getDeviceToken =async()=>{
       const notifeeData = remoteMessage;
       console.log(notifeeData.notification,"data")
       const permission = await notifee.requestPermission();
-      console.log(permission)
-      if (permission.authorizationStatus === 1) {
+      console.log(permission.authorizationStatus,"status")
+     
         await notifee.displayNotification(notifeeData);
-      } else {
-        console.log('Notification permission not granted');
-      }
+      
     });
 
 
