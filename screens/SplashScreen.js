@@ -14,7 +14,7 @@ const SplashScreen = () => {
         <Image style={styles.logo}
         source={require('../assets/logo.png')}
       />
-      <Text style={{fontSize:30,color:'white'}}>Bartender App</Text>
+      <Text style={{fontSize:30,color:'white'}}>Bartinder App</Text>
     </View>
   );
 };

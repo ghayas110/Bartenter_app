@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Bartender_App.app"
-               BlueprintName = "Bartender_App"
-               ReferencedContainer = "container:Bartender_App.xcodeproj">
+               BuildableName = "Bartinder.app"
+               BlueprintName = "Bartinder"
+               ReferencedContainer = "container:Bartinder.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "Bartender_AppTests.xctest"
-               BlueprintName = "Bartender_AppTests"
-               ReferencedContainer = "container:Bartender_App.xcodeproj">
+               BuildableName = "BartinderTests.xctest"
+               BlueprintName = "BartinderTests"
+               ReferencedContainer = "container:Bartinder.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Bartender_App.app"
-            BlueprintName = "Bartender_App"
-            ReferencedContainer = "container:Bartender_App.xcodeproj">
+            BuildableName = "Bartinder.app"
+            BlueprintName = "Bartinder"
+            ReferencedContainer = "container:Bartinder.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Bartender_App.app"
-            BlueprintName = "Bartender_App"
-            ReferencedContainer = "container:Bartender_App.xcodeproj">
+            BuildableName = "Bartinder.app"
+            BlueprintName = "Bartinder"
+            ReferencedContainer = "container:Bartinder.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

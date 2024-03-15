@@ -74,9 +74,9 @@ android {
     ndkVersion "25.1.8937393"
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
-    namespace "com.bartender_app"
+    namespace "com.bartinder"
     defaultConfig {
-        applicationId "com.bartender_app"
+        applicationId "com.bartinder"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy "store", "play"

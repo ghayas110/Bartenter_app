@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "611984250170",
+    "project_id": "bartinder-3e6ba",
+    "storage_bucket": "bartinder-3e6ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611984250170:android:b5fd52d2f91d41b8a1ec03",
+        "android_client_info": {
+          "package_name": "com.bartinder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOx-HBmYySkDWNB8X4h0Aqk3F-uYIPJZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

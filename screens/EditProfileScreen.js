@@ -409,7 +409,7 @@ const EditProfileScreen = ({ route }) => {
                   <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: "100%" }}>
                     <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
                     <Icons.AntDesign name="file1"  size={20} />
-                      <Text style={{ color: 'black' }}>{resumeUriimage.name}</Text>
+                      <Text style={{ color: 'black' }}>{resumeUriimage?.name}</Text>
                     </View>
                     <Icons.AntDesign name={"closecircle"} />
                   </View>

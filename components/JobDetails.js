@@ -137,7 +137,7 @@ const JobDetailsScreen = ({route}) => {
     
       {
        data?.length>0?
-       <Text style={{color:"black",fontWeight:"bold"}}>Booked Bartender</Text>:""
+       <Text style={{color:"black",fontWeight:"bold"}}>Booked Bartinder</Text>:""
       }
       
         <FlatList

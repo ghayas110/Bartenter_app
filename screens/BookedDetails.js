@@ -78,21 +78,33 @@ const BookedDetails = ({route}) => {
 
   const handleCancel = async () => {
     try {
-      await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
-        method: 'GET',
+      await fetch(`https://bartenderbackend.bazazi.co/posts/CancelBookedPost`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${userss.access_token}`
+          'accesstoken': `Bearer ${users.access_token}`
         },
+        body:JSON.stringify({
+          "post_id":data?.post_id
+      })
       })
         .then(response => response.json())
         .then(dataa => {
           console.log("USERRRRRRRRRRRRRRR",dataa,"USERRRRRRRRRRRRRRR")
-          if (dataa?.users.length > 0) {
-            setImageUri(`https://bartenderbackend.bazazi.co${dataa?.users[0]?.image}`)
-            setdata(dataa?.users)
+          if(dataa?.success==="Success"){            Alert.alert(
+              "Sucess",
+              dataa.message,
+              [
+                {
+                  text: 'OK',
+                  onPress: () => navigation.goBack(),
+                  style: 'cancel',
+                }
+              ]
+              )
           }
+    
         });
     } catch (error) {
       Alert.alert('An error occurred while processing your request.');
@@ -102,7 +114,7 @@ const BookedDetails = ({route}) => {
     const navigation = useNavigation()
     console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",route.params)
     const data = route.params.item
-    console.log(data,"as")
+    console.log(data?.post_id,"as")
     const datas = [
         { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
         
@@ -194,7 +206,7 @@ const BookedDetails = ({route}) => {
       <View style={{justifyContent:'center', flexDirection: 'row', alignItems: 'center'}}>
 
 
-         <ButtonInput title={"Cancel Booking"} />
+         <ButtonInput title={"Cancel Booking"} onPress={handleCancel}/>
       </View>
       :null}
       {userState==2?

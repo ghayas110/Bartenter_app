@@ -154,7 +154,17 @@ console.log(JsonBody,"ssss")
         )
         .then(data => {
           if (data.message == "Success") {
-            Alert.alert("You have booked this event")
+            Alert.alert(
+              "Sucess",
+            "Booked Event Succesfully"
+              [
+                {
+                  text: 'OK',
+                  onPress: () => navigation.goBack(),
+                  style: 'cancel',
+                }
+              ]
+              )
             getAllPosts()
           } else {
             Alert.alert("Something Went Wrong")
