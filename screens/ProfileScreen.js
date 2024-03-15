@@ -31,12 +31,12 @@ const ProfileScreen = ({route}) => {
   const count = useSelector((state) => state.auth.user)
   const[userState,setuserState]=useState(11)
   const [checked, setChecked] = useState(false);
-  const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users?.image}`||'');
+  const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
   const [data, setdata] = useState()
 
   const handleSubmit = async (userss) => {
     try {
-      fetch(`https://bartender.logomish.com/users/GetUserById/${userss.user_data[0].id}`, {
+      fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss.user_data[0].id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const ProfileScreen = ({route}) => {
       .then(dataa => {
         if(dataa?.users){
 
-          setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
+          setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
        setdata(dataa?.users[0])
         }
       });

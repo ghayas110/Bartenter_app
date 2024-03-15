@@ -12,7 +12,7 @@ const [isLoading, setIsLoading] = useState(false);
 const[userState,setuserState]=useState(11)
 const [users,setusers]=useState("")
 const [data, setdata] = useState()
-const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users?.image}`||'');
+const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
 
 
 useEffect(() => {
@@ -30,7 +30,7 @@ const handleSubmit = async (userss) => {
   setIsLoading(true)
 
   try {
-    fetch(`https://bartender.logomish.com/users/GetUserById/${userss.user_data[0].id}`, {
+    fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss.user_data[0].id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const handleSubmit = async (userss) => {
       setIsLoading(false)
 
       if(dataa?.users){
-        setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
+        setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
         setdata(dataa?.users[0])     
       }
     });

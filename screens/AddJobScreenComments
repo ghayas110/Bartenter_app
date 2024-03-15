@@ -32,7 +32,7 @@
 //   const [event_location, setevent_location] = useState();
 //   const [showPicker, setShowPicker] = useState(false);
 //   const [showTimePicker, setShowTimePicker] = useState(false);
-//   const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users.image}`);
+//   const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users.image}`);
 
 //   const handleSelectImage = () => {
 //     const options = {
@@ -75,7 +75,7 @@
 //     };
 //     formData.append('file', file);
 //     try {
-//       fetch('https://bartender.logomish.com/posts/CreatePost', {
+//       fetch('https://bartenderbackend.bazazi.co/posts/CreatePost', {
      
 //           method: 'POST',
 //           headers: {
@@ -261,7 +261,7 @@ import {
     const [theme, setTheme] = useState(false);
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
-    const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users.image}`);
+    const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users.image}`);
     const [selectedSpecialty, setSelectedSpecialty] = useState('');
     const hourlyRate =["$20","$25","$30",,"$40","$50"]
     const handleSpecialtySelected = (specialty) => {
@@ -307,7 +307,7 @@ import {
       };
       formData.append('file', file);
       try {
-        fetch('https://bartender.logomish.com/posts/CreatePost', {
+        fetch('https://bartenderbackend.bazazi.co/posts/CreatePost', {
        
             method: 'POST',
             headers: {

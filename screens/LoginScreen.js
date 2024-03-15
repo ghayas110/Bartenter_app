@@ -28,7 +28,7 @@ const LoginScreen = () => {
       const bodys= {email:email,password:password,user_type:user_type}
       try {
   
-     fetch('https://bartender.logomish.com/users/Login', {
+     fetch('https://bartenderbackend.bazazi.co/users/Login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

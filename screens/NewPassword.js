@@ -7,7 +7,7 @@ import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 
-const NewPassword = () => {
+const NewPassword = ({route}) => {
     const [email, setEmail] = useState(route?.params?.bodys?.email);
   const [password, setPassword] = useState('');
   const [cpassword, setcpassword] = useState('');
@@ -24,7 +24,7 @@ const NewPassword = () => {
    
       const bodys= {email:email,password:password,user_type:user_type}
       try {
-        fetch('https://bartender.logomish.com/users/FogetPassword', {
+        fetch('https://bartenderbackend.bazazi.co/users/FogetPassword', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

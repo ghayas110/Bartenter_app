@@ -34,7 +34,7 @@ const AddJobScreen = () => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem("data");
       setusers(JSON.parse(value))
-      setImageUri(`https://bartender.logomish.com/${JSON.parse(value).user_data[0].image}`)
+      setImageUri(`https://bartenderbackend.bazazi.co/${JSON.parse(value).user_data[0].image}`)
       setpost_type(JSON.parse(value).user_data[0].user_type == 1 ? "bartender" : "user")
     }
     replacementFunction()
@@ -97,11 +97,11 @@ const AddJobScreen = () => {
       event_duration: event_duration,
       zip_code:9999
     }
-
+console.log(JsonBody,"my Name")
   
     
     try {
-      fetch('https://bartender.logomish.com/posts/CreatePost', {
+      fetch('https://bartenderbackend.bazazi.co/posts/CreatePost', {
 
         method: 'POST',
         headers: {

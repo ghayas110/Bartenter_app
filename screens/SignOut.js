@@ -12,8 +12,8 @@ const SignOut = ({ onLogin }) => {
   const [data, setdata] = useState()
   const handleSubmit = async (userss) => {
     try {
-      // console.log("helloo url",`https://bartender.logomish.com/users/GetUserById/${userss.user_data[0].id}`)
-      fetch(`https://bartender.logomish.com/users/GetUserById/${userss?.user_data[0]?.id}`, {
+      // console.log("helloo url",`https://bartenderbackend.bazazi.co/users/GetUserById/${userss.user_data[0].id}`)
+      fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss?.user_data[0]?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const SignOut = ({ onLogin }) => {
       {
         users.user_data[0].image==""?<Image source={require('../assets/userpic.jpg')} style={{width: 90, height: 90,borderRadius:50}} />
         :
-        <Image source={{ uri: `https://bartender.logomish.com/${users?.user_data[0]?.image}` }} style={{width: 90, height: 90,borderRadius:50}} />
+        <Image source={{ uri: `https://bartenderbackend.bazazi.co/${users?.user_data[0]?.image}` }} style={{width: 90, height: 90,borderRadius:50}} />
       }
     </TouchableOpacity>
     <Text style={{fontSize:20,color:"black"}}>{users.user_data[0]?.name}</Text>

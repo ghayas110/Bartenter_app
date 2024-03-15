@@ -32,6 +32,7 @@ const App = () => {
     async function checkLoginStatus() {
    
       const value = await AsyncStorage.getItem("data");
+      console.log(value,"hello value")
       if (value !== null) {
         setIsLoggedIn(true);
       } else {
@@ -44,6 +45,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
+ 
     <NavigationContainer>
     {isLoggedIn ? (
       <Drawer.Navigator  screenOptions={{
@@ -97,7 +99,3 @@ const App = () => {
   );
 };
 export default App;
-
-
-
-

@@ -20,7 +20,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Icons from '../components/Icons';
 import ButtonInput from '../components/ButtonInput';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-
+import DocumentPicker from 'react-native-document-picker';
 import { useSelector } from 'react-redux';
 import SpecialtySelector from '../components/Selector';
 import FormTextInput from '../components/FormTextInput';
@@ -96,13 +96,38 @@ const EditProfileScreen = ({ route }) => {
       }
     });
   };
+  const selectDoc = async (setUriFunction, seturi, setflag) => {
+    try {
+      const doc = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+        allowMultiSelection: true
+      });
+      // const doc = await DocumentPicker.pickSingle()
+      console.log("object",doc)
+      const uri = doc[0].uri;
+      const uri2 = doc[0];
+      setUriFunction(uri);
+      seturi(uri2)
+      setflag(true)
+      
+    //   const doc = await DocumentPicker.pickMultiple({
+    //     type: [DocumentPicker.types.pdf, DocumentPicker.types.images]
+    //   })
+    //   console.log(doc)
+    } catch(err) {
+      if(DocumentPicker.isCancel(err)) 
+        console.log("User cancelled the upload", err);
+      else 
+        console.log(err)
+    }
+  }
   const[userTypes,setuserTypes]=useState(0)
 
   const getDefaultData = async (users) => {
     setIsLoading(true)
     setusers(users)
     try {
-      await fetch(`https://bartender.logomish.com/users/GetUserById/${users?.user_data[0]?.id}`, {
+      await fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${users?.user_data[0]?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -119,9 +144,9 @@ const EditProfileScreen = ({ route }) => {
             setSelectedTraining(training.filter(data => data == `${tra == "1" ? "Yes" : "No"}`)[0])
             setNumber(data?.users[0]?.number)
             setdob_date(new Date(data?.users[0]?.dob))
-            setImageUri(`https://bartender.logomish.com` + data?.users[0]?.image)
-            setCertificationUri(`https://bartender.logomish.com` + data?.users[0]?.certificate)
-            setResumeUri(`https://bartender.logomish.com` + data?.users[0]?.resume)
+            setImageUri(`https://bartenderbackend.bazazi.co` + data?.users[0]?.image)
+            setCertificationUri(`https://bartenderbackend.bazazi.co` + data?.users[0]?.certificate)
+            setResumeUri(`https://bartenderbackend.bazazi.co` + data?.users[0]?.resume)
             setsignature_drink(data?.users[0]?.signature_drink)
             setPaymentLink(data?.users[0].payment_link)
             var spe = data?.users[0]?.speciality
@@ -145,12 +170,12 @@ const EditProfileScreen = ({ route }) => {
     const Certification = {
       uri: certificationUri,
       type: certificationUriimage?.type,
-      name: `${new Date()}certificate_image.jpg`,
+      name: `${new Date()}certificate_image.pdf`,
     };
     const Resume = {
       uri: resumeUri,
       type: resumeUriimage?.type,
-      name: `${new Date()}resume_image.jpg`,
+      name: `${new Date()}resume_image.pdf`,
     };
     // console.log(file,Resume,Certification)
     const formData = new FormData();
@@ -167,7 +192,7 @@ const EditProfileScreen = ({ route }) => {
     formData.append('dob', dob_date.toString())
 
     try {
-      await fetch('https://bartender.logomish.com/userProfile/updateProfiles', {
+      await fetch('https://bartenderbackend.bazazi.co/userProfile/updateProfiles', {
         method: 'PATCH',
         headers: {
           'Accept': 'application/json',
@@ -189,7 +214,17 @@ const EditProfileScreen = ({ route }) => {
             setImageUriflag(false)
             setCertificationUriflag(false)
             setResumeUriflag(false)
-            Alert.alert(data.message);
+            Alert.alert(
+            'Profile Updated',
+            data.message,
+            [
+              {
+                text: 'OK',
+                onPress: () => navigation.goBack(),
+                style: 'cancel',
+              }
+            ]
+            )
           } else {
             Alert.alert(data.data);
           }
@@ -202,7 +237,7 @@ const EditProfileScreen = ({ route }) => {
 
   return (
     <>
-    {console.log(userTypes,"uhuiuiuiuiuiuiuiui")}
+
       {isLoading||users=={} ?
         <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
           <ActivityIndicator size="large" />
@@ -215,7 +250,7 @@ const EditProfileScreen = ({ route }) => {
                 style={{ display: "flex", flexDirection: "row" }}>
                 <Text style={styles.headerText}>Cancel</Text>
               </TouchableOpacity>
-              <Text style={styles.headerText}>Edit Item</Text>
+              <Text style={styles.headerText}>Edit Profile</Text>
               <TouchableOpacity
                 onPress={handleSubmit}
                 style={{ display: "flex", flexDirection: "row" }}>
@@ -343,20 +378,12 @@ const EditProfileScreen = ({ route }) => {
                   marginTop: 10,
                   marginBottom: 15,
                 }}
-                onPress={() => handleSelectImage(setCertificationUri, setCertificationUriimage, setCertificationUriflag)}>
+                onPress={()=>selectDoc(setCertificationUri,setCertificationUriimage,setCertificationUriflag)}>
                 {certificationUri ? (
                   <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: "100%" }}>
                     <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
-                      <Image
-                        source={{ uri: certificationUri }}
-                        style={{
-                          width: 30,
-                          height: 30,
-                          borderRadius: 10,
-                          marginRight: 10,
-                        }}
-                      />
-                      <Text style={{ color: 'black' }}>Browse</Text>
+                    <Icons.AntDesign name="file1"  size={20} />
+                      <Text style={{ color: 'black' }}>{certificationUriimage?.name}</Text>
                     </View>
                     <Icons.AntDesign name={"closecircle"} />
                   </View>
@@ -377,20 +404,12 @@ const EditProfileScreen = ({ route }) => {
                   marginTop: 10,
                   marginBottom: 15,
                 }}
-                onPress={() => handleSelectImage(setResumeUri, setResumeUriimage, setResumeUriflag)}>
+                onPress={() => selectDoc(setResumeUri, setResumeUriimage, setResumeUriflag)}>
                 {resumeUri ? (
                   <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: "100%" }}>
                     <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
-                      <Image
-                        source={{ uri: resumeUri }}
-                        style={{
-                          width: 30,
-                          height: 30,
-                          borderRadius: 10,
-                          marginRight: 10,
-                        }}
-                      />
-                      <Text style={{ color: 'black' }}>Browse</Text>
+                    <Icons.AntDesign name="file1"  size={20} />
+                      <Text style={{ color: 'black' }}>{resumeUriimage.name}</Text>
                     </View>
                     <Icons.AntDesign name={"closecircle"} />
                   </View>

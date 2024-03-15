@@ -1,17 +1,19 @@
-import {StyleSheet, Text, View,TouchableOpacity,FlatList,Image} from 'react-native';
+import {StyleSheet, Text, View,TouchableOpacity,FlatList,Image, Alert} from 'react-native';
 import React ,{useState,useEffect}from 'react';
 import HeaderDetails from '../components/HeaderDetails';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
+import ButtonInput from '../components/ButtonInput';
 const baseUrl = require('../global')
 const BookedDetails = ({route}) => {
   const [userState, setuserState] = useState(11)
   const [users, setusers] = useState("")
   const [data2, setdata] = useState()
-
+  const [comment, setComment] = useState([])
   const [imageUri, setImageUri] = useState('');
-
+  const [imageUris, setImageUris] = useState('');
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem('data');
@@ -19,6 +21,7 @@ const BookedDetails = ({route}) => {
       setusers(JSON.parse(value));
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value));
+      handleComments(JSON.parse(value))
     }
     replacementFunction()
   }, [userState,route]);
@@ -37,7 +40,57 @@ const BookedDetails = ({route}) => {
         .then(dataa => {
           console.log("USERRRRRRRRRRRRRRR",dataa,"USERRRRRRRRRRRRRRR")
           if (dataa?.users.length > 0) {
-            setImageUri(`https://bartender.logomish.com${dataa?.users[0]?.image}`)
+            setImageUri(`https://bartenderbackend.bazazi.co${dataa?.users[0]?.image}`)
+            setdata(dataa?.users)
+          }
+        });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+
+  };
+  const handleComments = async (userss) => {
+    const commentData={
+      post_id:data.post_id
+    }
+    console.log(commentData)
+    try {
+      await fetch(`${baseUrl}/comments/GetAllCommentsById`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${userss.access_token}`
+        },
+        body:JSON.stringify(commentData)
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          console.log("comment",dataa,"USERRRRRRRRRRRRRRR")
+          if (dataa?.data.length > 0) {
+      setComment(dataa.data)
+          }
+        });
+    } catch (error) {
+    }
+
+  };
+
+  const handleCancel = async () => {
+    try {
+      await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${userss.access_token}`
+        },
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          console.log("USERRRRRRRRRRRRRRR",dataa,"USERRRRRRRRRRRRRRR")
+          if (dataa?.users.length > 0) {
+            setImageUri(`https://bartenderbackend.bazazi.co${dataa?.users[0]?.image}`)
             setdata(dataa?.users)
           }
         });
@@ -49,6 +102,7 @@ const BookedDetails = ({route}) => {
     const navigation = useNavigation()
     console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",route.params)
     const data = route.params.item
+    console.log(data,"as")
     const datas = [
         { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
         
@@ -61,7 +115,7 @@ const BookedDetails = ({route}) => {
         <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
      
-        {console.log(imageUri,"uriiiiiiii")}
+      
         <Image source={imageUri==''?{uri:imageUri}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:50 }} />
         <View style={{marginLeft:15}}>
         <Text style={{color:'black'}}>{name}</Text>
@@ -73,29 +127,32 @@ const BookedDetails = ({route}) => {
         </View>
         </TouchableOpacity>
       );
-      const CommentItem = ({ id, name, comment, image,date }) => (
-        <TouchableOpacity  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      const CommentItem = ({ id, name, comment, image,created_at }) => (
+        <View  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center',flexWrap:'wrap' }}>
      
     
-        <Image source={image} style={{ width: 50, height: 50,borderRadius:50 }} />
+        <Image source={{uri:`https://bartenderbackend.bazazi.co${image}`}} style={{ width: 50, height: 50,borderRadius:50 }} />
         <View style={{marginLeft:15}}>
-        <View style={{display:'flex',flexDirection:'row'}}>
+
+
         <Text style={{color:'black'}}>{name}  </Text>
-        <Text style={{color:'black',fontSize:11}}>{date}</Text>
+        <Text style={{color:'black',fontSize:11}}>{created_at.split('GMT')[0]}</Text>
         </View>
-        <View style={{width:"70%",backgroundColor:'#f6f6f6',borderRadius:20,padding:20}}>
-        <Text style={{color:'black'}}>{comment}</Text>
+        <View style={{marginTop:15}}>
+        <View style={{display:'flex',flexDirection:'row'}}>
+        <View style={{width:"100%",backgroundColor:'#f6f6f6',borderRadius:20,padding:20}}>
+        <Text style={{color:'black',flexWrap:'wrap'}}>{comment}</Text>
         </View>
+        </View>
+      
         </View>
         </View>
    
-        </TouchableOpacity>
+        </View>
       );
       const renderComment = ({ item }) => (
-        <CommentItem name={item.name} comment={item.comment} image={item.image} date={item.date}
-        // onPress={() => navigation.navigate('DetailScreen', {item})}
-        />
+        <CommentItem name={item.name} comment={item.comment} image={item.image} created_at={item.created_at}        />
       );
       const renderItem = ({ item }) => (
         <Item name={item.name} role='Bartender' image={imageUri} onPress={() => navigation.navigate('DetailScreen', {item})}/>
@@ -133,6 +190,14 @@ const BookedDetails = ({route}) => {
         <Text style={{color:"black"}}>{data.contact_phone} </Text>
       </View>
       </View>
+      {userState==1?
+      <View style={{justifyContent:'center', flexDirection: 'row', alignItems: 'center'}}>
+
+
+         <ButtonInput title={"Cancel Booking"} />
+      </View>
+      :null}
+      {userState==2?
       <View style={{padding:10}}>
       <Text style={{fontWeight:'bold',color:'black'}}>Confirmed Bartender</Text>
       <FlatList
@@ -141,14 +206,19 @@ const BookedDetails = ({route}) => {
       keyExtractor={(item) => item.id}
     />
       </View>
-      <View style={{padding:10}}>
-      <Text style={{fontWeight:'bold',color:'black'}}>comments</Text>
+             :null}
+      <Text style={{fontWeight:'bold',color:'black',padding:10}}>Comments</Text>
+      <ScrollView style={{padding:10}}>
+        <View>
+
+
       <FlatList
-      data={commentData}
+      data={comment}
       renderItem={renderComment}
       keyExtractor={(item) => item.id}
     />
-      </View>
+     </View>
+      </ScrollView>
       <View>
       <View  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',paddingHorizontal: 20, }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -156,7 +226,7 @@ const BookedDetails = ({route}) => {
   
       <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:50 }} />
       <View style={{marginLeft:15}}>
-      <TouchableOpacity style={{display:'flex',flexDirection:'row'}} onPress={()=>navigation.navigate('CommentScreen')}>
+      <TouchableOpacity style={{display:'flex',flexDirection:'row'}} onPress={()=>navigation.navigate('CommentScreen',data)}>
       <Text style={{color:'orange'}}>Add comment...  </Text>
    
       </TouchableOpacity>

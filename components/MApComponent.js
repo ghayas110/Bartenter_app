@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const MapComponent = ({onPress,dataSend}) => {
   var navigation=useNavigation()
+  console.log(dataSend?.event_lat,"evental")
   return (
     <View style={styles.container}>
       <MapView
@@ -23,8 +24,8 @@ const MapComponent = ({onPress,dataSend}) => {
             latitude: item.event_lat,
             longitude: item.event_lng,
           }}
-          title={item.post_name}
-          description={"Marker Description"}
+          title={item.post_title}
+       
         />
         ))}
         

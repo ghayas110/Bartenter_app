@@ -56,7 +56,7 @@ const JobDetailsScreen = ({route}) => {
     </View>
     </View>
     <View>
-    <Image source={image!=""?{uri:`https://bartender.logomish.com${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+    <Image source={image!=""?{uri:`https://bartenderbackend.bazazi.co${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
     </TouchableOpacity>
   

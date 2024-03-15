@@ -31,7 +31,7 @@ const ChangePassword = ({route}) => {
     if ( password != '' ) {
       const bodys= {email:email,password:password,user_type:user_type}
       try {
-        fetch('https://bartender.logomish.com/users/ChangePassword', {
+        fetch('https://bartenderbackend.bazazi.co/users/ChangePassword', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

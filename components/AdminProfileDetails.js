@@ -31,24 +31,12 @@ export default function AdminProfileDetails({name,email,number,signature_drink,p
  <Text>Phone</Text>
  <Text style={{color:'#FFA500'}}>{number}</Text>
  </View>
- <View style={styles.section}>
- <Text>Signature Drink</Text>
- <Text>{signature_drink}</Text>
- </View>
+
  <View style={styles.section}>
  <Text>Personal Payment Link</Text>
  <Text>{payment_link}</Text>
  </View>
- <View style={styles.rating}>
- <Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>Rating and Reviews</Text>
 
-<RatingCard rating={2} text="Great work"/>
-<RatingCard rating={5} text="Great work"/>
-<RatingCard rating={4.5} text="Great work"/>
-
-
-
- </View>
     </ScrollView>
   );
 }

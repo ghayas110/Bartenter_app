@@ -40,7 +40,7 @@ useEffect(() => {
     // Your existing login logic
     if (id) {
       try {
-          fetch('https://bartendersocket.logomish.com/alluser', {
+          fetch('https://socket.bazazi.co/alluser', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -51,9 +51,11 @@ useEffect(() => {
           }),
           })
           .then(response => {
+           
             return response.json()
           })
           .then(chat => {
+            console.log(chat.user,"cfgv")
             if (chat.success) {
             setdata(chat.user)
             setdatas(chat.user)
@@ -76,7 +78,7 @@ useEffect(() => {
     if(sender!==null)
       try {
 
-          fetch('https://bartender.logomish.com/messages/ReadMessages', {
+          fetch('https://socket.bazazi.co/messages/ReadMessages', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -117,7 +119,7 @@ useEffect(() => {
     </View>
     </View>
     <View>
-    <Image source={image!=""?{uri:`https://bartender.logomish.com${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+    <Image source={image!=""?{uri:`https://bartenderbackend.bazazi.co${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
 
     </TouchableOpacity>

@@ -42,7 +42,7 @@ export default function Messagescreen({ route }) {
   }, []);
 
   // const socket = useRef(io("https://bartendersocket.logomish.com"));
-  const socket = useRef(io("https://bartendersocket.logomish.com"));
+  const socket = useRef(io("https://socket.bazazi.co"));
   
 
   useEffect(() => {
@@ -124,7 +124,7 @@ const[skeleton,setskeleton]=useState(false)
         messagebool:true,
         image:""
       };
-      
+      console.log(msgData)
       socket.current.emit("chat message", msgData);
       setCurrentChatMessage("");
       setImageUri(null); // Reset imageUri after sending
@@ -163,7 +163,7 @@ const[skeleton,setskeleton]=useState(false)
         //  console.log(file,"Resume","Certification")
         try {
           setskeleton(true)
-          await fetch('https://bartender.logomish.com/sendImage', {
+          await fetch('https://bartenderbackend.bazazi.co/sendImage', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -185,6 +185,7 @@ const[skeleton,setskeleton]=useState(false)
                 messagebool:false,
                 image:data?.image
               };
+              console.log(msgData,"imageData")
               socket.current.emit("chat message", msgData);
               setTimeout(() => {
         setskeleton(false)
@@ -250,7 +251,7 @@ const[skeleton,setskeleton]=useState(false)
       </SkeletonPlaceholder>
     ) : (
       <Image
-        source={{ uri: `https://bartender.logomish.com${item.image}` }}
+        source={{ uri: `https://bartenderbackend.bazazi.co/${item.image}` }}
         style={{ width: 125, height: 120, objectFit: 'contain' }}
         onLoad={() => setImageLoaded(true)}
       />

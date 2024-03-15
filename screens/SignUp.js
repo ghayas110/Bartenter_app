@@ -29,7 +29,7 @@ const SignUp = () => {
       }
       try {
 
-          fetch('https://bartender.logomish.com/users/CreateUser', {
+          fetch('https://bartenderbackend.bazazi.co/users/CreateUser', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

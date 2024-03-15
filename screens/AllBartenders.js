@@ -43,7 +43,7 @@ useEffect(() => {
         console.log(availabilties,"sss")
         console.log(speciality,"jjj")
         console.log(ratings,"kkkkk")
-          fetch(`https://bartender.logomish.com/users/GetAllBartenders?availability=${availabilties}&skills=${speciality}&minRating=${ratings}`, {
+          fetch(`https://bartenderbackend.bazazi.co/users/GetAllBartenders?availability=${availabilties}&skills=${speciality}&minRating=${ratings}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -89,7 +89,8 @@ useEffect(() => {
     </View>
     </View>
     <View>
-    <Image source={image!=""?{uri:`https://bartender.logomish.com${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+
+    <Image source={image!=""?{uri:`https://bartenderbackend.bazazi.co${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
 
     </TouchableOpacity>

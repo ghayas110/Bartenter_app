@@ -13,7 +13,7 @@ const FormTextInputWithLocationAutocomplete = ({ setValues }) => {
         GooglePlacesDetailsQuery={{ fields: "geometry" }}
         fetchDetails={true}
         disableScroll={true}
-        placeholder="Search"
+        placeholder="Your Location"
         query={{
           key: "AIzaSyCk3D9V8gfZ_c7xmNhHs7RpqTODFndxHzU",
           language: "en",

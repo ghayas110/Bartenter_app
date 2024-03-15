@@ -54,7 +54,7 @@ const Otp = ({ onLogin,route }) => {
 
          try {
 
-            fetch('https://bartender.logomish.com/users/VerifyOtp', {
+            fetch('https://bartenderbackend.bazazi.co/users/VerifyOtp', {
                method: 'POST',
                headers: {
                  'Content-Type': 'application/json',

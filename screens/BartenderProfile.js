@@ -20,7 +20,7 @@ export default function BartenderProfile({route}) {
   const[userState,setuserState]=useState(11)
   const [users,setusers]=useState("")
   const [data, setdata] = useState()
-  const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users?.image}`||'');
+  const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -38,7 +38,7 @@ export default function BartenderProfile({route}) {
   const handleSubmit = async (userss) => {
     setIsLoading(true)
     try {
-     await fetch(`https://bartender.logomish.com/users/GetUserById/${route?.params?.bartender_id}`, {
+     await fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${route?.params?.bartender_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default function BartenderProfile({route}) {
 
         setIsLoading(false)
         if(dataa?.users){
-          setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
+          setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
           console.log(dataa?.users[0])
        
@@ -74,7 +74,9 @@ export default function BartenderProfile({route}) {
 <>
 <ScrollView style={styles.card}>
   
- 
+ <View>
+
+
   {
 data?.image==""?
 <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
@@ -93,22 +95,11 @@ data?.image==""?
 <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>
 <Text style={{color:'grey',fontWeight:"700"}}>{data?.speciality}</Text>
 </View>
-<View style={styles.section}>
-<Text style={{color:'black',fontWeight:"700"}}>Signature Drink</Text>
-<Text style={{color:'grey',fontWeight:"700"}}>{data?.signature_drink}</Text>
-</View>
+
 <View style={styles.section}>
 <Text style={{color:'black',fontWeight:"700"}}>Payment Link</Text>
 <Text style={{color:'grey',fontWeight:"700"}}>{data?.payment_link}</Text>
 </View>
-
-
-<View style={styles.rating}>
-<Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>Rating and Reviews</Text>
-
-<RatingCard rating={2} text="Great work"/>
-<RatingCard rating={5} text="Great work"/>
-
 
 
 
@@ -140,7 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     elevation: 3,
     backgroundColor: '#fff',
-    shadowOffset: { width: 1, height: 1 },
+   
     shadowColor: '#333',
 
   },
@@ -170,7 +161,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%', // specify the width
-    height: 400, // specify the height
+   
     justifyContent: "flex-end",
     alignItems: 'flex-start', // center the text horizontally
     marginBottom: 20,

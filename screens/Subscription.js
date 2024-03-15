@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View,SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import { Button, StyleSheet, Text, View,SafeAreaView, TouchableOpacity, Image, Alert } from 'react-native'
 import React from 'react'
 import Header from '../components/Header'
 import ButtonInput from '../components/ButtonInput'
@@ -18,7 +18,7 @@ const Subscription = ({navigation}) => {
       <Text style={{ fontSize: 16, marginBottom: 10 }}>
         $400.00
       </Text>
-      <ButtonInput title={"Subscribe"} />
+      <ButtonInput title={"Subscribe"} onPress={()=>Alert.alert("Subscription Successfull")} />
     </View>
 
   </View>

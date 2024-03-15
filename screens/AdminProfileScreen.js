@@ -31,7 +31,7 @@ const navigation = useNavigation();
   const handleSubmit = async () => {
 
     try {
-      fetch('https://bartender.logomish.com/users/GetAllUsers', {
+      fetch('https://bartenderbackend.bazazi.co/users/GetAllUsers', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

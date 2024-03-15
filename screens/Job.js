@@ -11,34 +11,38 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Job = ({route}) => {
   const isFocused = useIsFocused();
   const [users,setusers]=useState("")
-
+  const[userState,setuserState]=useState(11)
   useEffect(()=>{
     async function replacementFunction(){
     const value = await AsyncStorage.getItem("data");
       setusers(JSON.parse(value))
+      handleSubmit(JSON.parse(value));
+      setuserState(JSON.parse(value)?.user_data[0]?.user_type);
     }
     replacementFunction()
 
-  },[route,isFocused])
+  },[userState,isFocused])
   const navigation =useNavigation()
   const [data, setData] = useState();
   const count = useSelector((state) => state.auth.user)
-  const userState = users.user_type
+
  
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (userr) => {
     try {
-      fetch('https://bartender.logomish.com/posts/GetAllPost', {
+      console.log(userr.access_token)
+      fetch('https://bartenderbackend.bazazi.co/posts/GetAllAvailablePostsLocation', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
-          'accesstoken':`Bearer ${users?.access_token}`
+          'accesstoken':`Bearer ${userr?.access_token}`
         },
       })
       .then(response => response.json())
       .then(data => {
-     setData(data.posts)
+     setData(data.data)
+     console.log(data)
       });
     } catch (error) {
       console.log('An error occurred while processing your request.',error);

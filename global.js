@@ -1,3 +1,3 @@
-const baseUrl = 'https://bartender.logomish.com';
+const baseUrl = 'https://bartenderbackend.bazazi.co';
 
 module.exports = baseUrl

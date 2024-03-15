@@ -15,7 +15,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
   const[userState,setuserState]=useState(11)
   const [users,setusers]=useState("")
   const [data, setdata] = useState()
-  const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users?.image}`||'');
+  const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -35,7 +35,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
   const handleSubmit = async (userss) => {
     setIsLoading(true)
     try {
-     await fetch(`https://bartender.logomish.com/users/GetUserById/${userss.user_data[0].id}`, {
+     await fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss.user_data[0].id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
         console.log(dataa,"i love u")
         setIsLoading(false)
         if(dataa?.users){
-          setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
+          setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
           dataa?.users[0]?.availability==0?
           setIsEnabled(false):setIsEnabled(true)
@@ -64,7 +64,7 @@ const handleAvalibilaty = async () => {
   setIsEnabled(previousState => !previousState)
   console.log(users)
   try {
-   await fetch(`https://bartender.logomish.com/users/ToggleUserAvailability`, {
+   await fetch(`https://bartenderbackend.bazazi.co/users/ToggleUserAvailability`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -113,10 +113,7 @@ data?.image==""?
 <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>
 <Text style={{color:'grey',fontWeight:"700"}}>{data?.speciality}</Text>
 </View>
-<View style={styles.section}>
-<Text style={{color:'black',fontWeight:"700"}}>Signature Drink</Text>
-<Text style={{color:'grey',fontWeight:"700"}}>{data?.signature_drink}</Text>
-</View>
+
 <View style={styles.section}>
 <Text style={{color:'black',fontWeight:"700"}}>Available</Text>
 <Switch
@@ -126,17 +123,6 @@ data?.image==""?
     onValueChange={handleAvalibilaty}
     value={isEnabled}
   />
-</View>
-{console.log(isEnabled)}
-<View style={styles.rating}>
-<Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>Rating and Reviews</Text>
-
-<RatingCard rating={2} text="Great work"/>
-<RatingCard rating={5} text="Great work"/>
-
-
-
-
 </View>
 </ScrollView>
 </>
@@ -190,7 +176,7 @@ const styles = StyleSheet.create({
   },
   
   rating:{
-    padding:10,
+    paddingVertical:40,
     paddingVertical:15
   },
   image: {

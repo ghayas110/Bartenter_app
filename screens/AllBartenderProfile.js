@@ -12,7 +12,8 @@ import HeaderDetails from '../components/HeaderDetails';
 
 
 export default function AllBartenderProfile({route}) {
-    console.log(route.params)
+    console.log(route.params.id,'id hai meri')
+    const id = route.params.id
   const isFocused = useIsFocused();
   const [rating, setRating] = useState(0);
   const [isEnabled, setIsEnabled] = useState(false);
@@ -20,9 +21,9 @@ export default function AllBartenderProfile({route}) {
   const[userState,setuserState]=useState(11)
   const [users,setusers]=useState("")
   const [data, setdata] = useState()
-  const [imageUri, setImageUri] = useState(`https://bartender.logomish.com/${users?.image}`||'');
+  const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
   const [isLoading, setIsLoading] = useState(false);
-
+  const [rat, setRat] = useState([]);
 
   useEffect(() => {
     async function replacementFunction(){        
@@ -31,14 +32,47 @@ export default function AllBartenderProfile({route}) {
           setusers(JSON.parse(value));
           setuserState(JSON.parse(value)?.user_data[0]?.user_type);
           handleSubmit(JSON.parse(value));
+          GetRating(JSON.parse(value))
   }
   replacementFunction()
   }, [userState,isFocused]);
-
+  const GetRating =  (userss) => {
+    // Your existing login logic
+    if (id) {
+      console.log("data nahi araha")
+      try {
+          fetch('https://bartenderbackend.bazazi.co/reviews/GetReviewsByProfileId', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key':'BarTenderAPI',
+              'accesstoken':`Bearer ${userss.access_token}`
+            },
+            body: JSON.stringify({
+                "profile_id":id
+          }),
+          })
+          .then(response => {
+           
+            return response.json()
+          })
+          .then(chat => {
+            console.log(chat,"cfgvsss")
+            setRat(chat.data)
+          }).catch(err=>{
+            console.log(err,"dddd")
+          })
+      } catch (error) {
+      console.log('An error occurred while processing your request.',error);
+      }
+    } else {
+      console.log('Please fill in all fields');
+    }
+  };
   const handleSubmit = async (userss) => {
     setIsLoading(true)
     try {
-     await fetch(`https://bartender.logomish.com/users/GetUserById/${route?.params?.id}`, {
+     await fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${route?.params?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +85,7 @@ export default function AllBartenderProfile({route}) {
 
         setIsLoading(false)
         if(dataa?.users){
-          setImageUri(`https://bartender.logomish.com/${dataa?.users[0]?.image}`)
+          setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
           console.log(dataa?.users[0])
        
@@ -93,10 +127,7 @@ data?.image==""?
 <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>
 <Text style={{color:'grey',fontWeight:"700"}}>{data?.speciality}</Text>
 </View>
-<View style={styles.section}>
-<Text style={{color:'black',fontWeight:"700"}}>Signature Drink</Text>
-<Text style={{color:'grey',fontWeight:"700"}}>{data?.signature_drink}</Text>
-</View>
+
 <View style={styles.section}>
 <Text style={{color:'black',fontWeight:"700"}}>Payment Link</Text>
 <Text style={{color:'grey',fontWeight:"700"}}>{data?.payment_link}</Text>
@@ -106,9 +137,12 @@ data?.image==""?
 <View style={styles.rating}>
 <Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>Rating and Reviews</Text>
 
-<RatingCard rating={2} text="Great work"/>
-<RatingCard rating={5} text="Great work"/>
-
+{rat.map((digit, index) => (
+    <>
+   
+        <RatingCard rating={digit.rating} text={digit.reviewer}/>
+    </>
+        ))}
 
 
 

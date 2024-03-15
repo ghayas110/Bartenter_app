@@ -1,10 +1,10 @@
-import { FlatList,SafeAreaView, ImageBackground,ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView,Alert, TextInput, Dimensions } from 'react-native'
+import { FlatList, SafeAreaView, ImageBackground, ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, TextInput, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Entypo';
 const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation ,useIsFocused} from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icons from '../components/Icons';
 import DraggableProgressBar from '../components/DraggableProgressBar';
@@ -16,11 +16,12 @@ const BookedEvents = ({ route }) => {
   const [userState, setuserState] = useState(11)
   const [users, setusers] = useState("")
   const [data, setdata] = useState()
-  const [no_of_people, setno_of_people] = useState("null")
-  const [zip_code, setzip_code] = useState("null")
-  const [Distance_Radius, setDistance_Radius] = useState("null")
-  const [Hourly_Rate, setHourly_Rate] = useState("null")
-  const [event_duration, setevent_duration] = useState("null")
+  const [show, setShow] = useState(false)
+  const [no_of_people, setno_of_people] = useState("")
+  const [zip_code, setzip_code] = useState("")
+  const [Distance_Radius, setDistance_Radius] = useState("")
+  const [Hourly_Rate, setHourly_Rate] = useState("")
+  const [event_duration, setevent_duration] = useState("")
   const [bookedEvents, setBookedEvents] = useState([])
   const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
   const [isLoading, setIsLoading] = useState(false);
@@ -57,14 +58,14 @@ const BookedEvents = ({ route }) => {
 
 
 
-  const rating = ["1", "2", "3", "4","5"]
-const availabilty = ["No","Yes"]
-const navigation =useNavigation()
-const [speciality, setspeciality] = useState("")
-const handleSearch = (text) => {
-  setspeciality(text);
+  const rating = ["1", "2", "3", "4", "5"]
+  const availabilty = ["No", "Yes"]
+  const navigation = useNavigation()
+  const [speciality, setspeciality] = useState("")
+  const handleSearch = (text) => {
+    setspeciality(text);
 
-};
+  };
 
 
   useEffect(() => {
@@ -74,10 +75,10 @@ const handleSearch = (text) => {
       setusers(JSON.parse(value));
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value));
-      getAllPosts(JSON.parse(value).user_data[0].access_token)
+      getAllPosts(JSON.parse(value).access_token)
     }
     replacementFunction()
-  }, [userState,route,isFocused,event_duration,zip_code,Distance_Radius,startDate,endDate,no_of_people,Hourly_Rate]);
+  }, [userState, route, isFocused, event_duration, zip_code, Distance_Radius, startDate, endDate, no_of_people, Hourly_Rate]);
 
   const handleSubmit = async (userss) => {
     try {
@@ -101,27 +102,29 @@ const handleSearch = (text) => {
     }
 
   };
+
   const getAllPosts = async (access_token) => {
-    console.log(`https://bartender.logomish.com/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate!="null"?new Date(startDate).toISOString().split("T")[0]:"null"}&date_end=${endDate!="null"?new Date(endDate).toISOString().split("T")[0]:"null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`,"start")
+
+    console.log(`https://bartenderbackend.bazazi.co/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate != "null" ? new Date(startDate).toISOString().split("T")[0] : "null"}&date_end=${endDate != "null" ? new Date(endDate).toISOString().split("T")[0] : "null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`, "start")
     // return
     setIsLoading(true)
     try {
-      await fetch(`https://bartender.logomish.com/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate!="null"?new Date(startDate).toISOString().split("T")[0]:"null"}&date_end=${endDate!="null"?new Date(endDate).toISOString().split("T")[0]:"null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`, {
+      await fetch(`https://bartenderbackend.bazazi.co/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate != "null" ? new Date(startDate).toISOString().split("T")[0] : "null"}&date_end=${endDate != "null" ? new Date(endDate).toISOString().split("T")[0] : "null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken':`Bearer ${access_token}`
+          'accesstoken': `Bearer ${access_token}`
         }
       }).then(response => response.json())
         .then(data => {
-          console.log(data)
+          console.log(data,"hhh")
           setIsLoading(false)
 
           if (data.posts.length > 0) {
             setBookedEvents([...data.posts])
           }
-          else{
+          else {
             setBookedEvents([])
           }
         })
@@ -131,11 +134,11 @@ const handleSearch = (text) => {
     }
   }
 
-  const handleBookEvent = async(postId)=>{
-    const JsonBody ={post_id:postId}
-   
+  const handleBookEvent = async (postId) => {
+    const JsonBody = { post_id: postId }
+console.log(JsonBody,"ssss")
     try {
-      fetch('https://bartender.logomish.com/posts/BookPost', {
+      fetch('https://bartenderbackend.bazazi.co/posts/BookPost', {
 
         method: 'PATCH',
         headers: {
@@ -148,7 +151,7 @@ const handleSearch = (text) => {
         .then(response => {
           return response.json()
         }
-       )
+        )
         .then(data => {
           if (data.message == "Success") {
             Alert.alert("You have booked this event")
@@ -159,30 +162,30 @@ const handleSearch = (text) => {
         });
 
     } catch (error) {
-      console.log("erroror",error)
+      console.log("erroror", error)
     }
   }
-  
-  const Item = ({ EventDate,postId, name, contact, EventTime, theme, EventLocation,NoOfPeople, onPress }) => (
+
+  const Item = ({ EventDate, postId, name, contact, EventTime, theme, EventLocation, NoOfPeople, event_duration, onPress }) => (
     <View style={styles.card}>
-      {/* <ImageBackground source={image} style={styles.image}> 
-        <Text style={styles.title}>{name}</Text>
-        <Text style={styles.title}>16 – 30</Text>
-       </ImageBackground> */}
+
 
       <TouchableOpacity style={styles.cardtext2}>
         <View style={styles.cardtext}>
-        <Text style={styles.text1}>Event Name: </Text>
-        <Text style={styles.text}>{name}</Text>
+          <Text style={styles.text1}>Event Name: </Text>
+          <Text style={styles.text}>{name}</Text>
 
           <Text style={styles.text1}>Event Date :</Text>
           <Text style={styles.text}>{EventDate?.split('T')[0]}</Text>
+
+          <Text style={styles.text1}>Event Duration :</Text>
+          <Text style={styles.text}>{event_duration}</Text>
         </View>
-        <View style={{
+        {/* <View style={{
           width: 40, height: 40, borderRadius: 50, backgroundColor: '#F4E8D6', display: 'flex', alignItems: 'center', justifyContent: 'center'
         }}>
           <Icon name="mail" color="#FFA500" size={20} />
-        </View>
+        </View> */}
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.cardtext}>
@@ -195,7 +198,7 @@ const handleSearch = (text) => {
         <Text style={styles.text}>{contact}</Text>
 
       </TouchableOpacity>
-      
+
       <TouchableOpacity style={styles.cardtext}>
         <Text style={styles.text1}>Time:</Text>
         <Text style={styles.text}>{EventTime}</Text>
@@ -213,188 +216,176 @@ const handleSearch = (text) => {
 
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.cardtext} onPress={()=>onPress(postId)}>
+      <TouchableOpacity style={styles.cardtext} onPress={onPress}>
         <Text style={styles.BookEventButton}>
-            Book Event
+          Book Event
         </Text>
 
       </TouchableOpacity>
-    
-      
+
+
 
     </View>
   );
   const renderItem = ({ item }) => (
-    <Item postId={item?.post_id} name={item?.post_title} contact={item?.contact_phone} image={item?.image} theme={item?.theme} EventDate={item?.event_date} EventTime={item?.event_time} EventLocation={item?.event_location} NoOfPeople={item?.no_of_people} onPress={handleBookEvent}/>
+    <>
+    {console.log(item)}
+    <Item postId={item?.post_id} name={item?.post_title} contact={item?.contact_phone} image={item?.image} theme={item?.theme} EventDate={item?.event_date} EventTime={item?.event_time} EventLocation={item?.event_location} NoOfPeople={item?.no_of_people} event_duration={item?.event_duration} onPress={()=>handleBookEvent(item?.post_id)} />
+    </>
   );
   return (
     <>
-    {
-      isLoading||bookedEvents.length==0?
-       <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
-      <ActivityIndicator size="large" />
-    </View> :
-      <View>
-    <SafeAreaView>
-    <View style={styles.headerContainer}>
-    <View style={styles.siders}>
-    <TouchableOpacity onPress={()=>navigation.openDrawer("helloo")}>
-    <Icon name="menu" size={24} color="#fff" />
-    </TouchableOpacity>
-   
-    </View>
-    <Text style={styles.headerText}>Events</Text>
-
-  <View style={{display:'flex',alignItems:'center',justifyContent:'space-around',flexDirection:'row'}}>
-    <View>
-
-    
-  <Text style={{color:'white',fontSize:11}}>Start Date</Text>
-<View style={styles.searchContainers}>
-
-
-  <TouchableOpacity onPress={showStartDatePicker} >
-    <TextInput
-      style={styles.input}
-      placeholder="Start Date"
-      placeholderTextColor={"white"}
-      value={startDate!="null"?startDate.toDateString():""} // Display the selected date
-      editable={false} // Disable manual input
-      
-    />
-  </TouchableOpacity>
-
-  <DatePicker
-        modal
-        open={isStartDatePickerVisible}
-        mode="date"
-        date={startDate!="null"?startDate:new Date()}
-        onConfirm={handleStartDateConfirm}
-        onCancel={hideStartDatePicker}
-      />
-</View>
-</View>
-<View>
- 
-<Text style={{color:'white',fontSize:11}}>End Date</Text>
-<View style={styles.searchContainers}>
-
-
-  <TouchableOpacity onPress={showEndDatePicker} >
-    <TextInput
-      style={styles.input}
-      placeholder="End Date"
-      placeholderTextColor={"white"}
-      value={endDate!="null"?endDate.toDateString():""} // Display the selected date
-      editable={false} // Disable manual input
-      
-    />
-  </TouchableOpacity>
-
-  <DatePicker
-        modal
-        open={isEndDatePickerVisible}
-        mode="date"
-        date={endDate!="null"?endDate:new Date()}
-        onConfirm={handleEndDateConfirm}
-        onCancel={hideEndDatePicker}
-      />
-</View>
-</View>
-
-  </View>
-  <View style={{display:'flex',alignItems:'center',justifyContent:'space-around',flexDirection:'row'}}>
-  <View>
- 
- <Text style={{color:'white',fontSize:11}}>Event Duration</Text>
-<View style={styles.searchContainers}>
-  <TextInput
-    style={styles.input}
-    placeholder="Event Duration"
-    placeholderTextColor={"white"}
-    value={event_duration}
-    onChangeText={(e)=>setevent_duration(e)}
-    
-  />
-</View>
-</View>
-<View>
- 
-<Text style={{color:'white',fontSize:11}}>ZipCode</Text>
-<View style={styles.searchContainers}>
-
-  <TextInput
-    style={styles.input}
-    placeholder="Zip code"
-    placeholderTextColor={"white"}
-    value={zip_code}
-    onChangeText={(e)=>setzip_code(e)}
-    
-  />
-</View>
-</View>
-</View>
-<View style={{display:'flex',alignItems:'center',justifyContent:'space-around',flexDirection:'row'}}>
-<View>
- 
- <Text style={{color:'white',fontSize:11}}>End Date</Text>
-<View style={styles.searchContainers}>
-  <TextInput
-    style={styles.input}
-    placeholder="No of People"
-    placeholderTextColor={"white"}
-    value={no_of_people}
-    onChangeText={(e)=>setno_of_people(e)}
-    
-  />
-</View>
-</View>
-<View>
- 
- <Text style={{color:'white',fontSize:11}}>End Date</Text>
-<View style={styles.searchContainers}>
-  <TextInput
-    style={styles.input}
-    placeholder="Hourly Rate"
-    placeholderTextColor={"white"}
-    value={Hourly_Rate}
-    onChangeText={(e)=>setHourly_Rate(e)}
-    
-  />
-</View>
-</View>
-</View>
-<Text style={{color:'white',fontSize:11}}>Distance Radius</Text>
-<View style={styles.searchContainer}>
-  
-  <TextInput
-    style={styles.input}
-    placeholder="Distance Raduis"
-    placeholderTextColor={"white"}
-    value={Distance_Radius}
-    onChangeText={(e)=>setDistance_Radius(e)}
-    
-  />
-</View>
-    </View>
- 
-    </SafeAreaView>
-      <View  style={styles.flatList}>
       {
-        bookedEvents.length>0?
-        <FlatList
-        data={bookedEvents}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />:<Text style={{color:"black",textAlign:"center",fontSize:20}}>No booked events</Text>
-      }
-</View>
 
-    </View>
-    }
+
+        <ScrollView>
+          {/* <SafeAreaView> */}
+            <View style={styles.headerContainer}>
+              <View style={styles.siders}>
+                <TouchableOpacity onPress={() => navigation.openDrawer("helloo")}>
+                  <Icon name="menu" size={24} color="#fff" />
+                </TouchableOpacity>
+
+              </View>
+              <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' }}>
+
+                <Text style={styles.headerText}>Events</Text>
+                <TouchableOpacity onPress={() => setShow(!show)}>
+
+                  <Icons.AntDesign name="filter" size={24} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              {show ?
+                <View>
+
+
+                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}>
+                    <View style={{ paddingTop: 10 }}>
+
+
+                      <Text style={{ color: 'white', fontSize: 11 }}>Start Date</Text>
+                      <View style={styles.searchContainers}>
+
+
+                        <TouchableOpacity onPress={showStartDatePicker} >
+                          <TextInput
+                            style={styles.input}
+                            placeholder="Start Date"
+                            placeholderTextColor={"white"}
+                            value={startDate != "null" ? startDate.toDateString() : ""} // Display the selected date
+                            editable={false} // Disable manual input
+
+                          />
+                        </TouchableOpacity>
+
+                        <DatePicker
+                          modal
+                          open={isStartDatePickerVisible}
+                          mode="date"
+                          date={startDate != "null" ? startDate : new Date()}
+                          onConfirm={handleStartDateConfirm}
+                          onCancel={hideStartDatePicker}
+                        />
+                      </View>
+                    </View>
+                    <View>
+
+                      <Text style={{ color: 'white', fontSize: 11 }}>End Date</Text>
+                      <View style={styles.searchContainers}>
+
+
+                        <TouchableOpacity onPress={showEndDatePicker} >
+                          <TextInput
+                            style={styles.input}
+                            placeholder="End Date"
+                            placeholderTextColor={"white"}
+                            value={endDate != "null" ? endDate.toDateString() : ""} // Display the selected date
+                            editable={false} // Disable manual input
+
+                          />
+                        </TouchableOpacity>
+
+                        <DatePicker
+                          modal
+                          open={isEndDatePickerVisible}
+                          mode="date"
+                          date={endDate != "null" ? endDate : new Date()}
+                          onConfirm={handleEndDateConfirm}
+                          onCancel={hideEndDatePicker}
+                        />
+                      </View>
+                    </View>
+
+                  </View>
+                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}>
+                    <View style={{ paddingTop: 10 }}>
+
+                      <Text style={{ color: 'white', fontSize: 11 }}>Event Duration</Text>
+                      <View style={styles.searchContainers}>
+                        <TextInput
+                          style={styles.input}
+                          placeholder="Event Duration"
+                          placeholderTextColor={"white"}
+                          value={event_duration}
+                          onChangeText={(e) => setevent_duration(e)}
+
+                        />
+                      </View>
+                    </View>
+                    <View>
+
+                      <Text style={{ color: 'white', fontSize: 11 }}>No of People</Text>
+                      <View style={styles.searchContainers}>
+                        <TextInput
+                          style={styles.input}
+                          placeholder="No of People"
+                          placeholderTextColor={"white"}
+                          value={no_of_people}
+                          onChangeText={(e) => setno_of_people(e)}
+
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  <View style={{ paddingTop: 10 }}>
+
+
+                    <Text style={{ color: 'white', fontSize: 11 }}>Hourly_Rate</Text>
+                    <View style={styles.searchContainer}>
+
+                      <TextInput
+                        style={styles.input}
+                        placeholder="Hourly_Rate"
+                        placeholderTextColor={"white"}
+                        value={Hourly_Rate}
+                        onChangeText={(e) => setHourly_Rate(e)}
+
+                      />
+                    </View>
+                  </View>
+                </View>
+                : null}
+            </View>
+
+          {/* </SafeAreaView> */}
+          {
+            bookedEvents.length > 0 ?
+              <View>
+                <FlatList
+                  data={bookedEvents}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.id}
+                />
+              </View>
+              : <Text style={{ color: "black", textAlign: "center", fontSize: 20 }}>No events</Text>
+          }
+        </ScrollView>
+
+
+      }
     </>
 
-    
+
   )
 }
 
@@ -420,8 +411,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#D98100',
     paddingHorizontal: 10,
     marginTop: 10,
-    height:40,
-    borderRadius:10
+    height: 40,
+    borderRadius: 10
   },
   searchContainers: {
     flexDirection: 'row',
@@ -430,14 +421,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#D98100',
     paddingHorizontal: 10,
     marginTop: 10,
-    height:40,
-    width:windowWidth*0.4,
-    borderRadius:10
+    height: 40,
+    width: windowWidth * 0.4,
+    borderRadius: 10
   },
   input: {
     marginLeft: 10,
     flex: 1,
-    color:'white'
+    color: 'white'
   },
   cardtext: {
     display: 'flex',
@@ -448,19 +439,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  BookEventButton:{
+  BookEventButton: {
     backgroundColor: '#FFA500',
-    height:38,
-    color:'#fff',
-    width:190,
-    marginLeft:65,
-    paddingTop:9,
-    textAlign:'center',
-    fontSize:16,
-    borderRadius:10
+    height: 38,
+    color: '#fff',
+    width: 190,
+    marginLeft: 65,
+    paddingTop: 9,
+    textAlign: 'center',
+    fontSize: 16,
+    borderRadius: 10
+
 
   },
   card: {
+
     borderRadius: 6,
     elevation: 3,
     backgroundColor: '#fff',
@@ -471,8 +464,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     marginVertical: 6,
     padding: 20
-    
-    
+
+
   },
   image: {
     width: '100%', // specify the width
@@ -498,15 +491,12 @@ const styles = StyleSheet.create({
   text1: {
     fontSize: 14,
     color: 'black', // white color for better visibility on image
-
   },
   container: {
     width: 'auto',
     height: "87%",
-
     backgroundColor: '#fff',
   },
-
   button: {
     position: 'absolute',
     right: 20,
@@ -516,22 +506,20 @@ const styles = StyleSheet.create({
     width: 60, height: 60,
     justifyContent: 'center', alignItems: 'center'
   },
-  flatList:{
-    paddingBottom: 320,
+  flatList: {
+    paddingBottom: 1320,
   },
-       
   containerSpinner: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center', 
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   horizontalSpinner: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 20, 
+    padding: 20,
     borderRadius: 10,
-    backgroundColor: '#fff', 
-    
+    backgroundColor: '#fff',
   }
 })

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry, Alert} from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry, Alert, Button} from 'react-native'
 import React ,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
@@ -28,10 +28,10 @@ const MyCalender = ({route}) => {
      
     }
     replacementFunction()
-  
+    getDeviceToken()
   }, [userState,route,isFocused]);
 useEffect(() => {
-  getDeviceToken()
+
 }, [])
 const getDeviceToken =async()=>{
  
@@ -42,18 +42,55 @@ const getDeviceToken =async()=>{
   useEffect(() => {
     const unsubscribeBackground = messaging().onMessage(async remoteMessage => {
       const notifeeData = remoteMessage;
-      console.log(notifeeData.notification,"data")
+     
       const permission = await notifee.requestPermission();
       console.log(permission.authorizationStatus,"status")
-     
-        await notifee.displayNotification(notifeeData);
+      console.log(notifeeData,"notification")
+      const channelId = await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+      });
+  
+      await notifee.displayNotification({
+        title: notifeeData.notification.title,
+        body: notifeeData.notification.body,
+        android: {
+          channelId,
+          // pressAction is needed if you want the notification to open the app when pressed
+          pressAction: {
+            id: 'default',
+          },
+        },
+      });
       
     });
 
 
     return unsubscribeBackground;
   }, []);
+  async function onDisplayNotification() {
+    // Request permissions (required for iOS)
+    await notifee.requestPermission()
 
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: 'Notification Title',
+      body: 'Main body content of the notification',
+      android: {
+        channelId,
+        // pressAction is needed if you want the notification to open the app when pressed
+        pressAction: {
+          id: 'default',
+        },
+      },
+    });
+  }
   const handleSubmit = async (userss) => {
     try {
       await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
@@ -153,6 +190,7 @@ const navigation =useNavigation()
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         />
+       
          </>
         
         :

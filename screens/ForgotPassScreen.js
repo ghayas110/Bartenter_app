@@ -27,7 +27,7 @@ const ForgotPassScreen =  ()=> {
       try {
         const bodys = {email:email,user_type:user_type}
 
-          fetch('https://bartender.logomish.com/users/ForgetPasswordEmailVerify', {
+          fetch('https://bartenderbackend.bazazi.co/users/ForgetPasswordEmailVerify', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -3,13 +3,14 @@ import React from 'react'
 import ProfileDetails from '../components/ProfileDetails'
 import Header from '../components/Header'
 import HeaderDetails from '../components/HeaderDetails'
+import BartenderProfile from '../components/BartenderProfile'
 
 const DetailsScreen = ({route}) => {
-
+console.log(route.params.item,"ss")
   return (
     <View>
-    <HeaderDetails title={"John Brown"}/>
- <ProfileDetails name={route.params.item.name} email={route.params.item.email} PhoneNumber={route.params.item.PhoneNumber}/>
+ 
+ <BartenderProfile name={route.params.item.name} email={route.params.item.email} image={route.params.item.image} PhoneNumber={route.params.item.PhoneNumber} id={route.params.item.id}/>
     </View>
   )
 }
