@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get('window');
 
 const ButtonInput = ({onPress,title,icon}) => {
   return (
-    <TouchableOpacity style={title === "Create Event" || title === "Take Job" || title === "Start Chat " ? styles.buttons : styles.button} onPress={onPress}>
+    <TouchableOpacity style={title === "Create Gig" || title === "Create Full Time Job" || title === "Take Job" || title === "Start Chat " ? styles.buttons : styles.button} onPress={onPress}>
       <Text style={styles.text}>{title} </Text>
       <Icon name={icon} size={20} color="white"/>
     </TouchableOpacity>

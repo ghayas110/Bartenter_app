@@ -23,6 +23,7 @@ import BookedEvents from "../screens/BookedEvents";
 import BartenderProfile from "../screens/BartenderProfile";
 import AllBartenders from "../screens/AllBartenders";
 import AllBartenderProfile from "../screens/AllBartenderProfile";
+import AddJobScreen2 from "../screens/AddJobScreen2";
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -44,6 +45,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Details" component={DetailsScreen} />
       <Stack.Screen name="BookedEvents" component={BookedEvents} />
       <Stack.Screen name="AddJob" component={AddJobScreen} />
+      <Stack.Screen name="AddJob2" component={AddJobScreen2} />
       <Stack.Screen name="QRScreen" component={QrScreen} screenOptions={{
         headerShown: false
         }}/>
@@ -57,7 +59,7 @@ const ContactStackNavigator = () => {
       headerShown: false
       }}>
       
-      <Stack.Screen name="Chats" component={Chats} screenOptions={{
+      <Stack.Screen name="Chat" component={Chats} screenOptions={{
         headerShown: false
         }}/>
         <Stack.Screen name="Message" component={MessageScreen} screenOptions={{
@@ -72,10 +74,10 @@ const BartenderStackNavigator = () => {
     <Stack.Navigator screenOptions={{
       headerShown: false
       }}>
-        <Stack.Screen name="AllBartenders" component={AllBartenders} screenOptions={{
+        <Stack.Screen name="AllBartinders" component={AllBartenders} screenOptions={{
         headerShown: false
         }}/>
-           <Stack.Screen name="Bartender" component={AllBartenderProfile} screenOptions={{
+           <Stack.Screen name="Bartinder" component={AllBartenderProfile} screenOptions={{
         headerShown: false
         }}/>
 
@@ -89,7 +91,7 @@ const CalenderStackNavigator = () => {
   <Stack.Navigator screenOptions={{
     headerShown: false
     }}>
-    <Stack.Screen name="Calender" component={MyCalender} screenOptions={{
+    <Stack.Screen name="Calenders" component={MyCalender} screenOptions={{
       headerShown: false
       }}/>
       <Stack.Screen name="BookedDetails" component={BookedDetails} screenOptions={{

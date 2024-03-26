@@ -12,7 +12,6 @@ const SignOut = ({ onLogin }) => {
   const [data, setdata] = useState()
   const handleSubmit = async (userss) => {
     try {
-      // console.log("helloo url",`https://bartenderbackend.bazazi.co/users/GetUserById/${userss.user_data[0].id}`)
       fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss?.user_data[0]?.id}`, {
         method: 'GET',
         headers: {

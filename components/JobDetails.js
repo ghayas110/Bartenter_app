@@ -1,22 +1,26 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import HeaderDetails from './HeaderDetails'
 import MapView, { Marker } from 'react-native-maps'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import Icons from './Icons';
 const baseUrl = require('../global')
 
 const JobDetailsScreen = ({route}) => {
   const [users, setusers] = useState("")
   const [usertype,setusertype]=useState(0)
   const [data, setdata] = useState()
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const navigation = useNavigation()
+  console.log(route.params)
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem("data");
        setusers(JSON.parse(value))
       setusertype(JSON.parse(value).user_data[0].user_type)
       handleSubmit(JSON.parse(value))
+      route?.params?.hide_post==0?setIsPasswordVisible(false):setIsPasswordVisible(true)
     }
     replacementFunction()
   }, [])
@@ -34,7 +38,8 @@ const JobDetailsScreen = ({route}) => {
      })
        .then(response => response.json())
        .then(dataa => {
-        console.log(dataa)
+        console.log(dataa.post,"post")
+
         setdata(dataa.posts)
        });
    } catch (error) {
@@ -49,6 +54,7 @@ const JobDetailsScreen = ({route}) => {
 
     <TouchableOpacity onPress={onPress}  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10,borderBottomWidth: 1, borderBottomColor: 'whitesmoke'   }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <Image source={image!=""?{uri:`https://bartenderbackend.bazazi.co${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
    
     <View style={{marginLeft:15}}>
     <Text style={{color:'grey'}}>{name}</Text>
@@ -56,7 +62,6 @@ const JobDetailsScreen = ({route}) => {
     </View>
     </View>
     <View>
-    <Image source={image!=""?{uri:`https://bartenderbackend.bazazi.co${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
     </TouchableOpacity>
   
@@ -64,7 +69,7 @@ const JobDetailsScreen = ({route}) => {
   const renderItem = ({ item }) => (
     <>
 
-    <Item name={item.name} image={item.resume} number={item.number} onPress={()=>navigation.navigate('BartenderProfile',item)} />
+    <Item name={item.name} image={item.image} number={item.number} onPress={()=>navigation.navigate('BartenderProfile',item)} />
     </>
   );
 
@@ -74,6 +79,40 @@ const JobDetailsScreen = ({route}) => {
 
 
 
+  const togglePasswordVisibility = () => {
+    if (route?.params?.post_id) {
+      try {
+          fetch('https://bartenderbackend.bazazi.co/posts/ChangePostHideStatus', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key':'BarTenderAPI',
+              'accesstoken':`Bearer ${users.access_token}`
+            },
+            body: JSON.stringify({
+              "post_id":route?.params?.post_id
+          }),
+          })
+          .then(response => {
+           
+            return response.json()
+          })
+          .then(chat => {
+          console.log(chat)
+              setIsPasswordVisible(!isPasswordVisible);
+          }).catch(err=>{
+            console.log(err,"dddd")
+          })
+      } catch (error) {
+      console.log('An error occurred while processing your request.',error);
+      }
+    } else {
+      console.log('Please fill in all fields');
+    }
+
+
+
+  };
 
 
   return (
@@ -87,10 +126,15 @@ const JobDetailsScreen = ({route}) => {
         style={styles.section}>
           {usertype==1?
            <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}> Posted by : {route.params.posted_by}</Text>:
+           <View>
+          
            <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}> Event Name : {route.params.post_title}</Text>
-
+           <TouchableOpacity style={{paddingRight:15}} onPress={togglePasswordVisibility}>
+           <Icons.MaterialCommunityIcons name={!isPasswordVisible ? 'eye' : 'eye-off'} size={20} color="#000" />
+         </TouchableOpacity>
+         </View>
           }
-       
+
       </View>
       <View
         style={styles.section}>
@@ -202,7 +246,7 @@ const styles = StyleSheet.create({
   section: {
     display: 'flex',
     justifyContent: 'space-between',
-    flexDirection: 'column',
+    flexDirection: 'row',
     width: '100%',
     paddingTop: 10,
     paddingHorizontal: 10,

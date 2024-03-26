@@ -38,7 +38,7 @@ const LoginScreen = () => {
         })
         .then(response => response.json())
         .then(data => {
-          console.log("Email",data)
+        
           if(data){
             if (data.message==="Success") {
               Alert.alert("Login","Otp have been send to your email")
@@ -91,9 +91,9 @@ const LoginScreen = () => {
       </TouchableOpacity>
       <RadioButton.Group  onValueChange={value => setUser_type(value)} value={user_type}>
       <RadioButton.Item color='orange' label="Admin" value={0} />
-      <RadioButton.Item color='orange' label="Bartender" value={1} />
+      <RadioButton.Item color='orange' label="Bartinder" value={1} />
       <RadioButton.Item color='orange' label="User" value={2} />
-      <RadioButton.Item color='orange' label="Buisness" value={3} />
+      <RadioButton.Item color='orange' label="Business" value={3} />
     </RadioButton.Group>
       </View>
       <View>

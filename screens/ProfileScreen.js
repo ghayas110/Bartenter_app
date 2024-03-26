@@ -13,10 +13,8 @@ import ProfileDetails from '../components/ProfileDetails';
 import UserDetails from '../components/UserDetails';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const ProfileScreen = ({route}) => {
-  console.log("hello",route)
   const [users,setusers]=useState("")
   useEffect(() => {
-    console.log("hehehhehhe")
     async function replacementFunction(){
       const value =  await AsyncStorage.getItem('data');
           setusers(JSON.parse(value));
@@ -46,6 +44,7 @@ const ProfileScreen = ({route}) => {
       })
       .then(response => response.json())
       .then(dataa => {
+     
         if(dataa?.users){
 
           setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
@@ -93,7 +92,10 @@ const ProfileScreen = ({route}) => {
   <View>
   <UserDetails name={data?data.name:""} prop={"truururu"} />
   </View>
-    :
+    :userState == 3 ?
+    <View>
+    <UserDetails name={data?data.name:""} prop={userState} />
+    </View>:
     <>
     {
       data?

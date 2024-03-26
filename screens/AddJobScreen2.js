@@ -26,7 +26,8 @@ import Icons from '../components/Icons';
 import SpecialtySelector from '../components/Selector';
 import AboutHeader from '../components/AboutHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const AddJobScreen = () => {
+import { types } from 'react-native-document-picker';
+const AddJobScreen2 = () => {
   const navigation = useNavigation()
   const [users, setusers] = useState("")
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +35,6 @@ const AddJobScreen = () => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem("data");
       setusers(JSON.parse(value))
-      setImageUri(`https://bartenderbackend.bazazi.co/${JSON.parse(value).user_data[0].image}`)
       setpost_type(JSON.parse(value).user_data[0].user_type == 1 ? "bartender" : "user")
     }
     replacementFunction()
@@ -52,11 +52,14 @@ const AddJobScreen = () => {
   const [event_duration, setevent_duration] = useState();
   const [event_location, setevent_location] = useState();
   const [showPicker, setShowPicker] = useState(false);
+  const [imageUriimage, setImageUriimage] = useState();
+const [imageUriflag, setImageUriflag] = useState(false);
+
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [theme, setTheme] = useState(false);
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-  const [imageUri, setImageUri] = useState("");
+  const [imageUri, setImageUri] = useState();
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const hourlyRate = ["20", "25", "30", , "40", "50"]
   const [no_of_bartenders, setNo_of_bartenders] = useState();
@@ -74,46 +77,65 @@ const AddJobScreen = () => {
       } else if (response.error) {
       } else {
         const uri = response.assets[0].uri;
+        const uri2 = response.assets[0];
         setImageUri(uri);
+        setImageUriimage(uri2)
       }
     });
   };
   const handleSubmit = async () => {
-    setIsLoading(true)
-    const JsonBody = {
-      host_name: hostname,
-      contact_phone: contact_phone,
-      post_title: post_title,
-      event_date: new Date(event_date).toISOString().split('T')[0],
-      event_time: new Date(event_time).toISOString().split('T')[1].split('.')[0],
-      no_of_people: no_of_people,
-      theme: theme,
-      event_location: location,
-      event_lng: 31.000000,
-      event_lat: -100.000000,
-      no_of_bartenders: no_of_bartenders,
-      post_type: post_type,
-      bartender_hourly_rate: selectedSpecialty,
-      event_duration: event_duration,
-      zip_code:9999
-    }
-console.log(JsonBody,"my Name")
+    const Images = {
+      uri: imageUri,
+      type: imageUriimage?.type,
+      name: `${new Date()}image.jpg`,
+    };
+    console.log(Images)
+    
+    // console.log(file,Resume,Certification)
+    const formData = new FormData();
+    formData.append('attachment', Images);
+    formData.append('host_name', hostname);
+    formData.append('contact_phone', contact_phone);
+    formData.append('post_title', post_title);
+    formData.append('event_date', new Date(event_date).toISOString().split('T')[0]);
+    formData.append('event_time', new Date(event_time).toISOString().split('T')[1].split('.')[0]);
+    formData.append('no_of_people', no_of_people);
+    formData.append('theme', theme);
+    formData.append('event_location', location);
+    // formData.append('event_location', event_location?.location);
+    // formData.append('event_lng', event_location?.latlng.lng);
+    // formData.append('event_lat', event_location?.latlng.lat);
+    formData.append('event_lng', 31.000000);
+    formData.append('event_lat', -100.000000);
+    formData.append('no_of_bartenders', no_of_bartenders);
+    formData.append('post_type', post_type);
+    formData.append('bartender_hourly_rate', selectedSpecialty);
+    formData.append('event_duration', event_duration);
+    formData.append('zip_code', 9999);
+    imageUriflag ? formData.append('file', Images) : "";
+
+  
+if (!post_title || !hostname || !contact_phone || !event_date || !event_time || !no_of_people || !event_duration  || !selectedSpecialty || !no_of_bartenders || !imageUri) {
+  Alert.alert('All fields are required');
+  return;
+}else{
+
 
     try {
-      fetch('https://bartenderbackend.bazazi.co/posts/CreatePost', {
+      fetch('https://bartenderbackend.bazazi.co/posts/CreateFullTimeJob', {
 
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'accesstoken': `Bearer ${users.access_token}`,
           'x-api-key': 'BarTenderAPI',
         },
-        body: JSON.stringify(JsonBody),
+        body: formData,
       })
         .then(response => response.json())
         .then(data => {
+          console.log(data)
           setIsLoading(false)
-          if (data.message == "Created") {
+          if (data.success == "success") {
             Alert.alert("Job Created")
             console.log(data)
             navigation.goBack()
@@ -123,7 +145,7 @@ console.log(JsonBody,"my Name")
         });
     } catch (error) {
     }
-
+  }
   };
   const onChangeEnd = (event, selectedDate) => {
     const currentDate = selectedDate || event;
@@ -172,12 +194,14 @@ console.log(JsonBody,"my Name")
           placeholder={'Host Name'}
           placeholderColor={'grey'}
           setValues={text => sethostName(text)}
+          
         />
 
+{/* <FormTextInputWithLocationAutocomplete setValues={setevent_location} /> */}
 <FormTextInput
           placeholder={'Location'}
           placeholderColor={'grey'}
-        
+       
           setValues={text => setLocation(text)}
         />
         <FormTextInput
@@ -212,7 +236,6 @@ console.log(JsonBody,"my Name")
         <View >
           <FormInput
             titleName={"Event Duration"}
-
             iconss={"menuunfold"}
             placeholderColor={'grey'}
             keyboardType="numeric"
@@ -251,11 +274,11 @@ console.log(JsonBody,"my Name")
           placeholderColor={'grey'}
           setValues={text => setevent_location(text)}
         /> */}
-        <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginHorizontal: 20 }}>
-          <Text style={{ textAlign: 'center', color: "black", fontWeight: 900,lineHeight:15 }}>Below Please select the rate you are willing to pay bartinder per hour. If you are finding that your event is not being booked by bartinder we suggest that you review your hourly rate. </Text>
+        <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 10 }}>
+          <Text style={{ textAlign: 'center', color: "black", fontWeight: 800 }}>Below Please select the rate you are willing to pay bartinder per hour. If you are finding that your event is not being booked by bartinder we suggest that you review your hourly rate. </Text>
         </View>
         <View>
-          <Text style={{ color: "black", fontWeight: "bold", lineHeight: 17 }}>Bartenter Hourly Rate</Text>
+          <Text style={{ color: "black", fontWeight: "bold", lineHeight: 17 }}>Bartinder Hourly Rate</Text>
           <SpecialtySelector
             specialties={hourlyRate}
             onSpecialtySelected={handleSpecialtySelected}
@@ -264,7 +287,32 @@ console.log(JsonBody,"my Name")
         {/* <ButtonInput title={"Create Event"} onPress={()=>handleSubmit()}/> 
 
         */}
-
+              <Text style={{ color: "black", fontWeight: "bold", lineHeight: 17 }}>Attachment</Text>
+            <TouchableOpacity
+                style={{
+                  backgroundColor: '#ECECEC',
+                  padding: 12,
+                  borderRadius: 10,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 10,
+                  marginBottom: 15,
+                }}
+                onPress={()=>handleSelectImage()}>
+                {imageUri ? (
+                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: "100%" }}>
+                    <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
+                    <Icons.AntDesign name="file1"  size={20} />
+                    
+                      <Text style={{ color: 'black' }}>{imageUriimage?.fileName}</Text>
+                    </View>
+                    <Icons.AntDesign name={"closecircle"} />
+                  </View>
+                ) : (
+                  <Icons.AntDesign name="file1"  size={20} />
+                )}
+              </TouchableOpacity>
       </View>
     </View>
   </ScrollView>
@@ -275,7 +323,7 @@ console.log(JsonBody,"my Name")
   );
 };
 
-export default AddJobScreen;
+export default AddJobScreen2;
 
 const styles = StyleSheet.create({
   container: {

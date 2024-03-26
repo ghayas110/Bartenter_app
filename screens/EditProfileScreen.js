@@ -102,18 +102,13 @@ const EditProfileScreen = ({ route }) => {
         type: [DocumentPicker.types.pdf],
         allowMultiSelection: true
       });
-      // const doc = await DocumentPicker.pickSingle()
-      console.log("object",doc)
       const uri = doc[0].uri;
       const uri2 = doc[0];
       setUriFunction(uri);
       seturi(uri2)
       setflag(true)
       
-    //   const doc = await DocumentPicker.pickMultiple({
-    //     type: [DocumentPicker.types.pdf, DocumentPicker.types.images]
-    //   })
-    //   console.log(doc)
+ 
     } catch(err) {
       if(DocumentPicker.isCancel(err)) 
         console.log("User cancelled the upload", err);
@@ -391,7 +386,7 @@ const EditProfileScreen = ({ route }) => {
                   <Icons.AntDesign name="user" size={70} />
                 )}
               </TouchableOpacity>
-              <Text style={{ color: 'grey', marginTop: 20 }}>Please Add Your Bartending Resume</Text>
+              <Text style={{ color: 'grey', marginTop: 20 }}>Please Add Your Bartinding Resume</Text>
 
               <TouchableOpacity
                 style={{

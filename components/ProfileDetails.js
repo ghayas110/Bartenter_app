@@ -45,7 +45,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
       })
       .then(response => response.json())
       .then(dataa => {
-        console.log(dataa,"i love u")
+        console.log(dataa)
         setIsLoading(false)
         if(dataa?.users){
           setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
@@ -107,7 +107,7 @@ data?.image==""?
 }
   <View style={styles.maintitle}>
   <Text style={styles.titlemain}>Welcome {data?.name}.</Text>
-  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartender":""}!</Text>
+  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartinder":""}!</Text>
   </View>
 <View style={styles.section}>
 <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>

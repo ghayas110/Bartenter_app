@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ButtonInput from '../components/ButtonInput';
-import { RadioButton } from 'react-native-paper'
+import { Checkbox,RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 import LoginInput from '../components/LoginInput';
 
@@ -13,7 +13,7 @@ const SignUp = () => {
   const [user_type, setUser_type] = useState(0);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('')
-  
+  const [checked, setChecked] = React.useState(false);
   const navigation = useNavigation();
   const validateEmail = (email) => {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -109,13 +109,31 @@ const SignUp = () => {
       />
       <RadioButton.Group  onValueChange={value => setUser_type(value)} value={user_type}>
       <RadioButton.Item color='orange' label="Admin" value={0} />
-      <RadioButton.Item color='orange' label="Bartender" value={1} />
+      <RadioButton.Item color='orange' label="Bartinder" value={1} />
       <RadioButton.Item color='orange' label="User" value={2} />
-      <RadioButton.Item color='orange' label="Buisness" value={3} />
+      <RadioButton.Item color='orange' label="Business" value={3} />
     </RadioButton.Group>
+
+      </View>
+      <View style={{display:'flex',alignItems:'center',justifyContent:'space-around',
+    flexDirection:'row', padding:20}}>
+
+      <Checkbox
+      status={checked ? 'checked' : 'unchecked'}
+      color='orange'
+      onPress={() => {
+        setChecked(!checked);
+      }}
+      /> 
+    <Text style={{paddingLeft:10}}>Are you sure you acccept <Text style={{color:'orange',textDecorationLine:'underline'}} onPress={()=>navigation.navigate('Privacy')}>
+    Privacy Policy 
+      </Text> and <Text style={{color:'orange',textDecorationLine:'underline'}} onPress={()=>navigation.navigate('Terms')}>
+         Terms and Condition
+        </Text>
+         </Text>
       </View>
       <ButtonInput title={"Get Started!"} onPress={handleLogin}/>
-
+    
     </View>
   );
 };

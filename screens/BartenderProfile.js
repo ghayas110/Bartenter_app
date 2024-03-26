@@ -12,7 +12,6 @@ import HeaderDetails from '../components/HeaderDetails';
 
 
 export default function BartenderProfile({route}) {
-    console.log(route.params)
   const isFocused = useIsFocused();
   const [rating, setRating] = useState(0);
   const [isEnabled, setIsEnabled] = useState(false);
@@ -53,7 +52,6 @@ export default function BartenderProfile({route}) {
         if(dataa?.users){
           setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
-          console.log(dataa?.users[0])
        
         }
       });
@@ -89,7 +87,7 @@ data?.image==""?
 }
   <View style={styles.maintitle}>
   <Text style={styles.titlemain}>Welcome {data?.name}.</Text>
-  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartender":""}!</Text>
+  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartinder":""}!</Text>
   </View>
 <View style={styles.section}>
 <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>

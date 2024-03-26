@@ -1,15 +1,12 @@
-import { FlatList, SafeAreaView, ImageBackground, ActivityIndicator, StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, TextInput, Dimensions } from 'react-native'
+import { FlatList, SafeAreaView, ImageBackground, ActivityIndicator, PermissionsAndroid,Platform, StyleSheet, Text, TouchableOpacity, View, ScrollView, Alert, TextInput, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Entypo';
 const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import SelectDropdown from 'react-native-select-dropdown';
 import Icons from '../components/Icons';
-import DraggableProgressBar from '../components/DraggableProgressBar';
 import DatePicker from 'react-native-date-picker';
-import DatePickers from '../components/DatePicker';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const BookedEvents = ({ route }) => {
@@ -31,6 +28,7 @@ const BookedEvents = ({ route }) => {
   const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
 
+  
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
   };
@@ -105,7 +103,6 @@ const BookedEvents = ({ route }) => {
 
   const getAllPosts = async (access_token) => {
 
-    console.log(`https://bartenderbackend.bazazi.co/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate != "null" ? new Date(startDate).toISOString().split("T")[0] : "null"}&date_end=${endDate != "null" ? new Date(endDate).toISOString().split("T")[0] : "null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`, "start")
     // return
     setIsLoading(true)
     try {
@@ -118,7 +115,6 @@ const BookedEvents = ({ route }) => {
         }
       }).then(response => response.json())
         .then(data => {
-          console.log(data,"hhh")
           setIsLoading(false)
 
           if (data.posts.length > 0) {
@@ -136,7 +132,6 @@ const BookedEvents = ({ route }) => {
 
   const handleBookEvent = async (postId) => {
     const JsonBody = { post_id: postId }
-console.log(JsonBody,"ssss")
     try {
       fetch('https://bartenderbackend.bazazi.co/posts/BookPost', {
 
@@ -155,7 +150,7 @@ console.log(JsonBody,"ssss")
         .then(data => {
           if (data.message == "Success") {
             Alert.alert(
-              "Sucess",
+              "Success",
             "Booked Event Succesfully"
               [
                 {
@@ -176,7 +171,7 @@ console.log(JsonBody,"ssss")
     }
   }
 
-  const Item = ({ EventDate, postId, name, contact, EventTime, theme, EventLocation, NoOfPeople, event_duration, onPress }) => (
+  const Item = ({ EventDate, postId, name, contact, EventTime, theme, EventLocation, NoOfPeople, event_duration,post_type, onPress }) => (
     <View style={styles.card}>
 
 
@@ -191,6 +186,15 @@ console.log(JsonBody,"ssss")
           <Text style={styles.text1}>Event Duration :</Text>
           <Text style={styles.text}>{event_duration}</Text>
         </View>
+
+        {post_type == "Full Time"?
+ <TouchableOpacity  style={{
+  width: 40, height: 40, borderRadius: 50, backgroundColor: '#F4E8D6', display: 'flex', alignItems: 'center', justifyContent: 'center'
+}}>
+  <Icons.Ionicons name="attach" color="#FFA500" size={20} />
+ 
+</TouchableOpacity>:null
+        }
         {/* <View style={{
           width: 40, height: 40, borderRadius: 50, backgroundColor: '#F4E8D6', display: 'flex', alignItems: 'center', justifyContent: 'center'
         }}>
@@ -239,8 +243,7 @@ console.log(JsonBody,"ssss")
   );
   const renderItem = ({ item }) => (
     <>
-    {console.log(item)}
-    <Item postId={item?.post_id} name={item?.post_title} contact={item?.contact_phone} image={item?.image} theme={item?.theme} EventDate={item?.event_date} EventTime={item?.event_time} EventLocation={item?.event_location} NoOfPeople={item?.no_of_people} event_duration={item?.event_duration} onPress={()=>handleBookEvent(item?.post_id)} />
+    <Item postId={item?.post_id} name={item?.post_title} contact={item?.contact_phone} image={item?.image} theme={item?.theme} EventDate={item?.event_date} EventTime={item?.event_time} EventLocation={item?.event_location} NoOfPeople={item?.no_of_people} event_duration={item?.event_duration} onPress={()=>handleBookEvent(item?.post_id)} post_type={item?.post_type}/>
     </>
   );
   return (

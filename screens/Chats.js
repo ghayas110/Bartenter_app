@@ -38,7 +38,7 @@ useEffect(() => {
 }, [isFocused]);
   const AllChats = async (id,type) => {
     // Your existing login logic
-    if (id) {
+          if (id) {
       try {
           fetch('https://socket.bazazi.co/alluser', {
             method: 'POST',
@@ -55,7 +55,7 @@ useEffect(() => {
             return response.json()
           })
           .then(chat => {
-            console.log(chat.user,"cfgv")
+         
             if (chat.success) {
             setdata(chat.user)
             setdatas(chat.user)
@@ -74,7 +74,6 @@ useEffect(() => {
     }
   };
   const seenMessage = async (sender) => {
-    console.log("=====++++++++++++++++==========",sender,"xxxx000000000000000000000000000")
     if(sender!==null)
       try {
 
@@ -109,7 +108,6 @@ useEffect(() => {
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
     <View style={{marginLeft:15}}>
     <Text style={{color:'grey'}}>{name}</Text>
-   {console.log(sender,userId,message)}
     { message?.startsWith('/resources/static/assets/uploads/messages/')?
     <Text style={{color:seen_status==0&&sender!=userId?"black":'grey',fontWeight:seen_status==0&&sender!=userId?'bold':500}}>attachment</Text>:
     <Text style={{color:seen_status==0&&sender!=userId?"black":'grey',fontWeight:seen_status==0&&sender!=userId?'bold':500}}>{message}</Text>

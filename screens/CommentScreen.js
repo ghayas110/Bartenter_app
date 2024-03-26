@@ -47,7 +47,6 @@ const post_id=route.params.post_id
       .then(response => response.json())
       .then(dataa => {
         if(dataa?.message=="success"){
-          console.log(dataa,"i love u")
           Alert.alert(
             dataa.message,
             dataa.data,

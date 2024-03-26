@@ -21,6 +21,8 @@ import NewPassword from './screens/NewPassword';
 import ChangePassword from './screens/ChangePassword';
 import EditProfileScreen from './screens/EditProfileScreen';
 import {useNavigation} from '@react-navigation/native';
+import PrivacyPolicy from './screens/PrivacyPolicy';
+import TermsCondition from './screens/TermsCondition';
 const AuthStack = createStackNavigator();
 const App = () => {
 
@@ -32,7 +34,6 @@ const App = () => {
     async function checkLoginStatus() {
    
       const value = await AsyncStorage.getItem("data");
-      console.log(value,"hello value")
       if (value !== null) {
         setIsLoggedIn(true);
       } else {
@@ -60,6 +61,8 @@ const App = () => {
         </Drawer.Screen>
         <Drawer.Screen name='ChangePassword' component={ChangePassword} initialParams={true}/>
         <Drawer.Screen name='EditProfile' initialParams={true} component={EditProfileScreen}/>
+        <Drawer.Screen name="Privacy Policy" component={PrivacyPolicy}/>
+        <Drawer.Screen name="Terms Condition" component={TermsCondition}/>
       </Drawer.Navigator>
     ) 
     :(
@@ -77,6 +80,8 @@ const App = () => {
         <AuthStack.Screen name="OtpForget" component={OtpForget}/>
       
         <AuthStack.Screen name="NewPassword" component={NewPassword}/>
+        <AuthStack.Screen name="Privacy" component={PrivacyPolicy}/>
+        <AuthStack.Screen name="Terms" component={TermsCondition}/>
         <AuthStack.Screen name="Login">
         {(props) => <LoginScreen />}
         

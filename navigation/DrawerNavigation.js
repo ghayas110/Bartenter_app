@@ -53,7 +53,6 @@ function CustomDrawer(props) {
     }
  
 };
-console.log(imageUri,'imgaegegege')
 
   return (
     <DrawerContentScrollView {...props}>

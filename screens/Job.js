@@ -30,7 +30,6 @@ const Job = ({route}) => {
 
   const handleSubmit = async (userr) => {
     try {
-      console.log(userr.access_token)
       fetch('https://bartenderbackend.bazazi.co/posts/GetAllAvailablePostsLocation', {
         method: 'GET',
         headers: {
@@ -42,7 +41,6 @@ const Job = ({route}) => {
       .then(response => response.json())
       .then(data => {
      setData(data.data)
-     console.log(data)
       });
     } catch (error) {
       console.log('An error occurred while processing your request.',error);

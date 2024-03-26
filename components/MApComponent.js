@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 
 const MapComponent = ({onPress,dataSend}) => {
   var navigation=useNavigation()
-  console.log(dataSend?.event_lat,"evental")
   return (
     <View style={styles.container}>
       <MapView
@@ -18,7 +17,10 @@ const MapComponent = ({onPress,dataSend}) => {
           longitudeDelta: 0.0421,
         }}
       >
-        {dataSend?.map(item =>(
+        {dataSend?.map((item,index) =>(
+          <View key={index}>
+
+         
           <Marker
           coordinate={{
             latitude: item.event_lat,
@@ -27,6 +29,7 @@ const MapComponent = ({onPress,dataSend}) => {
           title={item.post_title}
        
         />
+         </View>
         ))}
         
       </MapView>

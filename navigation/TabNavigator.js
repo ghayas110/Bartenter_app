@@ -45,13 +45,20 @@ const BottomTabNavigator = () => {
     
   return (
     <Tab.Navigator
-    tabBarOptions={{
-      activeTintColor: 'tomato',
-      inactiveTintColor: 'gray',
-     
-    }}
-    
-    screenOptions={{
+  
+    screenOptions={
+  
+      {
+        
+          "tabBarActiveTintColor": "tomato",
+          "tabBarInactiveTintColor": "gray",
+          "tabBarStyle": [
+            {
+              "display": "flex"
+            },
+            null
+          ],
+        
       headerShown: false,
       showIcon: true
       }}>
@@ -120,7 +127,7 @@ const BottomTabNavigator = () => {
             
             ),
           }}/> */}
-           <Tab.Screen name="AllBartenders" component={BartenderStackNavigator} options={{
+           <Tab.Screen name="Bartinders" component={BartenderStackNavigator} options={{
             tabBarIcon: ({ color, size }) => (
            
               <Icons.AntDesign name="user" color={color} size={size}/>            ),

@@ -38,7 +38,6 @@ const BookedDetails = ({route}) => {
       })
         .then(response => response.json())
         .then(dataa => {
-          console.log("USERRRRRRRRRRRRRRR",dataa,"USERRRRRRRRRRRRRRR")
           if (dataa?.users.length > 0) {
             setImageUri(`https://bartenderbackend.bazazi.co${dataa?.users[0]?.image}`)
             setdata(dataa?.users)
@@ -53,7 +52,6 @@ const BookedDetails = ({route}) => {
     const commentData={
       post_id:data.post_id
     }
-    console.log(commentData)
     try {
       await fetch(`${baseUrl}/comments/GetAllCommentsById`, {
         method: 'POST',
@@ -66,7 +64,6 @@ const BookedDetails = ({route}) => {
       })
         .then(response => response.json())
         .then(dataa => {
-          console.log("comment",dataa,"USERRRRRRRRRRRRRRR")
           if (dataa?.data.length > 0) {
       setComment(dataa.data)
           }
@@ -91,9 +88,8 @@ const BookedDetails = ({route}) => {
       })
         .then(response => response.json())
         .then(dataa => {
-          console.log("USERRRRRRRRRRRRRRR",dataa,"USERRRRRRRRRRRRRRR")
           if(dataa?.success==="Success"){            Alert.alert(
-              "Sucess",
+              "Success",
               dataa.message,
               [
                 {
@@ -112,9 +108,7 @@ const BookedDetails = ({route}) => {
 
   };
     const navigation = useNavigation()
-    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",route.params)
     const data = route.params.item
-    console.log(data?.post_id,"as")
     const datas = [
         { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
         

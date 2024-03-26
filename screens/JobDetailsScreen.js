@@ -16,8 +16,7 @@ const JobDetailsScreens = ({route}) => {
   }, [setUserType]);
 
    const [details,setDetails] = useState(route.params)
-  console.log("setDetails",route.params)
-  return (
+     return (
     <View>
     <JobDetails
         post_title={"Conocation"}

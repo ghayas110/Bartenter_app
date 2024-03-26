@@ -6,7 +6,6 @@ import HeaderDetails from '../components/HeaderDetails'
 import BartenderProfile from '../components/BartenderProfile'
 
 const DetailsScreen = ({route}) => {
-console.log(route.params.item,"ss")
   return (
     <View>
  

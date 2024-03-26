@@ -5,7 +5,7 @@ import { useNavigation,useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function UserDetails({route}) {
+export default function UserDetails({prop}) {
 const navigation= useNavigation()
 const isFocused = useIsFocused();
 const [isLoading, setIsLoading] = useState(false);
@@ -74,17 +74,28 @@ const handleSubmit = async (userss) => {
       }
           <View style={styles.maintitle}>
           <Text style={styles.titlemain}>Welcome {data?.name},</Text>
-          <Text style={styles.titlemain}>you are a Host!</Text>
+          {prop != 3?
+          <Text style={styles.titlemain}>you are a Host!</Text>:
+          <Text style={styles.titlemain}>you are Business!</Text>
+          }
           </View>
-    
+          {prop == 3?
+     <View style={styles.rating}>
+
+     
+      <ButtonInput title={"Create Full Time Job"} onPress={()=>navigation.navigate('AddJob2')}/>
+    </View>
+    :null
+  }
     
      <View style={styles.rating}>
     
-     <ButtonInput title={"Create Event"} onPress={()=>navigation.navigate('AddJob')}/>
-    
+     <ButtonInput title={"Create Gig"} onPress={()=>navigation.navigate('AddJob')}/>
+
     
     
      </View>
+
         </ScrollView>
     }
 </>

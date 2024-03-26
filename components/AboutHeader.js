@@ -57,7 +57,6 @@ style={{display: "flex",flexDirection: "row"}}>
           {screen=="SignOut"?
           <TouchableOpacity
             onPress={()=> {
-              console.log("han araha h idhr")
               AsyncStorage.clear()
             }}
         

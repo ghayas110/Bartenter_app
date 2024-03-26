@@ -65,50 +65,6 @@ const[skeleton,setskeleton]=useState(false)
 
   const sendMessage = async () => {
     
-    // const file = {
-    //   uri: imageUri,
-    //   type: imageUriimage?.type,
-    //   name: `${new Date()}profile_image.jpg`,
-    // };
-  
-    // // console.log(file,Resume,Certification)
-    // const formData = new FormData();
-
-    // formData.append('file', file) ;
-    
-
-    // console.log(file,"FFFFFFFFDDDDDDDDDDDDDD")
-
-    // try {
-    //   await fetch('https://bartendersocket.logomish.com/sendImage', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //     body: formData,
-    //   })
-    //     .then(response => response.text()) // <-- log the response text
-    //     .then(text => {
-    //       return JSON.parse(text);
-
-    //     })
-    //     .then(data => {
-    //       console.log(data,"datattatatat")
-
-    //       return
-    //       if (data.success === 'success') {
-
-    //         setCertificationUriflag(false)
-    //         setResumeUriflag(false)
-    //         Alert.alert(data.message);
-    //       } else {
-    //         Alert.alert(data.data);
-    //       }
-    //     });
-
-    // } catch (error) {
-    //   console.log('An error occurred while processing your request.', error.message);
-    // }
   
     if (currentChatMessage !== "") {
 
@@ -124,7 +80,7 @@ const[skeleton,setskeleton]=useState(false)
         messagebool:true,
         image:""
       };
-      console.log(msgData)
+     
       socket.current.emit("chat message", msgData);
       setCurrentChatMessage("");
       setImageUri(null); // Reset imageUri after sending
@@ -154,13 +110,13 @@ const[skeleton,setskeleton]=useState(false)
           type: uri2?.type,
           name: `${new Date()}msg_image.jpg`,
         };
-        console.log(file,"Certification")
+    
         const formData = new FormData();
         
         formData.append('file', file);
         formData.append('sender',userId);
         formData.append('receiver',route.params.id);
-        //  console.log(file,"Resume","Certification")
+      
         try {
           setskeleton(true)
           await fetch('https://bartenderbackend.bazazi.co/sendImage', {
@@ -177,7 +133,7 @@ const[skeleton,setskeleton]=useState(false)
     
             })
             .then(data => {
-              console.log(data,"datattatatta")
+       
               const msgData = {
                 sender: userId,
                 receiver: route.params.id,
@@ -185,7 +141,7 @@ const[skeleton,setskeleton]=useState(false)
                 messagebool:false,
                 image:data?.image
               };
-              console.log(msgData,"imageData")
+             
               socket.current.emit("chat message", msgData);
               setTimeout(() => {
         setskeleton(false)

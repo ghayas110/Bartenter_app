@@ -37,6 +37,7 @@ const FormTextInput = ({
           keyboardType={keyboardType}
           secureTextEntry={pass}
           editable={edit}
+          
         />
         <Icon name={icon} size={20} color="grey" />
       </View>

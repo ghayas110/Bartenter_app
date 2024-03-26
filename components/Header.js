@@ -10,9 +10,12 @@ const Header = ({title,headerShown,onPress}) => {
     <SafeAreaView>
     <View style={styles.headerContainer}>
     <View style={styles.siders}>
-    <TouchableOpacity onPress={()=>navigation.openDrawer("helloo")}>
-    <Icon name="menu" size={24} color="#fff" />
-    </TouchableOpacity>
+    {
+      title=="Privacy Policy"?<View></View>:   <TouchableOpacity onPress={()=>navigation.openDrawer("helloo")}>
+      <Icon name="menu" size={24} color="#fff" />
+      </TouchableOpacity>
+    }
+ 
     {
       title=="Notification"?<Icon name="settings-outline" size={24} color="#fff" />:""
     }

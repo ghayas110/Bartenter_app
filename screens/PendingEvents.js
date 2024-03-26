@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
 const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icons from '../components/Icons';
 
 const PendingEvents = ({ route }) => {
   const [userState, setuserState] = useState(11)
@@ -14,7 +15,6 @@ const PendingEvents = ({ route }) => {
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
 
-
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem('data');
@@ -22,7 +22,7 @@ const PendingEvents = ({ route }) => {
       setusers(JSON.parse(value));
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value));
-      getAllPosts()
+      getAllPosts(JSON.parse(value)?.user_data[0]?.id)
     }
     replacementFunction()
   }, [userState,route,isFocused]);
@@ -52,11 +52,11 @@ const PendingEvents = ({ route }) => {
   };
 
 
-  const getAllPosts = async () => {
+  const getAllPosts = async (userss) => {
     const user_id = users.user_data[0].id;
     try {
       setIsLoading(true)
-      await fetch(`${baseUrl}/posts/GetAllPostCreatedByUser/${user_id}`, {
+      await fetch(`${baseUrl}/posts/GetAllPostCreatedByUser/${userss}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -67,6 +67,7 @@ const PendingEvents = ({ route }) => {
         .then(data => {
           if (data.data.length > 0) {
             setMyEvents([...data.posts])
+
             setIsLoading(false)
           }
           else {
@@ -80,8 +81,8 @@ const PendingEvents = ({ route }) => {
   }
 
 const navigation =useNavigation()
-  const Item = ({ id, name,eventdate, role,onPress}) => (
-    <TouchableOpacity  onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
+  const Item = ({ id, name,eventdate, role,onPress,hide_post}) => (
+    <TouchableOpacity key={id}  onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
    
     <View style={{marginLeft:15}}>
@@ -91,15 +92,18 @@ const navigation =useNavigation()
     </View>
     </View>
     <View>
+    <TouchableOpacity style={{paddingRight:15}} >
+  <Icons.MaterialCommunityIcons name={!hide_post ? 'eye' : 'eye-off'} size={20} color="#000" />
+</TouchableOpacity>
       {/* <TouchableOpacity onPress={onPress} style={{ width: 100, height: 50 ,backgroundColor:'yellow'}} >
         <Text style={styles.DetailButton}>View Details</Text>
       </TouchableOpacity> */}
     {/* <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50 }} /> */}
         </View>
     </TouchableOpacity>
-  );
+  )
   const renderItem = ({ item }) => (
-    <Item name={item.post_title} eventdate={item.event_date} role={userState} image={item.image} onPress={()=>navigation.navigate('JobDetail',item)}/>
+    <Item name={item.post_title} eventdate={item.event_date} role={userState} image={item.image} hide_post={item.hide_post} onPress={()=>navigation.navigate('JobDetail',item)}/>
   );
   return (
     <>

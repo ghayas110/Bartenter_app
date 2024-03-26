@@ -12,7 +12,7 @@ import HeaderDetails from '../components/HeaderDetails';
 
 
 export default function AllBartenderProfile({route}) {
-    console.log(route.params.id,'id hai meri')
+
     const id = route.params.id
   const isFocused = useIsFocused();
   const [rating, setRating] = useState(0);
@@ -39,7 +39,6 @@ export default function AllBartenderProfile({route}) {
   const GetRating =  (userss) => {
     // Your existing login logic
     if (id) {
-      console.log("data nahi araha")
       try {
           fetch('https://bartenderbackend.bazazi.co/reviews/GetReviewsByProfileId', {
             method: 'POST',
@@ -57,7 +56,7 @@ export default function AllBartenderProfile({route}) {
             return response.json()
           })
           .then(chat => {
-            console.log(chat,"cfgvsss")
+          
             setRat(chat.data)
           }).catch(err=>{
             console.log(err,"dddd")
@@ -87,7 +86,6 @@ export default function AllBartenderProfile({route}) {
         if(dataa?.users){
           setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
-          console.log(dataa?.users[0])
        
         }
       });
@@ -120,8 +118,8 @@ data?.image==""?
   </ImageBackground>
 }
   <View style={styles.maintitle}>
-  <Text style={styles.titlemain}>Welcome {data?.name}.</Text>
-  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartender":""}!</Text>
+  <Text style={styles.titlemain}>{data?.name}</Text>
+  <Text style={styles.titlemain}>{data?.user_type==1?"Bartinder":""}</Text>
   </View>
 <View style={styles.section}>
 <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>

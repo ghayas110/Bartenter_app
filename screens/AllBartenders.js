@@ -29,15 +29,17 @@ const handleSearch = (text) => {
 useEffect(() => {
   async function replacementFunction() {
     const value = await AsyncStorage.getItem('data');
+    console.log(JSON.parse(value))
     AsyncStorage.setItem('data', value)
     setusers(JSON.parse(value))
     setuserId(JSON.parse(value).user_data[0].id);
-    AllChats(JSON.parse(value).user_data[0].access_token)
+    AllChats(JSON.parse(value))
   }
   replacementFunction()
 }, [isFocused,availabilties,ratings,speciality]);
-  const AllChats = async (access_token) => {
+  const AllChats = async (userss) => {
     // Your existing login logic
+   
     // &minRating=0
       try {
         console.log(availabilties,"sss")
@@ -48,7 +50,7 @@ useEffect(() => {
             headers: {
               'Content-Type': 'application/json',
               'x-api-key':'BarTenderAPI',
-              'accesstoken':`Bearer ${access_token}`
+              'accesstoken':`Bearer ${userss.access_token}`
             },
             
           })
@@ -97,7 +99,7 @@ useEffect(() => {
   );
   const renderItem = ({ item }) => (
     // item.seen_status==0 && item.sender !==userId ?
-    <Item name={item.name} image={item.image}  onPress={()=>{navigation.navigate('Bartender',item)}}/>
+    <Item name={item.name} image={item.image}  onPress={()=>{navigation.navigate('Bartinder',item)}}/>
   );
   return (
     <SafeAreaView>
@@ -110,7 +112,7 @@ useEffect(() => {
     </TouchableOpacity>
    
     </View>
-    <Text style={styles.headerText}>Bartenders</Text>
+    <Text style={styles.headerText}>Bartinders</Text>
 
   <View style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
 
@@ -118,10 +120,9 @@ useEffect(() => {
   <SelectDropdown
   buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
   buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
-  defaultButtonText="Avalibilaty"
+  defaultButtonText="Availability"
 	data={availabilty}
 	onSelect={(selectedItem, index) => {
-		console.log(selectedItem, index)
         setavailabilties(index)
 	}}
 	buttonTextAfterSelection={(selectedItem, index) => {
@@ -141,7 +142,6 @@ useEffect(() => {
   defaultButtonText="Rating"
 	data={rating}
   onSelect={(selectedItem, index) => {
-		console.log(selectedItem, index)
         setratings(selectedItem)
 	}}
 	buttonTextAfterSelection={(selectedItem, index) => {

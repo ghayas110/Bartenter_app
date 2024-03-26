@@ -30,13 +30,10 @@ const MyCalender = ({route}) => {
     replacementFunction()
     getDeviceToken()
   }, [userState,route,isFocused]);
-useEffect(() => {
 
-}, [])
 const getDeviceToken =async()=>{
  
   let token = await messaging().getToken();
-  console.log(token,"mytoken")
 
   }
   useEffect(() => {
@@ -44,8 +41,6 @@ const getDeviceToken =async()=>{
       const notifeeData = remoteMessage;
      
       const permission = await notifee.requestPermission();
-      console.log(permission.authorizationStatus,"status")
-      console.log(notifeeData,"notification")
       const channelId = await notifee.createChannel({
         id: 'default',
         name: 'Default Channel',
@@ -125,6 +120,7 @@ const getDeviceToken =async()=>{
         }
       }).then(response => response.json())
         .then(data => {
+       
           setIsLoading(false)
           if (data.data.length > 0) {
             setBookedEvents([...data.data])
@@ -140,7 +136,9 @@ const getDeviceToken =async()=>{
   }
 const navigation =useNavigation()
  
-  const Item = ({ PhoneNumber, name,email, DateTime,theme, image, onPress }) => (
+  const Item = ({ PhoneNumber, name,email, DateTime,theme, image, onPress }) => {
+   
+    return(
     <TouchableOpacity onPress={onPress} style={styles.card}>
 
 
@@ -161,7 +159,7 @@ const navigation =useNavigation()
    
  
   </TouchableOpacity>
-  );
+  )}
   const renderItem = ({ item }) => (
     <Item name={item.post_title} email={item.email} image={item.image} theme={item.theme} PhoneNumber={item.contact_phone} DateTime={item.event_date} onPress={() => navigation.navigate('BookedDetails', {item})}/>
   );

@@ -81,7 +81,6 @@ export default function BartenderProfile({name,user_type,image,email,PhoneNumber
 const GetRating =  (userss) => {
     // Your existing login logic
     if (id) {
-      console.log("data nahi araha")
       try {
           fetch('https://bartenderbackend.bazazi.co/reviews/GetReviewsByProfileId', {
             method: 'POST',
@@ -99,7 +98,6 @@ const GetRating =  (userss) => {
             return response.json()
           })
           .then(chat => {
-            console.log(chat,"cfgvsss")
             setRat(chat.data)
           }).catch(err=>{
             console.log(err,"dddd")
@@ -135,7 +133,7 @@ const GetRating =  (userss) => {
             return response.json()
           })
           .then(chat => {
-            console.log(chat,"cfgv")
+         
           
           }).catch(err=>{
             console.log(err,"dddd")
