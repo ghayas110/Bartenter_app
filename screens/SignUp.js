@@ -5,6 +5,8 @@ import ButtonInput from '../components/ButtonInput';
 import { Checkbox,RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 import LoginInput from '../components/LoginInput';
+import Toast from 'react-native-toast-message';
+import baseUrl from '../global';
 
 
 const SignUp = () => {
@@ -24,12 +26,15 @@ const SignUp = () => {
     // Your existing login logic
     if (email !== '' && password !== ''&& number!='' && name != '' ) {
       if (!validateEmail(email)) {
-        Alert.alert('Invalid Email', 'Please enter a valid email address');
+        Toast.show({
+          type: 'error',
+          text1: 'Email Unverified',
+        });
         return;
       }
       try {
 
-          fetch('https://bartenderbackend.bazazi.co/users/CreateUser', {
+          fetch(`${baseUrl}/users/CreateUser`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -40,13 +45,19 @@ const SignUp = () => {
           })
           .then(response => response.json())
           .then(data => {
+            console.log(data)
             if(data.message=="Success"){
-              Alert.alert('SignUp Successfull')
- 
+              Toast.show({
+                type: 'success',
+                text1: 'SignUp Succesfull',
+              });
                navigation.navigate('Login')
             }
             else{
-              Alert.alert('SignUp Failed Please try Again')
+              Toast.show({
+                type: 'error',
+                text1: 'SignUp Failure',
+              });
             }
           
          
@@ -59,7 +70,11 @@ const SignUp = () => {
       console.log('An error occurred while processing your request.',error);
       }
    } else {
- Alert.alert("Please fill all fields")
+    Toast.show({
+      type: 'error',
+      text1: 'Job Not Created',
+      text2: 'Job has not been created 👋'
+    });
    }
     
   };

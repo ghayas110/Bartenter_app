@@ -7,6 +7,7 @@ import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import SelectDropdown from 'react-native-select-dropdown'
 import FormTextInput from '../components/FormTextInput';
+import baseUrl from '../global';
 const AllBartenders = () => {
 const [userId, setuserId] = useState(0)
  const [data, setdata] = useState()
@@ -42,10 +43,8 @@ useEffect(() => {
    
     // &minRating=0
       try {
-        console.log(availabilties,"sss")
-        console.log(speciality,"jjj")
-        console.log(ratings,"kkkkk")
-          fetch(`https://bartenderbackend.bazazi.co/users/GetAllBartenders?availability=${availabilties}&skills=${speciality}&minRating=${ratings}`, {
+      
+          fetch(`${baseUrl}/users/GetAllBartenders?availability=${availabilties}&skills=${speciality}&minRating=${ratings}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -58,7 +57,7 @@ useEffect(() => {
             return response.json()
           })
           .then(chat => {
-            console.log(chat)
+         
             if (chat.message) {
             setdata(chat.users)
             setdatas(chat.users)
@@ -92,7 +91,7 @@ useEffect(() => {
     </View>
     <View>
 
-    <Image source={image!=""?{uri:`https://bartenderbackend.bazazi.co${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+    <Image source={image!=""?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
 
     </TouchableOpacity>

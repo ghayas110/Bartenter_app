@@ -5,7 +5,8 @@ import ButtonInput from '../components/ButtonInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../redux/reducers/authReducer';
 import { useNavigation } from '@react-navigation/native';
-
+import baseUrl from '../global';
+import messaging from '@react-native-firebase/messaging';
 
 
 const Otp = ({ onLogin,route }) => {
@@ -43,9 +44,13 @@ const Otp = ({ onLogin,route }) => {
 
     setOtp(newOtp);
   };
-
+  const getDeviceToken =async()=>{
+ 
+ 
+    }
   const handleSubmit = async({route}) => {
-
+    let token = await messaging().getToken();
+  
     const enteredOtp = otp.join('');
    
     try {
@@ -53,13 +58,14 @@ const Otp = ({ onLogin,route }) => {
 
          try {
 
-            fetch('https://bartenderbackend.bazazi.co/users/VerifyOtp', {
+            fetch(`${baseUrl}/users/VerifyOtp`, {
                method: 'POST',
                headers: {
                  'Content-Type': 'application/json',
                  'x-api-key':'BarTenderAPI'
                },
-               body: JSON.stringify({ otp:enteredOtp,email:email,user_type:user_type }),
+               body: JSON.stringify({ otp:enteredOtp,email:email,user_type:user_type,FCM_token:`${token}`
+              }),
              })
              .then(
               
@@ -72,8 +78,10 @@ const Otp = ({ onLogin,route }) => {
                 AsyncStorage.setItem('data', JSON.stringify(data));
                  onLogin()
                } else {
-                 Alert.alert("Login","Login Faliure")
-               }
+                Toast.show({
+                  type: 'error',
+                  text1: 'SignIn Failure',
+                });               }
              });
          
    

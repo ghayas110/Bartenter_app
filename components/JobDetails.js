@@ -54,7 +54,7 @@ const JobDetailsScreen = ({route}) => {
 
     <TouchableOpacity onPress={onPress}  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10,borderBottomWidth: 1, borderBottomColor: 'whitesmoke'   }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    <Image source={image!=""?{uri:`https://bartenderbackend.bazazi.co${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+    <Image source={image!=""?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
    
     <View style={{marginLeft:15}}>
     <Text style={{color:'grey'}}>{name}</Text>
@@ -82,7 +82,7 @@ const JobDetailsScreen = ({route}) => {
   const togglePasswordVisibility = () => {
     if (route?.params?.post_id) {
       try {
-          fetch('https://bartenderbackend.bazazi.co/posts/ChangePostHideStatus', {
+          fetch(`${baseUrl}/posts/ChangePostHideStatus`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

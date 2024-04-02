@@ -106,7 +106,7 @@ const BookedEvents = ({ route }) => {
     // return
     setIsLoading(true)
     try {
-      await fetch(`https://bartenderbackend.bazazi.co/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate != "null" ? new Date(startDate).toISOString().split("T")[0] : "null"}&date_end=${endDate != "null" ? new Date(endDate).toISOString().split("T")[0] : "null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`, {
+      await fetch(`${baseUrl}/posts/SearchJobsPremiumPackage?event_duration=${event_duration}&zip_code=${zip_code}&DistanceRadius=${Distance_Radius}&date_start=${startDate != "null" ? new Date(startDate).toISOString().split("T")[0] : "null"}&date_end=${endDate != "null" ? new Date(endDate).toISOString().split("T")[0] : "null"}&no_of_people=${no_of_people}&bartender_hourly_rate=${Hourly_Rate}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ const BookedEvents = ({ route }) => {
   const handleBookEvent = async (postId) => {
     const JsonBody = { post_id: postId }
     try {
-      fetch('https://bartenderbackend.bazazi.co/posts/BookPost', {
+      fetch(`${baseUrl}/posts/BookPost`, {
 
         method: 'PATCH',
         headers: {

@@ -24,7 +24,7 @@ const NewPassword = ({route}) => {
    
       const bodys= {email:email,password:password,user_type:user_type}
       try {
-        fetch('https://bartenderbackend.bazazi.co/users/FogetPassword', {
+        fetch(`${baseUrl}/users/FogetPassword`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

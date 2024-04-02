@@ -10,6 +10,7 @@ import { useNavigation,useIsFocused } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import Icons from "../components/Icons";
+import baseUrl from "../global";
 const Drawer = createDrawerNavigator();
 
 function CustomDrawer(props) {  
@@ -25,7 +26,7 @@ function CustomDrawer(props) {
       const value =  await AsyncStorage.getItem('data');
         AsyncStorage.setItem('data',value)
           setusers(JSON.parse(value));
-          setImageUri(`https://bartenderbackend.bazazi.co/${JSON.parse(value).user_data[0].image}`)
+          setImageUri(`${baseUrl}/${JSON.parse(value).user_data[0].image}`)
           setuserState(JSON.parse(value)?.user_data[0]?.user_type);
           handleSubmit(JSON.parse(value));
   }
@@ -36,7 +37,7 @@ function CustomDrawer(props) {
   const handleSubmit = async () => {
 
     try {
-       fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${users?.user_data[0]?.id}`, {
+       fetch(`${baseUrl}/users/GetUserById/${users?.user_data[0]?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +47,7 @@ function CustomDrawer(props) {
       })
       .then(response => response.json())
       .then(dataa => {
-        setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
+        setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
        setdata(dataa?.users[0])
       });
     } catch (error) {

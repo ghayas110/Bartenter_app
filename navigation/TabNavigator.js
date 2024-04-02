@@ -106,7 +106,7 @@ const BottomTabNavigator = () => {
   }}
 /> */}
           </>
-      :
+      :userState != 3 || userState != 5?
       <>
       <Tab.Screen  initialParams={{ prop: true }} name="PendingEvents"  component={PendingStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
@@ -121,12 +121,6 @@ const BottomTabNavigator = () => {
             ),
           }}/> 
       
-        {/* <Tab.Screen name="BookedEvents" component={BookedEvents} options={{
-          tabBarIcon: ({ color, size }) => (
-            <Image source={require('../assets/png/1-05.png')} style={{ width: 25, height: 20 ,objectFit:'contain' }} />
-            
-            ),
-          }}/> */}
            <Tab.Screen name="Bartinders" component={BartenderStackNavigator} options={{
             tabBarIcon: ({ color, size }) => (
            
@@ -140,6 +134,7 @@ const BottomTabNavigator = () => {
           
     
       </>
+      :null
     }
 
         
@@ -153,20 +148,21 @@ const BottomTabNavigator = () => {
       
 
       {userState ==0?
-      <Tab.Screen name="Admins" component={AdminStackNavigator} options={{
+      <Tab.Screen name="User" component={AdminStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
        
           <Icon name="people-outline" color={color} size={size}/>
         ),
       }}/>
       :null}
-     
+        {userState !=0?
       <Tab.Screen name="Notification" component={Notification} options={{
         tabBarIcon: ({ color, size }) => (
        
           <Icon name="notifications" color={color} size={size}/>
         ),
       }}/>
+      :null}
     </Tab.Navigator>
   );
 };

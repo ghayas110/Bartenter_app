@@ -18,6 +18,7 @@ import ChatInput from "../components/ChatInput";
 import { launchImageLibrary } from "react-native-image-picker";
 import { configureLayoutAnimations } from "react-native-reanimated/lib/typescript/reanimated2/core";
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import baseUrl from "../global";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -26,7 +27,7 @@ export default function Messagescreen({ route }) {
   const [currentChatMessage, setCurrentChatMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null);
-
+  const socketUrl = 'https://bartinder-socket.digitalmobix.com'
   const [imageUri, setImageUri] = useState();
   const [imageUriimage, setImageUriimage] = useState();
   const [files,setFiles]= useState();
@@ -42,7 +43,7 @@ export default function Messagescreen({ route }) {
   }, []);
 
   // const socket = useRef(io("https://bartendersocket.logomish.com"));
-  const socket = useRef(io("https://socket.bazazi.co"));
+  const socket = useRef(io(`${socketUrl}`));
   
 
   useEffect(() => {
@@ -119,7 +120,7 @@ const[skeleton,setskeleton]=useState(false)
       
         try {
           setskeleton(true)
-          await fetch('https://bartenderbackend.bazazi.co/sendImage', {
+          await fetch(`${baseUrl}/sendImage`, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -207,7 +208,7 @@ const[skeleton,setskeleton]=useState(false)
       </SkeletonPlaceholder>
     ) : (
       <Image
-        source={{ uri: `https://bartenderbackend.bazazi.co/${item.image}` }}
+        source={{ uri: `${baseUrl}/${item.image}` }}
         style={{ width: 125, height: 120, objectFit: 'contain' }}
         onLoad={() => setImageLoaded(true)}
       />

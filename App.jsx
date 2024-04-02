@@ -15,6 +15,7 @@ import BartenderHomeScreen from './screens/BartenderHomeScreen';
 import SignOut from './screens/SignOut';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import ForgotPassScreen from './screens/ForgotPassScreen';
 import OtpForget from './screens/OtpForget';
 import NewPassword from './screens/NewPassword';
@@ -24,6 +25,40 @@ import {useNavigation} from '@react-navigation/native';
 import PrivacyPolicy from './screens/PrivacyPolicy';
 import TermsCondition from './screens/TermsCondition';
 const AuthStack = createStackNavigator();
+const toastConfig = {
+
+  success: (props) => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: 'green' }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 15,
+        fontWeight: '400'
+      }}
+    />
+  ),
+
+  error: (props) => (
+    <ErrorToast
+      {...props}
+      text1Style={{
+        fontSize: 17
+      }}
+      text2Style={{
+        fontSize: 15
+      }}
+    />
+  ),
+
+  tomatoToast: ({ text1, props }) => (
+    <View style={{ height: 60, width: '100%', backgroundColor: 'tomato' }}>
+      <Text>{text1}</Text>
+      <Text>{props.uuid}</Text>
+    </View>
+  )
+};
+
 const App = () => {
 
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -100,6 +135,8 @@ const App = () => {
     )}
    
     </NavigationContainer>
+
+      <Toast config={toastConfig} />
     </Provider>
   );
 };

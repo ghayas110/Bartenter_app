@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ButtonInput from '../components/ButtonInput';
 import { useNavigation } from '@react-navigation/native';
+import baseUrl from '../global';
 const OtpForget = ({route}) => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const [email, setEmail] = useState(route?.params?.bodys?.email);
@@ -49,7 +50,7 @@ const OtpForget = ({route}) => {
 
          try {
 const bodys ={email:email,user_type:user_type}
-            fetch('https://bartenderbackend.bazazi.co/users/VerifyOtp', {
+            fetch(`${baseUrl}/users/VerifyOtp`, {
                method: 'POST',
                headers: {
                  'Content-Type': 'application/json',

@@ -39,7 +39,7 @@ const BookedDetails = ({route}) => {
         .then(response => response.json())
         .then(dataa => {
           if (dataa?.users.length > 0) {
-            setImageUri(`https://bartenderbackend.bazazi.co${dataa?.users[0]?.image}`)
+            setImageUri(`${baseUrl}${dataa?.users[0]?.image}`)
             setdata(dataa?.users)
           }
         });
@@ -75,7 +75,7 @@ const BookedDetails = ({route}) => {
 
   const handleCancel = async () => {
     try {
-      await fetch(`https://bartenderbackend.bazazi.co/posts/CancelBookedPost`, {
+      await fetch(`${baseUrl}/posts/CancelBookedPost`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ const BookedDetails = ({route}) => {
         <View style={{ flexDirection: 'row', alignItems: 'center',flexWrap:'wrap' }}>
      
     
-        <Image source={{uri:`https://bartenderbackend.bazazi.co${image}`}} style={{ width: 50, height: 50,borderRadius:50 }} />
+        <Image source={{uri:`${baseUrl}${image}`}} style={{ width: 50, height: 50,borderRadius:50 }} />
         <View style={{marginLeft:15}}>
 
 

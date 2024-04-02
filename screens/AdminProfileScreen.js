@@ -8,6 +8,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Checkbox } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+import baseUrl from '../global';
 
 const AdminProfileScreen = ({ route }) => {
 const navigation = useNavigation();
@@ -24,23 +25,24 @@ const navigation = useNavigation();
     async function replacementFunction(){
     const value = await AsyncStorage.getItem("data");
       setusers(JSON.parse(value))
+      handleSubmit(JSON.parse(value))
     }
     replacementFunction()
 
   },[route])
-  const handleSubmit = async () => {
-
+  const handleSubmit = async (user) => {
     try {
-      fetch('https://bartenderbackend.bazazi.co/users/GetAllUsers', {
+      fetch(`${baseUrl}/users/GetAllUsers`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
-          'accesstoken':`Bearer ${users.access_token}`
+          'accesstoken':`Bearer ${user.access_token}`
         },
       })
       .then(response => response.json())
       .then(data => {
+        console.log(data)
      setData(data.users)
       });
     } catch (error) {
@@ -55,11 +57,8 @@ const navigation = useNavigation();
   const Item = ({ id, name,user_type,image, onPress }) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    <BouncyCheckbox  fillColor="black"
-    unfillColor="#FFFFFF" onPress={(isChecked) => {}} innerIconStyle={{
-      borderRadius: 0,
-       // to make it a little round increase the value accordingly
-    }} />
+    <Image source={image!=""?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+
 
    
     <View style={{marginLeft:15}}>
@@ -78,7 +77,7 @@ const navigation = useNavigation();
   );
   return (
     <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
-    <Header title="Admin" headerShown={true}/>
+    <Header title="Admin" headerShown={false}/>
   
     
     <FlatList

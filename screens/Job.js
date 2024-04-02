@@ -30,7 +30,7 @@ const Job = ({route}) => {
 
   const handleSubmit = async (userr) => {
     try {
-      fetch('https://bartenderbackend.bazazi.co/posts/GetAllAvailablePostsLocation', {
+      fetch(`${baseUrl}/posts/GetAllAvailablePostsLocation`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

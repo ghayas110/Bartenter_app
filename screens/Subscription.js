@@ -19,6 +19,7 @@ const items = Platform.select({
 const Subscription = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [purchased, setPurchased] = useState(false);
+  const [token, setToken] = useState();
 
   useEffect(() => {
     initConnection()
@@ -42,15 +43,20 @@ const Subscription = ({ navigation }) => {
     <Header title="Subscription" headerShown={false} />
     <ScrollView contentContainerStyle={styles.scrollContent}>
       {products.map((product, index) => {
+        const token=product?.subscriptionOfferDetails[0]?.offerToken
+       console.log(token)
         return(
         <View key={index} style={styles.productContainer}>
           <Image source={require('../assets/logo.png')} />
-          <Text style={styles.productTitle}>{product.title}</Text>
-          <Text style={styles.productDescription}>{product.description}</Text>
+          <Text style={styles.productTitle}>{product[`title`]}</Text>
+          <Text style={styles.productDescription}>{product[`description`]}</Text>
           <Text style={styles.productPrice}>{product.price}</Text>
-       
-            <ButtonInput title={"Subscribe"} onPress={() => console.log("")} />
-      
+        
+            <ButtonInput title={"Subscribe"} onPress={() => requestSubscription({
+                    sku: product.productId,
+                    subscriptionOffers: [{ sku: product.productId, offerToken:product.subscriptionOfferDetails[0]?.offerToken }]
+                }) } />
+         
         </View>
       )
 })

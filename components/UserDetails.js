@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ImageBackground,ActivityIndicator,ScrollView } 
 import ButtonInput from './ButtonInput';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import baseUrl from '../global';
 
 
 export default function UserDetails({prop}) {
@@ -12,7 +13,7 @@ const [isLoading, setIsLoading] = useState(false);
 const[userState,setuserState]=useState(11)
 const [users,setusers]=useState("")
 const [data, setdata] = useState()
-const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
+const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}`||'');
 
 
 useEffect(() => {
@@ -30,7 +31,7 @@ const handleSubmit = async (userss) => {
   setIsLoading(true)
 
   try {
-    fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss.user_data[0].id}`, {
+    fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +44,7 @@ const handleSubmit = async (userss) => {
       setIsLoading(false)
 
       if(dataa?.users){
-        setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
+        setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
         setdata(dataa?.users[0])     
       }
     });
@@ -74,9 +75,9 @@ const handleSubmit = async (userss) => {
       }
           <View style={styles.maintitle}>
           <Text style={styles.titlemain}>Welcome {data?.name},</Text>
-          {prop != 3?
-          <Text style={styles.titlemain}>you are a Host!</Text>:
-          <Text style={styles.titlemain}>you are Business!</Text>
+          {prop == 3?
+          <Text style={styles.titlemain}>you are a Host!</Text>:prop == 4?
+          <Text style={styles.titlemain}>you are Business!</Text>:<Text style={styles.titlemain}>you are Admin!</Text>
           }
           </View>
           {prop == 3?
@@ -87,7 +88,7 @@ const handleSubmit = async (userss) => {
     </View>
     :null
   }
-    
+       {prop != 0?
      <View style={styles.rating}>
     
      <ButtonInput title={"Create Gig"} onPress={()=>navigation.navigate('AddJob')}/>
@@ -95,7 +96,7 @@ const handleSubmit = async (userss) => {
     
     
      </View>
-
+:null}
         </ScrollView>
     }
 </>

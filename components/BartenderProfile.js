@@ -8,6 +8,7 @@ import { useNavigation,useIsFocused } from '@react-navigation/native';
 import HeaderDetails from './HeaderDetails';
 import Modal from 'react-native-modal';
 import ButtonInput from './ButtonInput';
+import baseUrl from '../global';
 
 export default function BartenderProfile({name,user_type,image,email,PhoneNumber,speciality,signatureDrink,id}) {
   const isFocused = useIsFocused();
@@ -19,7 +20,7 @@ export default function BartenderProfile({name,user_type,image,email,PhoneNumber
   const [data, setdata] = useState()
   const [rating, setRating] = useState(0);
   const [rat, setRat] = useState([]);
-  const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${image}`||'');
+  const [imageUri, setImageUri] = useState(`${baseUrl}/${image}`||'');
   const [isLoading, setIsLoading] = useState(false);
   
   const styless = {
@@ -53,7 +54,7 @@ export default function BartenderProfile({name,user_type,image,email,PhoneNumber
   const handleSubmit = async (userss) => {
     setIsLoading(true)
     try {
-     await fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${id}`, {
+     await fetch(`${baseUrl}/users/GetUserById/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ export default function BartenderProfile({name,user_type,image,email,PhoneNumber
       
         setIsLoading(false)
         if(dataa?.users){
-          setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
+          setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
           dataa?.users[0]?.availability==0?
           setIsEnabled(false):setIsEnabled(true)
@@ -82,7 +83,7 @@ const GetRating =  (userss) => {
     // Your existing login logic
     if (id) {
       try {
-          fetch('https://bartenderbackend.bazazi.co/reviews/GetReviewsByProfileId', {
+          fetch(`${baseUrl}/reviews/GetReviewsByProfileId`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -114,7 +115,7 @@ const GetRating =  (userss) => {
     if (id) {
       console.log("sss")
       try {
-        fetch('https://bartenderbackend.bazazi.co/reviews/CreateReview', {
+        fetch(`${baseUrl}/reviews/CreateReview`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

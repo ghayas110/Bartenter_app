@@ -26,6 +26,7 @@ import SpecialtySelector from '../components/Selector';
 import FormTextInput from '../components/FormTextInput';
 import AboutHeader from '../components/AboutHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import baseUrl from '../global';
 const EditProfileScreen = ({ route }) => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
@@ -122,7 +123,7 @@ const EditProfileScreen = ({ route }) => {
     setIsLoading(true)
     setusers(users)
     try {
-      await fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${users?.user_data[0]?.id}`, {
+      await fetch(`${baseUrl}/users/GetUserById/${users?.user_data[0]?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -139,9 +140,9 @@ const EditProfileScreen = ({ route }) => {
             setSelectedTraining(training.filter(data => data == `${tra == "1" ? "Yes" : "No"}`)[0])
             setNumber(data?.users[0]?.number)
             setdob_date(new Date(data?.users[0]?.dob))
-            setImageUri(`https://bartenderbackend.bazazi.co` + data?.users[0]?.image)
-            setCertificationUri(`https://bartenderbackend.bazazi.co` + data?.users[0]?.certificate)
-            setResumeUri(`https://bartenderbackend.bazazi.co` + data?.users[0]?.resume)
+            setImageUri(`${baseUrl}` + data?.users[0]?.image)
+            setCertificationUri(`${baseUrl}` + data?.users[0]?.certificate)
+            setResumeUri(`${baseUrl}` + data?.users[0]?.resume)
             setsignature_drink(data?.users[0]?.signature_drink)
             setPaymentLink(data?.users[0].payment_link)
             var spe = data?.users[0]?.speciality
@@ -187,7 +188,7 @@ const EditProfileScreen = ({ route }) => {
     formData.append('dob', dob_date.toString())
 
     try {
-      await fetch('https://bartenderbackend.bazazi.co/userProfile/updateProfiles', {
+      await fetch(`${baseUrl}/userProfile/updateProfiles`, {
         method: 'PATCH',
         headers: {
           'Accept': 'application/json',

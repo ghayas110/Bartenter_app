@@ -27,6 +27,7 @@ import SpecialtySelector from '../components/Selector';
 import AboutHeader from '../components/AboutHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { types } from 'react-native-document-picker';
+import baseUrl from '../global';
 const AddJobScreen2 = () => {
   const navigation = useNavigation()
   const [users, setusers] = useState("")
@@ -117,12 +118,27 @@ const [imageUriflag, setImageUriflag] = useState(false);
   
 if (!post_title || !hostname || !contact_phone || !event_date || !event_time || !no_of_people || !event_duration  || !selectedSpecialty || !no_of_bartenders || !imageUri) {
   Alert.alert('All fields are required');
+  if (data.message == "Created") {
+    Toast.show({
+      type: 'success',
+      text1: 'Job Created',
+      text2: 'Job has been created 👋'
+    });
+    console.log(data)
+    navigation.goBack()
+  } else {
+    Toast.show({
+      type: 'error',
+      text1: 'Job Not Created',
+      text2: 'Job has not been created 👋'
+    });
+  }
   return;
 }else{
 
 
     try {
-      fetch('https://bartenderbackend.bazazi.co/posts/CreateFullTimeJob', {
+      fetch(`${baseUrl}/posts/CreateFullTimeJob`, {
 
         method: 'POST',
         headers: {
@@ -135,12 +151,20 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
         .then(data => {
           console.log(data)
           setIsLoading(false)
-          if (data.success == "success") {
-            Alert.alert("Job Created")
+          if (data.message == "Created") {
+            Toast.show({
+              type: 'success',
+              text1: 'Job Created',
+              text2: 'Job has been created 👋'
+            });
             console.log(data)
             navigation.goBack()
           } else {
-            Alert.alert("Job Not Created")
+            Toast.show({
+              type: 'error',
+              text1: 'Job Not Created',
+              text2: 'Job has not been created 👋'
+            });
           }
         });
     } catch (error) {

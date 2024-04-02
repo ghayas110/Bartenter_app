@@ -7,6 +7,8 @@ import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 import LoginInput from '../components/LoginInput';
+import Toast from 'react-native-toast-message';
+import baseUrl from '../global';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -28,7 +30,7 @@ const LoginScreen = () => {
       const bodys= {email:email,password:password,user_type:user_type}
       try {
   
-     fetch('https://bartenderbackend.bazazi.co/users/Login', {
+     fetch(`${baseUrl}/users/Login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -41,7 +43,11 @@ const LoginScreen = () => {
         
           if(data){
             if (data.message==="Success") {
-              Alert.alert("Login","Otp have been send to your email")
+              Toast.show({
+                type: 'success',
+                text1: 'Otp sent to your email👋',
+           
+              });
               navigation.navigate('OtpS',{bodys})
             } else {
               Alert.alert("Login","Login Faliure")

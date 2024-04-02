@@ -3,15 +3,16 @@ import { View, Text, StyleSheet, ImageBackground,TouchableOpacity,ScrollView } f
 import Header from './Header';
 import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
+import baseUrl from '../global';
 
-export default function AdminProfileDetails({name,email,number,signature_drink,payment_link,speciality}) {
+export default function AdminProfileDetails({name,email,number,signature_drink,payment_link,speciality,image}) {
   const [rating, setRating] = useState(0);
-  
+
   return (
 
     <ScrollView style={styles.card}>
   
-      <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
+      <ImageBackground source={image!=""?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={styles.image}>
         <Text style={styles.title}>{name}</Text>
         
       </ImageBackground>

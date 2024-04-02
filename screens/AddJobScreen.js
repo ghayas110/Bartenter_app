@@ -26,6 +26,7 @@ import Icons from '../components/Icons';
 import SpecialtySelector from '../components/Selector';
 import AboutHeader from '../components/AboutHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 const AddJobScreen = () => {
   const navigation = useNavigation()
   const [users, setusers] = useState("")
@@ -34,7 +35,7 @@ const AddJobScreen = () => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem("data");
       setusers(JSON.parse(value))
-      setImageUri(`https://bartenderbackend.bazazi.co/${JSON.parse(value).user_data[0].image}`)
+      setImageUri(`${baseUrl}/${JSON.parse(value).user_data[0].image}`)
       setpost_type(JSON.parse(value).user_data[0].user_type == 1 ? "bartender" : "user")
     }
     replacementFunction()
@@ -100,7 +101,7 @@ const AddJobScreen = () => {
 console.log(JsonBody,"my Name")
 
     try {
-      fetch('https://bartenderbackend.bazazi.co/posts/CreatePost', {
+      fetch(`${baseUrl}/posts/CreatePost`, {
 
         method: 'POST',
         headers: {
@@ -114,11 +115,19 @@ console.log(JsonBody,"my Name")
         .then(data => {
           setIsLoading(false)
           if (data.message == "Created") {
-            Alert.alert("Job Created")
+            Toast.show({
+              type: 'success',
+              text1: 'Job Created',
+              text2: 'Job has been created 👋'
+            });
             console.log(data)
             navigation.goBack()
           } else {
-            Alert.alert("Job Not Created")
+            Toast.show({
+              type: 'error',
+              text1: 'Job Not Created',
+              text2: 'Job has not been created 👋'
+            });
           }
         });
     } catch (error) {

@@ -9,6 +9,7 @@ import RatingCard from '../components/RatingCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import HeaderDetails from '../components/HeaderDetails';
+import baseUrl from '../global';
 
 
 export default function AllBartenderProfile({route}) {
@@ -21,7 +22,7 @@ export default function AllBartenderProfile({route}) {
   const[userState,setuserState]=useState(11)
   const [users,setusers]=useState("")
   const [data, setdata] = useState()
-  const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
+  const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}`||'');
   const [isLoading, setIsLoading] = useState(false);
   const [rat, setRat] = useState([]);
 
@@ -40,7 +41,7 @@ export default function AllBartenderProfile({route}) {
     // Your existing login logic
     if (id) {
       try {
-          fetch('https://bartenderbackend.bazazi.co/reviews/GetReviewsByProfileId', {
+          fetch(`${baseUrl}/reviews/GetReviewsByProfileId`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ export default function AllBartenderProfile({route}) {
   const handleSubmit = async (userss) => {
     setIsLoading(true)
     try {
-     await fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${route?.params?.id}`, {
+     await fetch(`${baseUrl}/users/GetUserById/${route?.params?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +85,7 @@ export default function AllBartenderProfile({route}) {
 
         setIsLoading(false)
         if(dataa?.users){
-          setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
+          setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
        
         }

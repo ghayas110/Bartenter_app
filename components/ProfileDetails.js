@@ -5,6 +5,7 @@ import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
+import baseUrl from '../global';
 
 
 export default function ProfileDetails({name,user_type,email,PhoneNumber,speciality,signatureDrink}) {
@@ -15,7 +16,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
   const[userState,setuserState]=useState(11)
   const [users,setusers]=useState("")
   const [data, setdata] = useState()
-  const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
+  const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}`||'');
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -35,7 +36,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
   const handleSubmit = async (userss) => {
     setIsLoading(true)
     try {
-     await fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss.user_data[0].id}`, {
+     await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +49,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
         console.log(dataa)
         setIsLoading(false)
         if(dataa?.users){
-          setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
+          setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
           dataa?.users[0]?.availability==0?
           setIsEnabled(false):setIsEnabled(true)
@@ -64,7 +65,7 @@ const handleAvalibilaty = async () => {
   setIsEnabled(previousState => !previousState)
   console.log(users)
   try {
-   await fetch(`https://bartenderbackend.bazazi.co/users/ToggleUserAvailability`, {
+   await fetch(`${baseUrl}/users/ToggleUserAvailability`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

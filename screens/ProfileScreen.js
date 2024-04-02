@@ -12,6 +12,7 @@ import AdminProfileDetails from '../components/AdminProfileDetails';
 import ProfileDetails from '../components/ProfileDetails';
 import UserDetails from '../components/UserDetails';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import baseUrl from '../global';
 const ProfileScreen = ({route}) => {
   const [users,setusers]=useState("")
   useEffect(() => {
@@ -29,12 +30,12 @@ const ProfileScreen = ({route}) => {
   const count = useSelector((state) => state.auth.user)
   const[userState,setuserState]=useState(11)
   const [checked, setChecked] = useState(false);
-  const [imageUri, setImageUri] = useState(`https://bartenderbackend.bazazi.co/${users?.image}`||'');
+  const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}`||'');
   const [data, setdata] = useState()
 
   const handleSubmit = async (userss) => {
     try {
-      fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss.user_data[0].id}`, {
+      fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +48,7 @@ const ProfileScreen = ({route}) => {
      
         if(dataa?.users){
 
-          setImageUri(`https://bartenderbackend.bazazi.co/${dataa?.users[0]?.image}`)
+          setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
        setdata(dataa?.users[0])
         }
       });
@@ -96,17 +97,11 @@ const ProfileScreen = ({route}) => {
     <View>
     <UserDetails name={data?data.name:""} prop={userState} />
     </View>:
-    <>
-    {
-      data?
-      <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-      />:""
-    }
-   
-    </>
+  <View>
+  <UserDetails name={data?data.name:""} prop={userState} />
+  </View>
+  
+
     }
       
   

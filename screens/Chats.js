@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import baseUrl from '../global';
 
 const Chats = () => {
 const [userId, setuserId] = useState(0)
@@ -14,6 +15,7 @@ const navigation = useNavigation();
 const isFocused = useIsFocused();
 const [users, setusers] = useState("")
 const [searchQuery, setSearchQuery] = useState("");
+const socketUrl = 'https://bartinder-socket.digitalmobix.com'
 const handleSearch = (text) => {
   setSearchQuery(text);
   if (text === "") {
@@ -40,7 +42,7 @@ useEffect(() => {
     // Your existing login logic
           if (id) {
       try {
-          fetch('https://socket.bazazi.co/alluser', {
+          fetch(`${socketUrl}/alluser`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -77,7 +79,7 @@ useEffect(() => {
     if(sender!==null)
       try {
 
-          fetch('https://socket.bazazi.co/messages/ReadMessages', {
+          fetch(`${socketUrl}/messages/ReadMessages`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -117,7 +119,7 @@ useEffect(() => {
     </View>
     </View>
     <View>
-    <Image source={image!=""?{uri:`https://bartenderbackend.bazazi.co${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+    <Image source={image!=""?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
         </View>
 
     </TouchableOpacity>

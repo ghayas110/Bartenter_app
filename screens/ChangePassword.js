@@ -7,6 +7,7 @@ import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 import { useSelector } from 'react-redux'
+import baseUrl from '../global';
 const ChangePassword = ({route}) => {
   const [users,setusers]=useState("")
   useEffect(()=>{
@@ -31,7 +32,7 @@ const ChangePassword = ({route}) => {
     if ( password != '' ) {
       const bodys= {email:email,password:password,user_type:user_type}
       try {
-        fetch('https://bartenderbackend.bazazi.co/users/ChangePassword', {
+        fetch(`${baseUrl}/users/ChangePassword`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

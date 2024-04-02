@@ -5,6 +5,7 @@ import FormInput from '../components/FormInput'
 import AboutHeader from '../components/AboutHeader'
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import baseUrl from '../global'
 const CommentScreen = ({route}) => {
   const isFocused = useIsFocused();
     const navigation = useNavigation()
@@ -35,7 +36,7 @@ const post_id=route.params.post_id
     }
 
     try {
-     await fetch(`https://bartenderbackend.bazazi.co/comments/CreateComment`, {
+     await fetch(`${baseUrl}/comments/CreateComment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,6 +48,7 @@ const post_id=route.params.post_id
       .then(response => response.json())
       .then(dataa => {
         if(dataa?.message=="success"){
+        
           Alert.alert(
             dataa.message,
             dataa.data,

@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import AboutHeader from '../components/AboutHeader'
 import { useSelector } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import baseUrl from '../global';
 
 
 const SignOut = ({ onLogin }) => {
@@ -12,7 +13,7 @@ const SignOut = ({ onLogin }) => {
   const [data, setdata] = useState()
   const handleSubmit = async (userss) => {
     try {
-      fetch(`https://bartenderbackend.bazazi.co/users/GetUserById/${userss?.user_data[0]?.id}`, {
+      fetch(`${baseUrl}/co/users/GetUserById/${userss?.user_data[0]?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +54,7 @@ const SignOut = ({ onLogin }) => {
       {
         users.user_data[0].image==""?<Image source={require('../assets/userpic.jpg')} style={{width: 90, height: 90,borderRadius:50}} />
         :
-        <Image source={{ uri: `https://bartenderbackend.bazazi.co/${users?.user_data[0]?.image}` }} style={{width: 90, height: 90,borderRadius:50}} />
+        <Image source={{ uri: `${baseUrl}/${users?.user_data[0]?.image}` }} style={{width: 90, height: 90,borderRadius:50}} />
       }
     </TouchableOpacity>
     <Text style={{fontSize:20,color:"black"}}>{users.user_data[0]?.name}</Text>
