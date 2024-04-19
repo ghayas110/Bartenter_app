@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import baseUrl from '../global';
 
 
-const SignOut = ({ onLogin }) => {
+const SignOut = ({ onLogin ,onLogout}) => {
   const count = useSelector((state) => state.auth.user)
   const [users,setusers]=useState("")
   const [data, setdata] = useState()
@@ -34,27 +34,19 @@ const SignOut = ({ onLogin }) => {
 };
 
   useEffect(() => { 
-    async function replacementFunction(){
-    const value = await AsyncStorage.getItem('data');
-    setusers(JSON.parse(value))
-    handleSubmit(JSON.parse(value))
-    }
-    replacementFunction()
+    // async function replacementFunction(){
+    // const value = await AsyncStorage.getItem('data');
+    // setusers(JSON.parse(value))
+    // handleSubmit(JSON.parse(value))
+    // }
+    // replacementFunction()
+
+    // onLogin()
+    // onLogout()
 
   }, [])
   return (
     <>
- 
-      <>
-
-    <View style={{display:'flex',alignItems:'center',justifyContent:'center',height:"50%"}}>
-    <TouchableOpacity
-    >
-    
-    </TouchableOpacity>
-    <Text style={{fontSize:20,color:"black"}}>vgh</Text>
-    </View>
-      </>
     
     </>
   )

@@ -11,8 +11,8 @@ const MapComponent = ({onPress,dataSend}) => {
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: 35.7796,
-          longitude: -78.6382,
+          latitude: 29.38384437561035,
+          longitude: -94.90270233154297,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute', //Here is the trick
-    top: '55%', //Position from top
+    top: '65%', //Position from top
     right: '5%', //Position from right
   },
 });

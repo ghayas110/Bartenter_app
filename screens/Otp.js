@@ -7,6 +7,7 @@ import { loginSuccess } from '../redux/reducers/authReducer';
 import { useNavigation } from '@react-navigation/native';
 import baseUrl from '../global';
 import messaging from '@react-native-firebase/messaging';
+import Toast from 'react-native-toast-message';
 
 
 const Otp = ({ onLogin,route }) => {
@@ -74,13 +75,14 @@ const Otp = ({ onLogin,route }) => {
              )
              .then(async data => {
                if (data.message == "Success") {
-                dispatch(loginSuccess(data))
-                AsyncStorage.setItem('data', JSON.stringify(data));
+               
+                await AsyncStorage.setItem('data', JSON.stringify(data));
+                console.log(data)
                  onLogin()
                } else {
                 Toast.show({
                   type: 'error',
-                  text1: 'SignIn Failure',
+                  text1: 'Otp Failure',
                 });               }
              });
          

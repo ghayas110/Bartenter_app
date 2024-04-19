@@ -10,7 +10,8 @@ import { useNavigation,useIsFocused } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import Icons from "../components/Icons";
-import baseUrl from "../global";
+import baseUrl from '../global';
+
 const Drawer = createDrawerNavigator();
 
 function CustomDrawer(props) {  

@@ -12,12 +12,7 @@ import {
   import {useNavigation} from '@react-navigation/native';
   const AboutHeader = ({screen,name,onPress}) => {
     const navigation1 = useNavigation();
-    // const handleSignOut = async () => {
-    //    SharedPreferences.removeItem("data");
   
-    //   onLogin(false);
-    //   navigation.navigate('Login');
-    // };
     return (
       <SafeAreaView>
         <View style={styles.headerContainer}>
@@ -57,7 +52,7 @@ style={{display: "flex",flexDirection: "row"}}>
           {screen=="SignOut"?
           <TouchableOpacity
             onPress={()=> {
-              AsyncStorage.clear()
+              AsyncStorage.clear().then(()=>{console.log("Cleared data")})
             }}
         
           style={{display: "flex",flexDirection: "row"}}>

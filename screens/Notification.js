@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image,Dimensions } from 'react-native'
+import { Button, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image,Dimensions} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -6,6 +6,7 @@ import Iconss from 'react-native-vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
 import baseUrl from '../global';
+
 const Notification = () => {
   const { width, height } = Dimensions.get('window');
   const [userId, setuserId] = useState()
@@ -44,7 +45,7 @@ const Notification = () => {
      
       });
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
+
     }
  
 };
@@ -62,10 +63,10 @@ const handleSeen = async (userss) => {
       .then(response => response.json())
       .then(dataa => {
         setboolstate(!boolstate)
-        console.log(dataa, "sd")
+
       });
   } catch (error) {
-    Alert.alert('An error occurred while processing your request.');
+  
   }
 };
   const data = [

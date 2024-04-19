@@ -34,7 +34,7 @@ const MyCalender = ({route}) => {
 const getDeviceToken =async()=>{
  
   let token = await messaging().getToken();
-console.log(token,"token")
+
   }
   useEffect(() => {
     const unsubscribeBackground = messaging().onMessage(async remoteMessage => {

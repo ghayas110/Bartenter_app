@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Icons from '../components/Icons';
 import MapComponent from '../components/MApComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import baseUrl from '../global';
 const Job = ({route}) => {
   const isFocused = useIsFocused();
   const [users,setusers]=useState("")
@@ -75,10 +75,10 @@ const Job = ({route}) => {
   );
   return (
     <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
-    <Header title="Jobs" headerShown={true} onPress={()=>navigation.navigate('AddJob')}/>
+    <Header title="Jobs" headerShown={false} onPress={()=>navigation.navigate('AddJob')}/>
    
 <View>
-<MapComponent onPress={() => navigation.navigate('JobDetail')} dataSend={data} />
+<MapComponent onPress={() => navigation.navigate('JobDetail',data)} dataSend={data} />
 </View>
  
  

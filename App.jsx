@@ -90,8 +90,26 @@ const App = () => {
       <Drawer.Screen name="Home" component={BottomTabNavigator} />
         <Drawer.Screen name="About" component={BartenderHomeScreen} />
         <Drawer.Screen name="SignOut" >
-        {(props) => <SignOut {...props}  onLogin={
+        {(props) => <SignOut {...props}  onLogout={
+
+          
+          
+          AsyncStorage.clear().then(()=>{console.log("Cleared data")})
+          
+          
+          
+          
+        }
+        onLogin={
+
+          
           setIsLoggedIn(false)
+        
+          
+          
+          
+          
+        
         }/>}
         </Drawer.Screen>
         <Drawer.Screen name='ChangePassword' component={ChangePassword} initialParams={true}/>

@@ -12,7 +12,7 @@ import Job from "../screens/Job";
 import ProfileIcon from '../assets/svg/profileicon.svg';
 import ChatIcon from '../assets/svg/1-02.svg'
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Image, TouchableOpacity } from "react-native";
+import { Alert, Image, TouchableOpacity } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { useSelector } from "react-redux";
 import Subscription from "../screens/Subscription";
@@ -77,10 +77,9 @@ const BottomTabNavigator = () => {
         .then(response => response.json())
         .then(dataa => {
           setcurrentNotification(dataa.count)
-          console.log(dataa?.count, "sd")
+        
         });
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
     }
   };
 
@@ -166,7 +165,7 @@ const BottomTabNavigator = () => {
         : null}
       {userState != 0 ?
         <Tab.Screen name="Notification" component={Notification} options={{
-          tabBarBadge: (currentNotification),
+          tabBarBadge: (currentNotification>0?currentNotification:undefined),
           tabBarIcon: ({ color, size, focused }) => (
               <Icon name="notifications" color={color} size={size} />
           ),
