@@ -15,7 +15,7 @@ const FormTextInputWithLocationAutocomplete = ({ setValues }) => {
         disableScroll={true}
         placeholder="Your Location"
         query={{
-          key: "AIzaSyCk3D9V8gfZ_c7xmNhHs7RpqTODFndxHzU",
+          key: "AIzaSyD6NYSHgL0LaWPeLGfPQM3CE0cWu8q5gyM",
           language: "en",
         }}
         onPress={(data, details = null) => {

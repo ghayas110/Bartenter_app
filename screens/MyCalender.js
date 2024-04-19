@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry, Alert, Button} from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry, Alert, Button, Image} from 'react-native'
 import React ,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
@@ -16,7 +16,7 @@ const MyCalender = ({route}) => {
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
   const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
-
+  const [subscribed, setSubscribed] = useState();
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem('data');
@@ -25,7 +25,7 @@ const MyCalender = ({route}) => {
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value));
       getAllPosts()
-     
+      ValidateUserSubscription(JSON.parse(value))
     }
     replacementFunction()
     getDeviceToken()
@@ -107,7 +107,32 @@ console.log(token,"token")
       // Alert.alert('An error occurred while processing your request.');
     }
 
-  };
+  }
+  const ValidateUserSubscription=async(userss)=>{
+
+
+    try {
+      fetch(`${baseUrl}/subscription/CheckSubscription`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+     const subscriptions=dataa.subscription_status[0]
+  
+        setSubscribed(subscriptions)
+  
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+
+
+}
   const getAllPosts = async () => {
     try {
       setIsLoading(true)
@@ -179,10 +204,9 @@ const navigation =useNavigation()
          bookedEvents.length > 0?
          <>
           <Header title="My Calender" headerShown={true}/>
-          <BannerAd
-      unitId={adUnitId}
-      size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-    />
+          {subscribed?.subscription_status!=1?
+      <Image source={require('../assets/banner.jpeg')}/>
+            :null}
         <FlatList
         data={bookedEvents}
         renderItem={renderItem}

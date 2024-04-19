@@ -77,7 +77,7 @@ const handleSubmit = async (userss) => {
           <Text style={styles.titlemain}>Welcome {data?.name},</Text>
           {prop == 3?
           <Text style={styles.titlemain}>you are a Host!</Text>:prop == 4?
-          <Text style={styles.titlemain}>you are Business!</Text>:<Text style={styles.titlemain}>you are Admin!</Text>
+          <Text style={styles.titlemain}>you are Business!</Text>:<Text style={styles.titlemain}>{userState==2?"you are User":"you are Admin"}</Text>
           }
           </View>
           {prop == 3?

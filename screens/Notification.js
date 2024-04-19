@@ -4,14 +4,70 @@ import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Iconss from 'react-native-vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation ,useIsFocused} from '@react-navigation/native';
+import baseUrl from '../global';
 const Notification = () => {
   const { width, height } = Dimensions.get('window');
   const [userId, setuserId] = useState()
+  const [datas, setData] = useState()
+  const isFocused = useIsFocused();
+  
   // const [data, setdata] = useState()
   const navigation = useNavigation();
+  useEffect(() => {
+    async function replacementFunction(){
+      const value =  await AsyncStorage.getItem('data');
+          setuserId(JSON.parse(value));
+      
+          handleSubmit(JSON.parse(value))
+          handleSeen(JSON.parse(value))
+    }
+    replacementFunction()
+  }, [isFocused]);
+  
+  const handleSubmit = async (userss) => {
+   
+    try {
+     await fetch(`https://bartender-backend.digitalmobix.com/notifications/GetNotifications`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+      setData(dataa.data)
+      console.log(dataa.data)
+   
+     
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+ 
+};
 
+const handleSeen = async (userss) => {
+  try {
+    await fetch(`https://bartender-backend.digitalmobix.com/notifications/SeenNotifications`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': 'BarTenderAPI',
+        'accesstoken': `Bearer ${userss?.access_token}`
+      },
+    })
+      .then(response => response.json())
+      .then(dataa => {
+        setboolstate(!boolstate)
+        console.log(dataa, "sd")
+      });
+  } catch (error) {
+    Alert.alert('An error occurred while processing your request.');
+  }
+};
   const data = [
     { id: 12, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
     { id: 12, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
@@ -26,6 +82,7 @@ const Notification = () => {
     { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
 
   ];
+
   // useEffect(() => {
   //   AllChats()
   //     }, [userId])
@@ -48,7 +105,7 @@ const Notification = () => {
       <View style={styles.container}>
         <FlatList
           style={styles.flatlistBorder}
-          data={data}
+          data={datas}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />

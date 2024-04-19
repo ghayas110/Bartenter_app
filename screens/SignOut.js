@@ -44,23 +44,17 @@ const SignOut = ({ onLogin }) => {
   }, [])
   return (
     <>
-    {
-      users?
+ 
       <>
-      <AboutHeader name={"Sign Out"} screen={"SignOut"} onLogin={onLogin} />
+
     <View style={{display:'flex',alignItems:'center',justifyContent:'center',height:"50%"}}>
     <TouchableOpacity
     >
-      {
-        users.user_data[0].image==""?<Image source={require('../assets/userpic.jpg')} style={{width: 90, height: 90,borderRadius:50}} />
-        :
-        <Image source={{ uri: `${baseUrl}/${users?.user_data[0]?.image}` }} style={{width: 90, height: 90,borderRadius:50}} />
-      }
+    
     </TouchableOpacity>
-    <Text style={{fontSize:20,color:"black"}}>{users.user_data[0]?.name}</Text>
+    <Text style={{fontSize:20,color:"black"}}>vgh</Text>
     </View>
-      </>:""
-    }
+      </>
     
     </>
   )

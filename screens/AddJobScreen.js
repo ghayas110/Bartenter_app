@@ -27,6 +27,7 @@ import SpecialtySelector from '../components/Selector';
 import AboutHeader from '../components/AboutHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import baseUrl from "../global";
 const AddJobScreen = () => {
   const navigation = useNavigation()
   const [users, setusers] = useState("")
@@ -89,9 +90,9 @@ const AddJobScreen = () => {
       event_time: new Date(event_time).toISOString().split('T')[1].split('.')[0],
       no_of_people: no_of_people,
       theme: theme,
-      event_location: location,
-      event_lng: 31.000000,
-      event_lat: -100.000000,
+      event_location: event_location?.location,
+      event_lng: event_location?.latlng.lng,
+      event_lat: event_location?.latlng.lat,
       no_of_bartenders: no_of_bartenders,
       post_type: post_type,
       bartender_hourly_rate: selectedSpecialty,
@@ -182,13 +183,7 @@ console.log(JsonBody,"my Name")
           placeholderColor={'grey'}
           setValues={text => sethostName(text)}
         />
-
-<FormTextInput
-          placeholder={'Location'}
-          placeholderColor={'grey'}
-        
-          setValues={text => setLocation(text)}
-        />
+        <FormTextInputWithLocationAutocomplete setValues={setevent_location} />
         <FormTextInput
           placeholder={'Phone Number'}
           placeholderColor={'grey'}

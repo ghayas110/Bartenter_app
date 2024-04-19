@@ -46,7 +46,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
       })
       .then(response => response.json())
       .then(dataa => {
-        console.log(dataa)
+
         setIsLoading(false)
         if(dataa?.users){
           setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
@@ -63,7 +63,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
 };
 const handleAvalibilaty = async () => {
   setIsEnabled(previousState => !previousState)
-  console.log(users)
+
   try {
    await fetch(`${baseUrl}/users/ToggleUserAvailability`, {
       method: 'GET',
@@ -75,7 +75,7 @@ const handleAvalibilaty = async () => {
     })
     .then(response => response.json())
     .then(dataa => {
-      console.log(dataa)
+
       setIsLoading(false)
       handleSubmit(users)
     });
