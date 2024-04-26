@@ -5,7 +5,7 @@ import { useNavigation ,useIsFocused} from '@react-navigation/native';
 const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from '../components/Icons';
-
+import moment from 'moment';
 const PendingEvents = ({ route }) => {
   const [userState, setuserState] = useState(11)
   const [users, setusers] = useState("")
@@ -87,7 +87,7 @@ const navigation =useNavigation()
    
     <View style={{marginLeft:15}}>
     <Text style={{color:'black'}}>{name}</Text>
-    <Text style={{color:'grey'}}>{eventdate?.split('T')[0]}</Text>
+    <Text style={{color:'grey'}}>{moment(eventdate).format('MMMM Do YYYY, h:mm:ss a')}</Text>
     {/* <Text style={{color:'grey',fontSize:12}}>{role}</Text> */}
     </View>
     </View>

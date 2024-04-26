@@ -75,7 +75,7 @@ export default function BartenderProfile({name,user_type,image,email,PhoneNumber
         }
       });
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
+console.log(error)
     }
  
 };

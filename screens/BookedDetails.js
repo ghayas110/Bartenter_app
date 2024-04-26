@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import ButtonInput from '../components/ButtonInput';
+import moment from 'moment';
 const baseUrl = require('../global')
 const BookedDetails = ({route}) => {
   const [userState, setuserState] = useState(11)
@@ -176,7 +177,7 @@ const BookedDetails = ({route}) => {
       <View
       style={styles.section}>
         <Text style={{marginBottom: 10,color:"black"}}>Date and time</Text>
-        <Text style={{color:"black"}}>{data.event_date} </Text>
+        <Text style={{color:"black"}}>{moment(data.event_date).format('MMMM Do YYYY, h:mm:ss a')} </Text>
       </View>
       <View
       style={styles.section}>

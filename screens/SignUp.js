@@ -86,7 +86,7 @@ const SignUp = () => {
       </View>
       <View>
       <LoginInput 
-      placeholder={"Please enter Email address"}
+      placeholder={"Please Enter Email address"}
       placeholderColor={"black"}
       icon={"mail"}
       setValues={(text) => setEmail(text)}
@@ -95,7 +95,7 @@ const SignUp = () => {
       </View>
       <View>
       <PasswordInput 
-      placeholder={"Please enter Password"}
+      placeholder={"Please Enter Password"}
       placeholderColor={"black"}
       icon={"lock"}
       setValues={(text) => setPassword(text)}
@@ -116,19 +116,21 @@ const SignUp = () => {
       </View>
       <View>
          <LoginInput 
-      placeholder={"Please enter Phone Number"}
+      placeholder={"Please Enter Phone Number"}
       placeholderColor={"black"}
       icon={"phone"}
       setValues={(text) => setNumber(text)}
       
       />
-      <RadioButton.Group  onValueChange={value => setUser_type(value)} value={user_type}>
+      <View style={{marginTop:15}}>
+      <RadioButton.Group onValueChange={value => setUser_type(value)} value={user_type}>
       <RadioButton.Item color='orange' label="Admin" value={0} />
       <RadioButton.Item color='orange' label="Bartinder" value={1} />
       <RadioButton.Item color='orange' label="User" value={2} />
       <RadioButton.Item color='orange' label="Business" value={3} />
-    </RadioButton.Group>
-
+      </RadioButton.Group>
+      
+      </View>
       </View>
       <View style={{display:'flex',alignItems:'center',justifyContent:'space-around',
     flexDirection:'row', padding:20}}>

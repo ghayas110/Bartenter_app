@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Icons from '../components/Icons';
 import DatePicker from 'react-native-date-picker';
-
+import moment from 'moment';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const BookedEvents = ({ route }) => {
@@ -150,8 +150,8 @@ const BookedEvents = ({ route }) => {
         .then(data => {
           if (data.message == "Success") {
             Alert.alert(
-              "Success",
-            "Booked Event Succesfully"
+              "Booked Event Successfully",
+              "Booked Event Successfully"
               [
                 {
                   text: 'OK',
@@ -181,7 +181,7 @@ const BookedEvents = ({ route }) => {
           <Text style={styles.text}>{name}</Text>
 
           <Text style={styles.text1}>Event Date :</Text>
-          <Text style={styles.text}>{EventDate?.split('T')[0]}</Text>
+          <Text style={styles.text}>{moment(EventDate).format('MMMM Do YYYY, h:mm:ss a')}</Text>
 
           <Text style={styles.text1}>Event Duration :</Text>
           <Text style={styles.text}>{event_duration}</Text>
@@ -285,7 +285,7 @@ const BookedEvents = ({ route }) => {
                             style={styles.input}
                             placeholder="Start Date"
                             placeholderTextColor={"white"}
-                            value={startDate != "null" ? startDate.toDateString() : ""} // Display the selected date
+                            value={startDate != "null" ? startDate?.toDateString() : ""} // Display the selected date
                             editable={false} // Disable manual input
 
                           />

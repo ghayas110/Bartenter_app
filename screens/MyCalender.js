@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
+import moment from 'moment';
 const baseUrl = require('../global')
 const MyCalender = ({route}) => {
   const [userState, setuserState] = useState(11)
@@ -45,7 +46,7 @@ const getDeviceToken =async()=>{
         id: 'default',
         name: 'Default Channel',
       });
-  
+
       await notifee.displayNotification({
         title: notifeeData.notification.title,
         body: notifeeData.notification.body,
@@ -179,9 +180,9 @@ const navigation =useNavigation()
       color: 'grey', // white color for better visibility on image
       marginBottom: 5,
       fontSize:14,
-      fontWeight:'bold'}}>{DateTime}</Text>
+      fontWeight:'bold'}}>{moment(DateTime).format('MMMM Do YYYY, h:mm:ss a')}</Text>
 
-   
+ 
  
   </TouchableOpacity>
   )}

@@ -44,12 +44,7 @@ const MapComponent = ({onPress,dataSend}) => {
         
       </MapView>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={{width:50}}>
-          <Image
-            style={styles.mapicon}
-            source={require('../assets/mapIcon.png')} // replace with your image path
-          />
-        </TouchableOpacity>
+   
         <TouchableOpacity style={{marginLeft:10,width:50,height:50,backgroundColor:'orange',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:50}} onPress={()=>navigation.navigate('BookedEvents')}>
           <Icons.AntDesign name="menuunfold" size={24} color="#fff" />
         </TouchableOpacity>

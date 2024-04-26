@@ -163,6 +163,7 @@ useEffect(() => {
       placeholder="Speciality"
       placeholderTextColor={"orange"}
       value={speciality}
+      
       onChangeText={handleSearch}
       
     />
@@ -235,5 +236,6 @@ const styles = StyleSheet.create({
           input: {
             marginLeft: 10,
             flex: 1,
+            color:"white"
           },
 })

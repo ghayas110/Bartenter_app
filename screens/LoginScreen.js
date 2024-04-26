@@ -74,7 +74,7 @@ const LoginScreen = () => {
       </View>
       <View>
       <LoginInput 
-      placeholder={"Please enter Email addres"}
+      placeholder={"Please Enter Email address"}
       placeholderColor={"black"}
       icon={"mail"}
       setValues={(text) => setEmail(text)}
@@ -85,7 +85,7 @@ const LoginScreen = () => {
       <View>
     
       <PasswordInput 
-      placeholder={"Please enter Password"}
+      placeholder={"Please Enter Password"}
       placeholderColor={"black"}
       icon={"lock"}
       setValues={(text) => setPassword(text)}
