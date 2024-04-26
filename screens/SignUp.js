@@ -7,6 +7,7 @@ import PasswordInput from '../components/PasswordInput';
 import LoginInput from '../components/LoginInput';
 import Toast from 'react-native-toast-message';
 import baseUrl from '../global';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const SignUp = () => {
@@ -80,7 +81,9 @@ const SignUp = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      <View style={{display:'flex',alignItems:'center',justifyContent
+    :'center'}}>
     <View style={styles.header}>
     <Image source={require('../assets/mainlogo.png')} style={{ width: 200, height: 100 }} />
       </View>
@@ -122,10 +125,18 @@ const SignUp = () => {
       setValues={(text) => setNumber(text)}
       
       />
+  <LoginInput 
+      placeholder={"Referral code"}
+      placeholderColor={"black"}
+      icon={"team"}
+      setValues={(text) => setNumber(text)}
+      
+      />
+      
       <View style={{marginTop:15}}>
       <RadioButton.Group onValueChange={value => setUser_type(value)} value={user_type}>
       <RadioButton.Item color='orange' label="Admin" value={0} />
-      <RadioButton.Item color='orange' label="Bartinder" value={1} />
+      <RadioButton.Item color='orange' label="Bartender" value={1} />
       <RadioButton.Item color='orange' label="User" value={2} />
       <RadioButton.Item color='orange' label="Business" value={3} />
       </RadioButton.Group>
@@ -150,16 +161,15 @@ const SignUp = () => {
          </Text>
       </View>
       <ButtonInput title={"Get Started!"} onPress={handleLogin}/>
-    
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+
     backgroundColor: 'white',
     width:"100%"
   },

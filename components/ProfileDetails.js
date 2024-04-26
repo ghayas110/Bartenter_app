@@ -108,7 +108,7 @@ data?.image==""?
 }
   <View style={styles.maintitle}>
   <Text style={styles.titlemain}>Welcome {data?.name}.</Text>
-  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartinder":""}!</Text>
+  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartender":""}!</Text>
   </View>
 <View style={styles.section}>
 <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>

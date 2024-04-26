@@ -209,7 +209,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
   >
     <View style={{ padding: 15, width: windowWidth }}>
 
-      <Text style={styles.title}>THIS IS A BARTINDER BOOKING ONLY. </Text>
+      <Text style={styles.title}>THIS IS A BARTENDER BOOKING ONLY. </Text>
       <Text style={styles.title}>ALCOHOL IS NOT INCLUDED IN THIS </Text>
       <Text style={styles.title}>PURCHASE.</Text>
 
@@ -275,7 +275,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
           />
 
           <FormInput
-            titleName={"# no of bartinders"}
+            titleName={"# no of bartenders"}
             keyboardType="numeric"
             placeholderColor={'grey'}
             setValues={text => setNo_of_bartenders(text)}
@@ -283,7 +283,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
           />
              
 
-          <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartinder would be enough for 35 people.</Text>
+          <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartender would be enough for 35 people.</Text>
         </View>
         
         <FormTextInput
@@ -299,10 +299,10 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
           setValues={text => setevent_location(text)}
         /> */}
         <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 10 }}>
-          <Text style={{ textAlign: 'center', color: "black", fontWeight: 800 }}>Below Please select the rate you are willing to pay bartinder per hour. If you are finding that your event is not being booked by bartinder we suggest that you review your hourly rate. </Text>
+          <Text style={{ textAlign: 'center', color: "black", fontWeight: 800 }}>Below Please select the rate you are willing to pay bartender per hour. If you are finding that your event is not being booked by bartender we suggest that you review your hourly rate. </Text>
         </View>
         <View>
-          <Text style={{ color: "black", fontWeight: "bold", lineHeight: 17 }}>Bartinder Hourly Rate</Text>
+          <Text style={{ color: "black", fontWeight: "bold", lineHeight: 17 }}>Bartender Hourly Rate</Text>
           <SpecialtySelector
             specialties={hourlyRate}
             onSpecialtySelected={handleSpecialtySelected}

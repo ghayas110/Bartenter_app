@@ -84,6 +84,8 @@ android {
         versionCode 10
         versionName "0.0.2"
     }
+   
+
     signingConfigs {
         release {
             if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
@@ -121,6 +123,7 @@ project.ext.vectoricons = [
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
+   
     implementation("com.facebook.react:react-android")
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.facebook.react:flipper-integration")

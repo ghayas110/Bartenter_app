@@ -170,7 +170,7 @@ data?.image==""?
 }
   <View style={styles.maintitle}>
   <Text style={styles.titlemain}>Welcome {data?.name}.</Text>
-  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartinder":""}!</Text>
+  <Text style={styles.titlemain}>You are a {data?.user_type==1?"Bartender":""}!</Text>
   </View>
 <View style={styles.section}>
 <Text style={{color:'black',fontWeight:"700"}}>Speciality</Text>
@@ -242,7 +242,7 @@ data?.image==""?
                         color: 'green',
                         marginBottom: 15,
                       }}>
-                     Rate your Bartinder
+                     Rate your Bartender
                     </Text>
                     <View style={styles.ratingcard}>
     <StarRating
@@ -256,7 +256,7 @@ data?.image==""?
                 </View>
 
                 <View style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-                <ButtonInput title={"Rate Bartinder"} onPress={handleRating}/>
+                <ButtonInput title={"Rate Bartender"} onPress={handleRating}/>
                 </View>
               </View>
             </View>

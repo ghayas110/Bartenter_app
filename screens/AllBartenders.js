@@ -111,7 +111,7 @@ useEffect(() => {
     </TouchableOpacity>
    
     </View>
-    <Text style={styles.headerText}>Bartinders</Text>
+    <Text style={styles.headerText}>Bartenders</Text>
 
   <View style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
 

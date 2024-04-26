@@ -140,7 +140,7 @@ const BottomTabNavigator = () => {
               ),
             }} />
 
-            <Tab.Screen name="Bartinders" component={BartenderStackNavigator} options={{
+            <Tab.Screen name="Bartender" component={BartenderStackNavigator} options={{
               tabBarIcon: ({ color, size }) => (
                 <Icons.AntDesign name="user" color={color} size={size} />
               ),

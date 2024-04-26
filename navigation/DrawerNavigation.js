@@ -65,6 +65,8 @@ function CustomDrawer(props) {
         <Text style={{color:'white'}}>{data?.email}</Text>
         <TouchableOpacity onPress={()=>navigation.navigate('EditProfile')}>
         <Text style={{color:'white',marginTop:10,textDecorationLine:"underline",fontWeight:'bold'}}>Edit Profile</Text>
+        <Text style={{color:'white'}}>Referral code# <Text style={{fontWeight:'900'}}>XYZ123</Text></Text>
+
         </TouchableOpacity>
         </View>
       </View>

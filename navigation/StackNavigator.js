@@ -74,10 +74,10 @@ const BartenderStackNavigator = () => {
     <Stack.Navigator screenOptions={{
       headerShown: false
       }}>
-        <Stack.Screen name="AllBartinders" component={AllBartenders} screenOptions={{
+        <Stack.Screen name="AllBartenders" component={AllBartenders} screenOptions={{
         headerShown: false
         }}/>
-           <Stack.Screen name="Bartinder" component={AllBartenderProfile} screenOptions={{
+           <Stack.Screen name="Bartender" component={AllBartenderProfile} screenOptions={{
         headerShown: false
         }}/>
 

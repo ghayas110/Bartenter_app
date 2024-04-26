@@ -173,7 +173,7 @@ console.log(JsonBody,"my Name")
   >
     <View style={{ padding: 15, width: windowWidth }}>
 
-      <Text style={styles.title}>THIS IS A BARTINDER BOOKING ONLY. </Text>
+      <Text style={styles.title}>THIS IS A BARTENDER BOOKING ONLY. </Text>
       <Text style={styles.title}>ALCOHOL IS NOT INCLUDED IN THIS </Text>
       <Text style={styles.title}>PURCHASE.</Text>
 
@@ -224,7 +224,7 @@ console.log(JsonBody,"my Name")
           />
           
           <FormInput
-            titleName={"# no of people"}
+            titleName={"# no of People"}
             keyboardType="numeric"
             placeholderColor={'grey'}
             setValues={text => setno_of_people(text)}
@@ -232,7 +232,7 @@ console.log(JsonBody,"my Name")
           />
 
           <FormInput
-            titleName={"# no of bartinders"}
+            titleName={"# no of Bartender"}
             keyboardType="numeric"
             placeholderColor={'grey'}
             setValues={text => setNo_of_bartenders(text)}
@@ -240,7 +240,7 @@ console.log(JsonBody,"my Name")
           />
              
 
-          <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartinder would be enough for 35 people.</Text>
+          <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartender would be enough for 35 people.</Text>
         </View>
         
         <FormTextInput
@@ -256,7 +256,7 @@ console.log(JsonBody,"my Name")
           setValues={text => setevent_location(text)}
         /> */}
         <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginHorizontal: 20 }}>
-          <Text style={{ textAlign: 'center', color: "black", fontWeight: 900,lineHeight:15 }}>Below Please select the rate you are willing to pay bartinder per hour. If you are finding that your event is not being booked by bartinder we suggest that you review your hourly rate. </Text>
+          <Text style={{ textAlign: 'center', color: "black", fontWeight: 900,lineHeight:15 }}>Below Please select the rate you are willing to pay bartender per hour. If you are finding that your event is not being booked by bartender we suggest that you review your hourly rate. </Text>
         </View>
         <View>
           <Text style={{ color: "black", fontWeight: "bold", lineHeight: 17 }}>Bartenter Hourly Rate</Text>

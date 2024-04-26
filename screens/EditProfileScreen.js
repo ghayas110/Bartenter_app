@@ -230,7 +230,8 @@ const EditProfileScreen = ({ route }) => {
       console.log('An error occurred while processing your request.', error.message);
     }
   };
-
+  const Dob = dob_date.toLocaleDateString().split("/")
+  const actaulDob = `${Dob[1]}/${Dob[0]}/${Dob[2]}`
   return (
     <>
 
@@ -265,16 +266,17 @@ const EditProfileScreen = ({ route }) => {
                 style={{ backgroundColor: 'blue' }}
               />
               <TouchableOpacity onPress={() => setShowPicker(true)}>
-                <FormTextInput
-                  placeholderColor={'grey'}
-                  currentvalue={dob_date.toLocaleDateString()}
-                  edit={false}
-                  icon={'calendar'}
-                  title={'Date of Birth'}
-                />
+                  <FormTextInput
+                    placeholderColor={'grey'}
+                    currentvalue={actaulDob}
+                    edit={false}
+                    icon={'calendar'}
+                    title={'Date of Birth'}
+                  />
               </TouchableOpacity>
               {showPicker && (
                 <DateTimePicker
+                  dateFormat="month day year"
                   testID="startDateTimePicker"
                   value={dob_date}
                   mode="date"
