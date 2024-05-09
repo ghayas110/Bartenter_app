@@ -90,7 +90,7 @@ const [imageUriflag, setImageUriflag] = useState(false);
       type: imageUriimage?.type,
       name: `${new Date()}image.jpg`,
     };
-    console.log(Images)
+ 
     
     // console.log(file,Resume,Certification)
     const formData = new FormData();
@@ -124,7 +124,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
       text1: 'Job Created',
       text2: 'Job has been created 👋'
     });
-    console.log(data)
+  
     navigation.goBack()
   } else {
     Toast.show({
@@ -149,7 +149,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data)
+      
           setIsLoading(false)
           if (data.message == "Created") {
             Toast.show({
@@ -157,7 +157,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
               text1: 'Job Created',
               text2: 'Job has been created 👋'
             });
-            console.log(data)
+          
             navigation.goBack()
           } else {
             Toast.show({

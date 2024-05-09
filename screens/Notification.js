@@ -1,5 +1,5 @@
 import { Button, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image,Dimensions} from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Iconss from 'react-native-vector-icons/Entypo';
@@ -27,28 +27,39 @@ const Notification = () => {
   }, [isFocused]);
   
   const handleSubmit = async (userss) => {
-   
     try {
-     await fetch(`https://bartender-backend.digitalmobix.com/notifications/GetNotifications`, {
+      const response = await fetch(`https://bartender-backend.digitalmobix.com/notifications/GetNotifications`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
           'accesstoken':`Bearer ${userss.access_token}`
         },
-      })
-      .then(response => response.json())
-      .then(dataa => {
-      setData(dataa.data)
-
-   
-     
       });
+      const dataa = await response.json();
+     
+     
+      const sortedData = dataa.data.sort((a, b) => b.latest_updated_at - a.latest_updated_at);
+      // const sortedDatas = dataa.data.sort((a, b) =>
+      //   a.latest_updated_at.toISOString().localeCompare(b.latest_updated_at.toISOString()));
+      // console.log(sortedDatas,"ikl")
+      setData(dataa.data.reverse());
+     
+     
     } catch (error) {
+      // Handle error
 
     }
- 
 };
+
+// console.log(sortedData)
+// const sortedItem = useMemo(()=>{
+//   if(datas){
+//     // setData(sortedData)
+//     return sortedData(datas)
+//   }
+//   return datas;
+// },[datas])
 
 const handleSeen = async (userss) => {
   try {
@@ -69,20 +80,7 @@ const handleSeen = async (userss) => {
   
   }
 };
-  const data = [
-    { id: 12, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 12, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 12, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
-    { id: 1, name: 'lhafuhdsklgjgh sdagkjlhgjsd gksdh ghksd gkhsdgljksdlgkdsf gjds fgjsd jgds kg dsjg kjds gkds gksd gkjds gkds', role: 'Host', image: require('../assets/userpic.jpg'), email: 'csjguy@gmail.com', PhoneNumber: "999-999-999", message: "Do you have an Idea of what type of Drink..." },
 
-  ];
 
   // useEffect(() => {
   //   AllChats()
@@ -101,7 +99,7 @@ const handleSeen = async (userss) => {
     <Item id={item.id} name={item.name} message={item.message} role={item.role} image={item.image} postid={item?.post_id} onPress={()=>navigation.navigate("NotificationDetail",item)}/>
   );
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex:1}}>
       <Header title="Notification" headerShown={false} />
 
      
@@ -109,6 +107,7 @@ const handleSeen = async (userss) => {
           style={styles.flatlistBorder}
           data={datas}
           renderItem={renderItem}
+          
           
           keyExtractor={(item) => item.id}
         />

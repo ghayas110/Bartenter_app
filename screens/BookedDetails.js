@@ -89,6 +89,7 @@ const BookedDetails = ({route}) => {
       })
         .then(response => response.json())
         .then(dataa => {
+          console.log(dataa,JsonBody,"lllll")
           if(dataa?.success==="Success"){            
             Toast.show({
             type: 'success',
@@ -164,6 +165,7 @@ const BookedDetails = ({route}) => {
     <View style={styles.container}>
       <HeaderDetails title="Booked"/>
       <View >
+
       <View
       style={styles.section}>
         <Text style={{marginBottom: 10,color:"black"}}>Job Title</Text>
@@ -187,7 +189,7 @@ const BookedDetails = ({route}) => {
       <View style={{justifyContent:'center', flexDirection: 'row', alignItems: 'center'}}>
 
 
-         <ButtonInput title={"Cancel Booking"} onPress={()=>handleCancel(data?.post_id)}/>
+         <ButtonInput title={"Cancel Booking"} onPress={()=>handleCancel(data?.job_id)}/>
       </View>
       :null}
       {userState==2?
