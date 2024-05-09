@@ -8,14 +8,16 @@ import { useNavigation } from '@react-navigation/native';
 import baseUrl from '../global';
 import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
+import Icons from '../components/Icons';
+import Geolocation from '@react-native-community/geolocation';
 
 
 const Otp = ({ onLogin,route }) => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const dispatch=useDispatch()
   const navigation = useNavigation();
-  const [email, setEmail] = useState(route?.params?.bodys?.email);
-  const [user_type, setuser_type] = useState(route?.params?.bodys?.user_type)
+  const [email, setEmail] = useState(route?.params?.body?.email);
+  const [user_type, setuser_type] = useState(route?.params?.body?.user_type)
   const inputRefs = useRef(Array(4).fill(0).map((_, i) => i));
   const handleInputChange = (index, value) => {
     const newOtp = [...otp];
@@ -53,7 +55,7 @@ const Otp = ({ onLogin,route }) => {
     let token = await messaging().getToken();
   
     const enteredOtp = otp.join('');
-   
+   console.log( {otp:enteredOtp,email:email,user_type:user_type,FCM_token:`${token}`})
     try {
       if (otp) {
 
@@ -74,10 +76,11 @@ const Otp = ({ onLogin,route }) => {
               
              )
              .then(async data => {
+
                if (data.message == "Success") {
                
                 await AsyncStorage.setItem('data', JSON.stringify(data));
-                console.log(data)
+                Geolocation.requestAuthorization();
                  onLogin()
                } else {
                 Toast.show({
@@ -99,7 +102,17 @@ const Otp = ({ onLogin,route }) => {
       }
   };
   return (
+    <>
+    <TouchableOpacity style={{backgroundColor:'white'}} onPress={() => navigation.goBack()}>
+    <Icons.Ionicons
+      name="arrow-back"
+      style={{color: 'black',padding:10}}
+      size={27}
+    />
+  </TouchableOpacity>
+
     <View style={styles.container}>
+    
       <Text style={styles.title}>OTP Verification</Text>
       <Text style={styles.subtitle}>Please enter OTP from your Email</Text>
       <View style={styles.inputContainer}>
@@ -125,6 +138,7 @@ const Otp = ({ onLogin,route }) => {
    
       
     </View>
+    </>
   );
 };
 

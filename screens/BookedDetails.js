@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import ButtonInput from '../components/ButtonInput';
+import Toast from 'react-native-toast-message';
 import moment from 'moment';
 const baseUrl = require('../global')
 const BookedDetails = ({route}) => {
@@ -74,8 +75,9 @@ const BookedDetails = ({route}) => {
 
   };
 
-  const handleCancel = async () => {
+  const handleCancel = async  postId => {
     try {
+      const JsonBody = {post_id: postId};
       await fetch(`${baseUrl}/posts/CancelBookedPost`, {
         method: 'POST',
         headers: {
@@ -83,23 +85,17 @@ const BookedDetails = ({route}) => {
           'x-api-key': 'BarTenderAPI',
           'accesstoken': `Bearer ${users.access_token}`
         },
-        body:JSON.stringify({
-          "post_id":data?.post_id
-      })
+        body: JSON.stringify(JsonBody),
       })
         .then(response => response.json())
         .then(dataa => {
-          if(dataa?.success==="Success"){            Alert.alert(
-              "Success",
-              dataa.message,
-              [
-                {
-                  text: 'OK',
-                  onPress: () => navigation.goBack(),
-                  style: 'cancel',
-                }
-              ]
-              )
+          if(dataa?.success==="Success"){            
+            Toast.show({
+            type: 'success',
+            text1: 'Job Cancel',
+            text2: 'Job has been cancel 👋',
+          });
+          navigation.goBack();
           }
     
         });
@@ -170,38 +166,28 @@ const BookedDetails = ({route}) => {
       <View >
       <View
       style={styles.section}>
-        <Text style={{marginBottom: 10,color:"black"}}># of people</Text>
-        <Text style={{fontWeight: 'bold',color:"black"}}> {data.no_of_people} or Less</Text>
+        <Text style={{marginBottom: 10,color:"black"}}>Job Title</Text>
+        <Text style={{fontWeight: 'bold',color:"black"}}> {data?.title} </Text>
       </View>
 
       <View
       style={styles.section}>
         <Text style={{marginBottom: 10,color:"black"}}>Date and time</Text>
-        <Text style={{color:"black"}}>{moment(data.event_date).format('MMMM Do YYYY, h:mm:ss a')} </Text>
+        <Text style={{color:"black"}}>{data?.booked_at} </Text>
       </View>
       <View
       style={styles.section}>
-        <Text style={{marginBottom: 10,color:"black"}}>Event Duration</Text>
-        <Text style={{color:"black"}}>{data.event_duration} </Text>
+        <Text style={{marginBottom: 10,color:"black"}}>Time</Text>
+        <Text style={{color:"black"}}>{data?.time} </Text>
       </View>
 
-      <View
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          width: '100%',
-          padding: 10,
-        }}>
-        <Text style={{marginBottom: 10,color:"black"}}>Phone Number</Text>
-        <Text style={{color:"black"}}>{data.contact_phone} </Text>
-      </View>
+    
       </View>
       {userState==1?
       <View style={{justifyContent:'center', flexDirection: 'row', alignItems: 'center'}}>
 
 
-         <ButtonInput title={"Cancel Booking"} onPress={handleCancel}/>
+         <ButtonInput title={"Cancel Booking"} onPress={()=>handleCancel(data?.post_id)}/>
       </View>
       :null}
       {userState==2?

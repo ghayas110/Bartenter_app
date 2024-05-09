@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
       input: {
         marginLeft: 10,
         flex: 1,
-        color:'black'
+        color:'black',
+        width:"1005",
       },
 })

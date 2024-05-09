@@ -16,6 +16,7 @@ const SignUp = () => {
   const [user_type, setUser_type] = useState(0);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('')
+  const [referral_code, setReferral_code] = useState('')
   const [checked, setChecked] = React.useState(false);
   const navigation = useNavigation();
   const validateEmail = (email) => {
@@ -41,7 +42,7 @@ const SignUp = () => {
               'Content-Type': 'application/json',
               'x-api-key':'BarTenderAPI'
             },
-            body: JSON.stringify({name:name, email:email,number:number, password:password,user_type:user_type}),
+            body: JSON.stringify({name:name, email:email,number:number, password:password,user_type:user_type,referral_code: referral_code}),
 
           })
           .then(response => response.json())
@@ -50,14 +51,14 @@ const SignUp = () => {
             if(data.message=="Success"){
               Toast.show({
                 type: 'success',
-                text1: 'SignUp Succesfull',
+                text1: `${data?.data}`,
               });
                navigation.navigate('Login')
             }
             else{
               Toast.show({
                 type: 'error',
-                text1: 'SignUp Failure',
+                text1: `${data?.message}`,
               });
             }
           
@@ -71,11 +72,32 @@ const SignUp = () => {
       console.log('An error occurred while processing your request.',error);
       }
    } else {
-    Toast.show({
-      type: 'error',
-      text1: 'Job Not Created',
-      text2: 'Job has not been created 👋'
-    });
+    if (email === '' && password === '' && number === '' && name === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Sign Up Failed',
+        text2: 'All fields are required.',
+      });
+    } else {
+      let errorMessage = '';
+      if (email === '') {
+        errorMessage += 'Email is required. ';
+      }
+      if (password === '') {
+        errorMessage += 'Password is required. ';
+      }
+      if (number === '') {
+        errorMessage += 'Number is required. ';
+      }
+      if (name === '') {
+        errorMessage += 'Name is required. ';
+      }
+      Toast.show({
+        type: 'error',
+        text1: 'Sign Up Failed',
+        text2: errorMessage,
+      });
+    }
    }
     
   };
@@ -129,7 +151,7 @@ const SignUp = () => {
       placeholder={"Referral code"}
       placeholderColor={"black"}
       icon={"team"}
-      setValues={(text) => setNumber(text)}
+      setValues={(text) => setReferral_code(text)}
       
       />
       

@@ -59,4 +59,5 @@ flexDirection:'row'
         fontSize: 24,
         fontWeight: 'bold',
       },
+     
 })

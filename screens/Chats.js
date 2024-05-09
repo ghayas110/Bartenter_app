@@ -22,7 +22,7 @@ const handleSearch = (text) => {
     setdata(datas); 
  
   } else {
-    const filteredData = datas.filter(item => item.name.toLowerCase().includes(text.toLowerCase()));
+    const filteredData = datas?.filter(item => item.name?.toLowerCase().includes(text?.toLowerCase()));
     setdata(filteredData);
   }
 };

@@ -24,6 +24,8 @@ import BartenderProfile from "../screens/BartenderProfile";
 import AllBartenders from "../screens/AllBartenders";
 import AllBartenderProfile from "../screens/AllBartenderProfile";
 import AddJobScreen2 from "../screens/AddJobScreen2";
+import Notification from "../screens/Notification";
+import Notificationdetail from "../screens/NotificationDetail";
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -52,7 +54,22 @@ const MainStackNavigator = () => {
     </Stack.Navigator>
   );
 };
-
+const NotificationStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+      }}>
+      
+      <Stack.Screen name="NotificationScreen" component={Notification} screenOptions={{
+        headerShown: false
+        }}/>
+        <Stack.Screen name="NotificationDetail" component={Notificationdetail} screenOptions={{
+          headerShown: false
+          }}/>
+         
+    </Stack.Navigator>
+  );
+};
 const ContactStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{
@@ -146,4 +163,4 @@ const PendingStackNavigator = () => {
     </Stack.Navigator>
   );
 };
-export { CalenderStackNavigator,ContactStackNavigator,MainStackNavigator,AdminStackNavigator,JobStackNavigator,PendingStackNavigator,BartenderStackNavigator };
+export { CalenderStackNavigator,ContactStackNavigator,MainStackNavigator,AdminStackNavigator,JobStackNavigator,PendingStackNavigator,BartenderStackNavigator,NotificationStackNavigator };

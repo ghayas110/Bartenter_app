@@ -28,10 +28,17 @@ import AboutHeader from '../components/AboutHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import baseUrl from "../global";
+import SelectDropdown from 'react-native-select-dropdown'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SelectList } from 'react-native-dropdown-select-list';
+
 const AddJobScreen = () => {
   const navigation = useNavigation()
   const [users, setusers] = useState("")
+  const [selected, setSelected] = React.useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const data = Array.from({length: 350}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
+
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem("data");
@@ -42,6 +49,7 @@ const AddJobScreen = () => {
     replacementFunction()
 
   }, [])
+  const datas=["1 hour","2 hour","3 hour","4 hour","5 hour","6  or more"]
   const count = useSelector(state => state.auth.user);
   const [post_type, setpost_type] = useState('bartender');
   const [post_title, setpost_title] = useState();
@@ -65,6 +73,22 @@ const AddJobScreen = () => {
   const handleSpecialtySelected = (specialty) => {
     setSelectedSpecialty(specialty)
   };
+  const emojisWithIcons = [
+    {title: "happy", icon: "alpha-f"},
+    {title: 'cool', icon: 'emoticon-cool-outline'},
+    {title: 'lol', icon: 'emoticon-lol-outline'},
+    {title: 'sad', icon: 'emoticon-sad-outline'},
+    {title: 'cry', icon: 'emoticon-cry-outline'},
+    {title: 'angry', icon: 'emoticon-angry-outline'},
+    {title: 'confused', icon: 'emoticon-confused-outline'},
+    {title: 'excited', icon: 'emoticon-excited-outline'},
+    {title: 'kiss', icon: 'emoticon-kiss-outline'},
+    {title: 'devil', icon: 'emoticon-devil-outline'},
+    {title: 'dead', icon: 'emoticon-dead-outline'},
+    {title: 'wink', icon: 'emoticon-wink-outline'},
+    {title: 'sick', icon: 'emoticon-sick-outline'},
+    {title: 'frown', icon: 'emoticon-frown-outline'},
+  ];
   const handleSelectImage = () => {
     const options = {
       noData: true,
@@ -99,7 +123,7 @@ const AddJobScreen = () => {
       event_duration: event_duration,
       zip_code:9999
     }
-console.log(JsonBody,"my Name")
+
 
     try {
       fetch(`${baseUrl}/posts/CreatePost`, {
@@ -121,7 +145,7 @@ console.log(JsonBody,"my Name")
               text1: 'Job Created',
               text2: 'Job has been created 👋'
             });
-            console.log(data)
+       
             navigation.goBack()
           } else {
             Toast.show({
@@ -214,22 +238,31 @@ console.log(JsonBody,"my Name")
           setValues={text => setpost_title(text)}
         />
         <View >
-          <FormInput
-            titleName={"Event Duration"}
-
-            iconss={"menuunfold"}
-            placeholderColor={'grey'}
-            keyboardType="numeric"
-            setValues={text => setevent_duration(text)}
-          />
-          
-          <FormInput
-            titleName={"# no of People"}
-            keyboardType="numeric"
-            placeholderColor={'grey'}
-            setValues={text => setno_of_people(text)}
-            iconss={"menuunfold"}
-          />
+        <Text style={styles.dropdownButtonTxtStyle}>
+        Select Event Duration
+        </Text>
+        <SelectList 
+          searchPlaceholder=" Event Duration"
+          setSelected={(val) => setevent_duration(val)} 
+          data={datas} 
+          save="value"
+          dropdownItemStyles={{color:"black"}}
+          boxStyles={{color:"black"}}
+          placeholder='Select No. of People'
+        />
+      
+   
+         <Text  style={styles.dropdownButtonTxtStyle}>Number of People</Text>
+          <SelectList 
+          searchPlaceholder=" Enter No. of People"
+          setSelected={(val) => setno_of_people(val)} 
+          data={data} 
+          save="value"
+          dropdownItemStyles={{color:"black"}}
+          boxStyles={{color:"black"}}
+          placeholder='Select No. of People'
+        />
+        <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Note): For more than 350 people contact our website.</Text>
 
           <FormInput
             titleName={"# no of Bartender"}
@@ -242,13 +275,17 @@ console.log(JsonBody,"my Name")
 
           <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartender would be enough for 35 people.</Text>
         </View>
+       
         
         <FormTextInput
           placeholder={'Theme'}
           placeholderColor={'grey'}
           setValues={text => setTheme(text)}
         />
-   
+      <View style={{justifyContent:"center"}}>
+     
+        </View>
+  
 {/* 
         <FormTextInput
           placeholder={'Location'}
@@ -321,5 +358,52 @@ const styles = StyleSheet.create({
     padding: 20, 
     borderRadius: 10,
     backgroundColor: '#fff', 
-  }
+  },
+  dropdownButtonStyle: {
+    width: 500,
+   
+    
+ 
+  },
+  dropdownButtonTxtStyle: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: '400',
+    color: 'grey',
+    paddingVertical:10
+  },
+  dropdownButtonArrowStyle: {
+    fontSize: 28,
+  },
+  dropdownButtonIconStyle: {
+    fontSize: 28,
+    marginRight: 8,
+  },
+  dropdownMenuStyle: {
+    borderRadius: 8,
+    width:"90%",
+    
+    
+  
+    
+  },
+  dropdownItemStyle: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  dropdownItemTxtStyle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#151E26',
+    
+  },
+  dropdownItemIconStyle: {
+    fontSize: 28,
+    // marginRight: 8,
+  },
 });

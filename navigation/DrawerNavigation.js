@@ -61,11 +61,12 @@ function CustomDrawer(props) {
       <View style={{marginTop:-10, flex: 1, backgroundColor: 'orange', padding: 25 }}>
       <Image source={imageUri?{ uri: imageUri }:require('../assets/cardimg.png')} style={{width: 50, height: 50,borderRadius:50}} />
         <View style={{paddingTop:15}}>
+     
         <Text style={{color:"white",fontSize:20,fontWeight:'700'}}>{data?.name}</Text>
         <Text style={{color:'white'}}>{data?.email}</Text>
         <TouchableOpacity onPress={()=>navigation.navigate('EditProfile')}>
         <Text style={{color:'white',marginTop:10,textDecorationLine:"underline",fontWeight:'bold'}}>Edit Profile</Text>
-        <Text style={{color:'white'}}>Referral code# <Text style={{fontWeight:'900'}}>XYZ123</Text></Text>
+        <Text style={{color:'white'}}>Referral code# <Text style={{fontWeight:'900'}}>{data?.referral_code}</Text></Text>
 
         </TouchableOpacity>
         </View>

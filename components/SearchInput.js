@@ -1,14 +1,25 @@
 import { StyleSheet, Text, View,TextInput } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 const SearchInput = () => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
   return (
     <View style={styles.searchContainer}>
     <Icon name="search" size={20} color="orange" />
     <TextInput
       style={styles.input}
-      placeholder="Search"
+      placeholder={isFocused ? '' : 'Enter text...'}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       placeholderTextColor={"orange"}
       
     />

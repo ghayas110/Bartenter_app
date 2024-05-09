@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
-import { AdminStackNavigator, BartenderStackNavigator, CalenderStackNavigator, ContactStackNavigator, JobStackNavigator, MainStackNavigator, PendingStackNavigator } from "./StackNavigator";
+import { AdminStackNavigator, BartenderStackNavigator, CalenderStackNavigator, ContactStackNavigator, JobStackNavigator, MainStackNavigator, PendingStackNavigator,NotificationStackNavigator } from "./StackNavigator";
 import ProfileScreen from "../screens/ProfileScreen";
 import ShopingCart from "../screens/ShopingCart";
 import PendingEvents from "../screens/PendingEvents";
@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import Subscription from "../screens/Subscription";
 import Icons from "../components/Icons";
 import Notification from "../screens/Notification";
-
+import notifee from '@notifee/react-native';
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -55,6 +55,7 @@ const BottomTabNavigator = () => {
       const value = await AsyncStorage.getItem('data');
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value))
+      const permission = await notifee.requestPermission();
     }
     const intervalId = setInterval(replacementFunction, 2000);
 
@@ -106,7 +107,7 @@ const BottomTabNavigator = () => {
 
       <Tab.Screen name="Profile" component={MainStackNavigator} options={{
         tabBarIcon: ({ color, size }) => (
-          <Image source={require('../assets/png/1-01.png')} style={{ width: 25, height: 20, objectFit: 'contain' }} />
+          <Icons.MaterialCommunityIcons name="play-box-outline" color={color} size={size} />
         ),
       }} />
       <Tab.Screen name="Subscription" component={Subscription} options={{
@@ -164,7 +165,7 @@ const BottomTabNavigator = () => {
         }} />
         : null}
       {userState != 0 ?
-        <Tab.Screen name="Notification" component={Notification} options={{
+        <Tab.Screen name="Notification" component={NotificationStackNavigator} options={{
           tabBarBadge: (currentNotification>0?currentNotification:undefined),
           tabBarIcon: ({ color, size, focused }) => (
               <Icon name="notifications" color={color} size={size} />

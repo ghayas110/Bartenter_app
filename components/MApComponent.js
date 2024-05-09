@@ -3,10 +3,31 @@ import { Button, StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import Icons from './Icons';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
-
+import Geolocation from '@react-native-community/geolocation';
 const MapComponent = ({onPress,dataSend}) => {
   var navigation=useNavigation()
   const gMap = useRef(null)
+  const [position, setPosition] = useState({
+    latitude: 10,
+    longitude: 10,
+    latitudeDelta: 0.001,
+    longitudeDelta: 0.001,
+  });
+
+  useEffect(() => {
+    Geolocation.requestAuthorization();
+    
+    Geolocation.getCurrentPosition((pos) => {
+      const crd = pos.coords;
+     
+      setPosition({
+        latitude: crd.latitude,
+        longitude: crd.longitude,
+        latitudeDelta: 0.0421,
+        longitudeDelta: 0.0421,
+      });
+    })
+  }, []);
 
 
   return (
@@ -14,15 +35,11 @@ const MapComponent = ({onPress,dataSend}) => {
       <MapView
       ref={gMap}
         style={styles.map}
-        initialRegion={{
-          latitude: 37.0902, // Center of the USA
-          longitude: -95.7129, // Center of the USA
-          latitudeDelta: 40, // Zoom level for latitude
-          longitudeDelta: 40, // Zoom level for longitude
-        }}
+     region={position}
         focusable
    
       >
+      {console.log(position)}
         {dataSend?.map((item,index) =>(
           <View key={index}>
        
@@ -34,20 +51,26 @@ const MapComponent = ({onPress,dataSend}) => {
             latitude: item.event_lat,
             longitude: item.event_lng,
           }}
+          onPress={()=>navigation.navigate('JobDetail',item)}
           // identifier={index}
           title={item.post_title}
           focusable
        
         />
+       
          </View>
         ))}
-        
+        <Marker
+        title='You are here'
+
+        coordinate={position}
+        >
+        <Icons.Entypo name="location-pin" size={40} color={"blue"}/>
+        </Marker>
       </MapView>
       <View style={styles.buttonContainer}>
    
-        <TouchableOpacity style={{marginLeft:10,width:50,height:50,backgroundColor:'orange',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:50}} onPress={()=>navigation.navigate('BookedEvents')}>
-          <Icons.AntDesign name="menuunfold" size={24} color="#fff" />
-        </TouchableOpacity>
+     
       </View>
     </View>
   );
@@ -75,3 +98,6 @@ const styles = StyleSheet.create({
 });
 
 export default MapComponent;
+// <TouchableOpacity style={{marginLeft:10,width:50,height:50,backgroundColor:'orange',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:50}} onPress={()=>navigation.navigate('BookedEvents')}>
+// <Icons.AntDesign name="menuunfold" size={24} color="#fff" />
+// </TouchableOpacity>

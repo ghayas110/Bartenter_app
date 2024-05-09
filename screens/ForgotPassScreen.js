@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import LoginInput from '../components/LoginInput';
+import Icons from '../components/Icons';
 
 
 const ForgotPassScreen =  ()=> {
@@ -63,7 +64,16 @@ const ForgotPassScreen =  ()=> {
   };
 
   return (
+    <>
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+    <Icons.Ionicons
+      name="arrow-back"
+      style={{color: 'black',padding:10}}
+      size={27}
+    />
+  </TouchableOpacity>
     <View style={styles.container}>
+ 
     <View style={styles.header}>
     <Image source={require('../assets/mainlogo.png')} style={{ width: 200, height: 100 }} />
       </View>
@@ -90,6 +100,7 @@ const ForgotPassScreen =  ()=> {
       <ButtonInput title={"Get Started!"} onPress={handleSubmit}/>
 
     </View>
+    </>
   );
 };
 
@@ -97,9 +108,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    width:"100%"
+  padding:20,
+  alignItems:'center',
+  justifyContent:'center'
   },
   header: {
     marginBottom: 50,

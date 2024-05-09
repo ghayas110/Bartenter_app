@@ -8,38 +8,29 @@ import Icons from '../components/Icons';
 import MapComponent from '../components/MApComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import baseUrl from '../global';
+import Geolocation from '@react-native-community/geolocation';
 const Job = ({route}) => {
   const isFocused = useIsFocused();
   const [users,setusers]=useState("")
   const[userState,setuserState]=useState(11)
-  useEffect(()=>{
-    async function replacementFunction(){
-    const value = await AsyncStorage.getItem("data");
-      setusers(JSON.parse(value))
-      handleSubmit(JSON.parse(value));
-      setuserState(JSON.parse(value)?.user_data[0]?.user_type);
-    }
-    replacementFunction()
-
-  },[userState,isFocused])
-  const navigation =useNavigation()
-  const [data, setData] = useState();
-  const count = useSelector((state) => state.auth.user)
-
- 
+  const [position, setPosition] = useState();
+   
 
   const handleSubmit = async (userr) => {
+    console.log(`/posts/GetAllAvailablePostsLocation?lat=${userr?.latitude}&long=${userr?.longitude}`)
+    console.log(userr,"kkk")
     try {
-      fetch(`${baseUrl}/posts/GetAllAvailablePostsLocation`, {
+      fetch(`${baseUrl}/posts/GetAllAvailablePostsLocation?lat=${userr?.latitude}&long=${userr?.longitude}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key':'BarTenderAPI',
-          'accesstoken':`Bearer ${userr?.access_token}`
+          'accesstoken':`Bearer ${users?.access_token}`
         },
       })
       .then(response => response.json())
       .then(data => {
+        console.log(data,"mera")
      setData(data.data)
       });
     } catch (error) {
@@ -47,9 +38,37 @@ const Job = ({route}) => {
     }
  
 };
-  useEffect(() => {
-    handleSubmit()
-  }, [route,isFocused])
+
+
+  useEffect(()=>{
+    async function replacementFunction(){
+    const value = await AsyncStorage.getItem("data");
+      setusers(JSON.parse(value))
+      Geolocation.requestAuthorization();
+    
+    Geolocation.getCurrentPosition((pos) => {
+      const crd = pos.coords;
+     
+      setPosition({
+        latitude: crd.latitude,
+        longitude: crd.longitude,
+        latitudeDelta: 0.0421,
+        longitudeDelta: 0.0421,
+      });
+      position && handleSubmit(position);
+       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+    })
+    }
+    replacementFunction()
+
+  },[userState,isFocused])
+
+  const navigation =useNavigation()
+  const [data, setData] = useState();
+  const count = useSelector((state) => state.auth.user)
+
+
+
 
   const Item = ({ id, post_title,post_type,image, onPress }) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
@@ -78,7 +97,7 @@ const Job = ({route}) => {
     <Header title="Jobs" headerShown={false} onPress={()=>navigation.navigate('AddJob')}/>
    
 <View>
-<MapComponent onPress={() => navigation.navigate('JobDetail',data)} dataSend={data} />
+<MapComponent  dataSend={data} />
 </View>
  
  

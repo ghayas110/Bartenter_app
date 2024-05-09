@@ -14,55 +14,78 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user_type, setUser_type] = React.useState(0);
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const validateEmail = (email) => {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   };
-
   const handleLogin = async () => {
+    if (isLoading) {
+      return; // If login process is already ongoing, prevent further clicks
+    }
+  
+    setIsLoading(true); // Set loading state to true to disable the button
+  
     if (email != '' && password != '') {
       if (!validateEmail(email)) {
-        Alert.alert('Invalid Email', 'Please enter a valid email address');
+        Toast.show({
+          type: 'error',
+          text1: `Invalid Email`,
+          text2:"Please enter a valid email address"
+        });
+      
+        setIsLoading(false); // Enable the button
         return;
       }
-      const bodys= {email:email,password:password,user_type:user_type}
+      const body = { email: email, password: password, user_type: user_type };
       try {
-  
-     fetch(`${baseUrl}/users/Login`, {
+        fetch(`${baseUrl}/users/Login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key':'BarTenderAPI'
+            'x-api-key': 'BarTenderAPI'
           },
-          body: JSON.stringify({ email:email, password:password,user_type:user_type }),
+          body: JSON.stringify(body),
         })
-        .then(response => response.json())
-        .then(data => {
-        
-          if(data){
-            if (data.message==="Success") {
-              Toast.show({
-                type: 'success',
-                text1: 'Otp sent to your email👋',
-           
-              });
-              navigation.navigate('OtpS',{bodys})
+          .then(response => response.json())
+          .then(data => {
+            if (data) {
+              if (data.message === "Success") {
+                Toast.show({
+                  type: 'success',
+                  text1: 'Otp sent to your email👋',
+                });
+                console.log(body)
+                navigation.navigate('OtpS', { body });
+              } else {
+                Toast.show({
+                  type: 'error',
+                  text1: `${data?.data}`,
+                });
+              }
             } else {
-              Alert.alert("Login","Login Faliure")
+              Alert.alert("Login", "Login Failure");
             }
-          }else{
-            Alert.alert("Login","Login Faliure")
-          }
-          
-        });
-     
+          })
+          .catch(error => {
+            console.log('An error occurred while processing your request.', error);
+            Alert.alert('Error', 'An error occurred while processing your request.');
+          })
+          .finally(() => {
+            setIsLoading(false); // Enable the button regardless of success or failure
+          });
       } catch (error) {
-        console.log('An error occurred while processing your request.',error[0]);
+        console.log('An error occurred while processing your request.', error);
+        Alert.alert('Error', 'An error occurred while processing your request.');
+        setIsLoading(false); // Enable the button
       }
     } else {
-      Alert.alert('Please Fill All Fields')
+      Toast.show({
+        type: 'error',
+        text1: "Please fill all fields"
+      });
+      setIsLoading(false); // Enable the button
     }
   };
 
@@ -108,7 +131,7 @@ const LoginScreen = () => {
       </TouchableOpacity>
       </View>
 
-      <ButtonInput title={"Login"} onPress={handleLogin}/>
+      <ButtonInput title={"Login"} onPress={handleLogin} disabled={isLoading}/>
     </View>
   );
 };

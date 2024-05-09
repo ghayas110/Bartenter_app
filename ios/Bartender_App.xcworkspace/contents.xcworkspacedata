@@ -2,12 +2,15 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Bartinder.xcodeproj">
+      location = "group:/Users/ghayasali/Documents/Bartenter_app/ios/Bartender_App.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:GoogleService-Info.plist">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Bartender_App.xcodeproj">
    </FileRef>
 </Workspace>

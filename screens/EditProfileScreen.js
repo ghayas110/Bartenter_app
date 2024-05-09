@@ -25,6 +25,8 @@ import { useSelector } from 'react-redux';
 import SpecialtySelector from '../components/Selector';
 import FormTextInput from '../components/FormTextInput';
 import AboutHeader from '../components/AboutHeader';
+import SelectDropdown from 'react-native-select-dropdown'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import baseUrl from '../global';
 const EditProfileScreen = ({ route }) => {
@@ -44,6 +46,22 @@ const EditProfileScreen = ({ route }) => {
     }
     replacementFunction()
   }, [isFocused])
+  const emojisWithIcons = [
+    {title: 'happy', icon: 'emoticon-happy-outline'},
+    {title: 'cool', icon: 'emoticon-cool-outline'},
+    {title: 'lol', icon: 'emoticon-lol-outline'},
+    {title: 'sad', icon: 'emoticon-sad-outline'},
+    {title: 'cry', icon: 'emoticon-cry-outline'},
+    {title: 'angry', icon: 'emoticon-angry-outline'},
+    {title: 'confused', icon: 'emoticon-confused-outline'},
+    {title: 'excited', icon: 'emoticon-excited-outline'},
+    {title: 'kiss', icon: 'emoticon-kiss-outline'},
+    {title: 'devil', icon: 'emoticon-devil-outline'},
+    {title: 'dead', icon: 'emoticon-dead-outline'},
+    {title: 'wink', icon: 'emoticon-wink-outline'},
+    {title: 'sick', icon: 'emoticon-sick-outline'},
+    {title: 'frown', icon: 'emoticon-frown-outline'},
+  ];
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const count = useSelector(state => state.auth.user);
@@ -423,6 +441,7 @@ const EditProfileScreen = ({ route }) => {
                 setValues={text => setPaymentLink(text)}
                 currentvalue={paymentLink}
               />
+           
              </>
             }
               
@@ -515,6 +534,51 @@ const styles = StyleSheet.create({
     padding: 20, 
     borderRadius: 10,
     backgroundColor: '#fff', 
+  },
+  dropdownButtonStyle: {
+    width: 200,
+    height: 50,
+    backgroundColor: '#E9ECEF',
+    borderRadius: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+  },
+  dropdownButtonTxtStyle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#151E26',
+  },
+  dropdownButtonArrowStyle: {
+    fontSize: 28,
+  },
+  dropdownButtonIconStyle: {
+    fontSize: 28,
+    marginRight: 8,
+  },
+  dropdownMenuStyle: {
+    backgroundColor: '#E9ECEF',
+    borderRadius: 8,
+  },
+  dropdownItemStyle: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  dropdownItemTxtStyle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#151E26',
+  },
+  dropdownItemIconStyle: {
+    fontSize: 28,
+    marginRight: 8,
   },
 });
 export default EditProfileScreen;

@@ -40,7 +40,7 @@ const Notification = () => {
       .then(response => response.json())
       .then(dataa => {
       setData(dataa.data)
-      console.log(dataa.data)
+
    
      
       });
@@ -87,31 +87,33 @@ const handleSeen = async (userss) => {
   // useEffect(() => {
   //   AllChats()
   //     }, [userId])
-  const Item = ({ id, name, message, role, onPress }) => (
+  const Item = ({ id, name, message, role, onPress,postid }) => (
     < >
-      <TouchableOpacity onPress={()=>console.log("")} style={{ justifyContent: 'space-between', padding: 10, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 0, borderBottomColor: 'whitesmoke', backgroundColor: `${id == 12 ? "#D0D0D0" : ""}`,marginBottom:5 }}>
+      <TouchableOpacity onPress={onPress} style={{ justifyContent: 'space-between', padding: 10, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 0, borderBottomColor: 'whitesmoke', backgroundColor: `${id == 12 ? "#D0D0D0" : ""}`,marginBottom:5 }}>
         <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50, borderRadius: 50, marginRight: 5 }} />
         <Text style={{ color: 'grey',width: width * 0.70 }}>{name}</Text>
+        <Text style={{ color: 'grey',width: width * 0.70 }}>{postid}</Text>
         <Iconss style={{ color: 'grey'}} name="dots-three-vertical" size={20} />
       </TouchableOpacity>
     </>
   );
   const renderItem = ({ item }) => (
-    <Item id={item.id} name={item.name} message={item.message} role={item.role} image={item.image} />
+    <Item id={item.id} name={item.name} message={item.message} role={item.role} image={item.image} postid={item?.post_id} onPress={()=>navigation.navigate("NotificationDetail",item)}/>
   );
   return (
     <SafeAreaView>
       <Header title="Notification" headerShown={false} />
 
-      <View style={styles.container}>
+     
         <FlatList
           style={styles.flatlistBorder}
           data={datas}
           renderItem={renderItem}
+          
           keyExtractor={(item) => item.id}
         />
 
-      </View>
+
 
     </SafeAreaView>
   )
@@ -121,9 +123,8 @@ export default Notification
 
 const styles = StyleSheet.create({
   container: {
-    width: 'auto',
-    height: '100%',
-    paddingTop: 35,
+  
+    
     backgroundColor: '#fff',
   },
   text: {
@@ -137,11 +138,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2994A',
     borderRadius: 30,
     width: 60,
-    height: 60,
+
     justifyContent: 'center',
     alignItems: 'center',
   },
   flatlistBorder: {
-    borderBottomWidth: 0,
+    borderBottomWidth: 1,
+    borderColor:"black"
   },
 });

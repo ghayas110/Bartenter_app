@@ -6,16 +6,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
+import DatePicker from 'react-native-modern-datepicker';
+import {Agenda} from 'react-native-calendars';
 import moment from 'moment';
 const baseUrl = require('../global')
+
 const MyCalender = ({route}) => {
   const [userState, setuserState] = useState(11)
+  const [selectedDate, setSelectedDate] = useState("");
   const [users, setusers] = useState("")
   const [data, setdata] = useState()
   const [bookedEvents, setBookedEvents] = useState([])
   const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
+  const [items, setItems] = useState({
+    '2024-05-01': [{ name: 'Meeting with Client', time: '10:00 AM' }],
+    '2024-05-03': [{ name: 'Lunch with Team', time: '12:30 PM' }],
+    '2024-05-06': [{ name: 'Conference Call', time: '2:00 PM' }],
+    '2024-05-10': [{ name: 'Project Deadline', time: 'End of Day' }],
+  });
+
   const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
   const [subscribed, setSubscribed] = useState();
   useEffect(() => {
@@ -25,12 +36,12 @@ const MyCalender = ({route}) => {
       setusers(JSON.parse(value));
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value));
-      getAllPosts()
+      getAllPosts(JSON.parse(value))
       ValidateUserSubscription(JSON.parse(value))
     }
     replacementFunction()
     getDeviceToken()
-  }, [userState,route,isFocused]);
+  }, [userState,route,isFocused,selectedDate]);
 
 const getDeviceToken =async()=>{
  
@@ -56,6 +67,7 @@ const getDeviceToken =async()=>{
           pressAction: {
             id: 'default',
           },
+          
         },
       });
       
@@ -64,29 +76,7 @@ const getDeviceToken =async()=>{
 
     return unsubscribeBackground;
   }, []);
-  async function onDisplayNotification() {
-    // Request permissions (required for iOS)
-    await notifee.requestPermission()
 
-    // Create a channel (required for Android)
-    const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
-    });
-
-    // Display a notification
-    await notifee.displayNotification({
-      title: 'Notification Title',
-      body: 'Main body content of the notification',
-      android: {
-        channelId,
-        // pressAction is needed if you want the notification to open the app when pressed
-        pressAction: {
-          id: 'default',
-        },
-      },
-    });
-  }
   const handleSubmit = async (userss) => {
     try {
       await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
@@ -134,22 +124,26 @@ const getDeviceToken =async()=>{
 
 
 }
-  const getAllPosts = async () => {
+  const getAllPosts = async (value) => {
     try {
-      setIsLoading(true)
-      await fetch(`${baseUrl}/posts/GetAllBookedPosts`, {
+  
+  
+   
+  
+      await fetch(`https://bartender-backend.digitalmobix.com/posts/GetAllBookedPosts`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
+          
           'x-api-key': 'BarTenderAPI',
           'accesstoken': `Bearer ${users.access_token}`
         }
       }).then(response => response.json())
         .then(data => {
-       
-          setIsLoading(false)
-          if (data.data.length > 0) {
-            setBookedEvents([...data.data])
+ 
+      
+ 
+          if (data) {
+            setBookedEvents(data)
           }
           else{
             setBookedEvents([])
@@ -161,7 +155,7 @@ const getDeviceToken =async()=>{
     }
   }
 const navigation =useNavigation()
- 
+
   const Item = ({ PhoneNumber, name,email, DateTime,theme, image, onPress }) => {
    
     return(
@@ -187,39 +181,80 @@ const navigation =useNavigation()
   </TouchableOpacity>
   )}
   const renderItem = ({ item }) => (
-    <Item name={item.post_title} email={item.email} image={item.image} theme={item.theme} PhoneNumber={item.contact_phone} DateTime={item.event_date} onPress={() => navigation.navigate('BookedDetails', {item})}/>
+    <Item name={item?.title} time={item?.time} onPress={() => navigation.navigate('BookedDetails', {item})}/>
   );
   return (
     <>
+   
       {
         isLoading  ?
         <>
           <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
             <ActivityIndicator size="large" />
           </View> 
+
         </>:
          <>
          {
 
-         
+       
          bookedEvents.length > 0?
          <>
           <Header title="My Calender" headerShown={true}/>
+
           {subscribed?.subscription_status!=1?
       <Image source={require('../assets/banner.jpeg')}/>
             :null}
-        <FlatList
-        data={bookedEvents}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        />
-       
-         </>
+         
+            <Agenda
+            items={bookedEvents}
+            renderItem={(item)=>  <TouchableOpacity  style={styles.card}>
+
+
+            <Text style={styles.text1}>{item.title}</Text>
         
+        
+         
+        
+        
+        
+            <Text style={{ fontSize: 16,
+              color: 'grey', // white color for better visibility on image
+              marginBottom: 5,
+              fontSize:14,
+              fontWeight:'bold'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+        
+         
+         
+          </TouchableOpacity>}
+          />
+            </>
         :
         <>
         <Header title="My Calender" headerShown={true}/>
-        <Text style={{color:"black",textAlign:"center",fontSize:20}}>No booked events</Text>
+        <Agenda
+        items={bookedEvents}
+        renderItem={(item)=>  <TouchableOpacity onPress={() => navigation.navigate('BookedDetails', {item})} style={styles.card}>
+
+
+        <Text style={styles.text1}>{item.title}</Text>
+    
+    
+     
+    
+    
+    
+        <Text style={{ fontSize: 16,
+          color: 'grey', // white color for better visibility on image
+          marginBottom: 5,
+          fontSize:14,
+          fontWeight:'bold'}}>{item.time}</Text>
+    
+     
+     
+      </TouchableOpacity>}
+      />
+       
         </>
          }
         </>      
