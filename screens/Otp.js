@@ -10,7 +10,7 @@ import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
 import Icons from '../components/Icons';
 import Geolocation from '@react-native-community/geolocation';
-
+import notifee from '@notifee/react-native';
 
 const Otp = ({ onLogin,route }) => {
   const [otp, setOtp] = useState(['', '', '', '']);
@@ -81,6 +81,7 @@ const Otp = ({ onLogin,route }) => {
                
                 await AsyncStorage.setItem('data', JSON.stringify(data));
                 Geolocation.requestAuthorization();
+                
                  onLogin()
                } else {
                 Toast.show({

@@ -38,6 +38,7 @@ const AddJobScreen = () => {
   const [selected, setSelected] = React.useState("");
   const [isLoading, setIsLoading] = useState(false);
   const data = Array.from({length: 350}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
+  const datas = Array.from({length: 6}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
 
   useEffect(() => {
     async function replacementFunction() {
@@ -49,7 +50,7 @@ const AddJobScreen = () => {
     replacementFunction()
 
   }, [])
-  const datas=["1 hour","2 hour","3 hour","4 hour","5 hour","6  or more"]
+
   const count = useSelector(state => state.auth.user);
   const [post_type, setpost_type] = useState('bartender');
   const [post_title, setpost_title] = useState();
@@ -248,7 +249,7 @@ const AddJobScreen = () => {
           save="value"
           dropdownItemStyles={{color:"black"}}
           boxStyles={{color:"black"}}
-          placeholder='Select No. of People'
+          placeholder=" Event Duration"
         />
       
    

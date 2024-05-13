@@ -24,6 +24,7 @@ import EditProfileScreen from './screens/EditProfileScreen';
 import {useNavigation} from '@react-navigation/native';
 import PrivacyPolicy from './screens/PrivacyPolicy';
 import TermsCondition from './screens/TermsCondition';
+import messaging from '@react-native-firebase/messaging';
 const AuthStack = createStackNavigator();
 const toastConfig = {
 
@@ -71,6 +72,7 @@ const App = () => {
       const value = await AsyncStorage.getItem("data");
       if (value !== null) {
         setIsLoggedIn(true);
+        setusers(JSON.parse(value));
       } else {
         setIsLoggedIn(false);
       }
@@ -78,7 +80,35 @@ const App = () => {
 
     checkLoginStatus();
   }, []);
+const handleLogout=async()=>{
+  try {
+    let token = await messaging().getToken();
+    fetch(`${baseUrl}/reviews/GetReviewsByProfileId`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key':'BarTenderAPI',
+        'accesstoken':`Bearer ${users.access_token}`
+      },
+      body: JSON.stringify({
+        "FCM_token":`${token}`
+    }),
+    })
+    .then(response => {
+     
+      return response.json()
+    })
+    .then(chat => {
+  console.log(chat)
+  AsyncStorage.clear().then(()=>{console.log("Cleared data")})
+    }).catch(err=>{
+      console.log(err,"dddd")
+    })
+} catch (error) {
+console.log('An error occurred while processing your request.',error);
+}
 
+}
   return (
     <Provider store={store}>
  
@@ -90,11 +120,13 @@ const App = () => {
       <Drawer.Screen name="Home" component={BottomTabNavigator} />
         <Drawer.Screen name="About" component={BartenderHomeScreen} />
         <Drawer.Screen name="SignOut" >
-        {(props) => <SignOut {...props}  onLogout={
+        {(props) => <SignOut {...props}  onLogout={()=>{
+
+        }
 
           
           
-          AsyncStorage.clear().then(()=>{console.log("Cleared data")})
+          // AsyncStorage.clear().then(()=>{console.log("Cleared data")})
           
           
           
