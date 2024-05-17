@@ -1,84 +1,213 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import FormInput from '../components/FormInput';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import ButtonInput from '../components/ButtonInput';
+import {Checkbox, RadioButton} from 'react-native-paper';
+import PasswordInput from '../components/PasswordInput';
+import LoginInput from '../components/LoginInput';
+import Toast from 'react-native-toast-message';
+import baseUrl from '../global';
+import {ScrollView} from 'react-native-gesture-handler';
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
+  const [user_type, setUser_type] = useState(0);
   const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+  const [referral_code, setReferral_code] = useState('');
+  const [checked, setChecked] = React.useState(false);
   const navigation = useNavigation();
-  // const validateEmail = (email) => {
-  //   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //   return re.test(email);
-  // };
-
+  const validateEmail = email => {
+    var re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
   const handleLogin = async () => {
     // Your existing login logic
-   
-   
-      navigation.navigate('Login')
-    
+    if (email !== '' && password !== '' && number != '' && name != '') {
+      if (!validateEmail(email)) {
+        Toast.show({
+          type: 'error',
+          text1: 'Email Unverified',
+        });
+        return;
+      }
+      try {
+        fetch(`${baseUrl}/users/CreateUser`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': 'BarTenderAPI',
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            number: number,
+            password: password,
+            user_type: user_type,
+            referral_code: referral_code,
+          }),
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            if (data.message == 'Success') {
+              Toast.show({
+                type: 'success',
+                text1: `${data?.data}`,
+              });
+              navigation.navigate('Login');
+            } else {
+              Toast.show({
+                type: 'error',
+                text1: `${data?.message}`,
+              });
+            }
+          });
+      } catch (error) {
+        console.log('An error occurred while processing your request.', error);
+      }
+    } else {
+      if (email === '' && password === '' && number === '' && name === '') {
+        Toast.show({
+          type: 'error',
+          text1: 'Sign Up Failed',
+          text2: 'All fields are required.',
+        });
+      } else {
+        let errorMessage = '';
+        if (email === '') {
+          errorMessage += 'Email is required. ';
+        }
+        if (password === '') {
+          errorMessage += 'Password is required. ';
+        }
+        if (number === '') {
+          errorMessage += 'Number is required. ';
+        }
+        if (name === '') {
+          errorMessage += 'Name is required. ';
+        }
+        Toast.show({
+          type: 'error',
+          text1: 'Sign Up Failed',
+          text2: errorMessage,
+        });
+      }
+    }
   };
-
   return (
-    <View style={styles.container}>
-    <View style={styles.header}>
-    <Image source={require('../assets/logo.png')} style={{ width: 100, height: 100 }} />
+    <ScrollView style={styles.container}>
+      <View
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <View style={styles.header}>
+          <Image
+            source={require('../assets/mainlogo.png')}
+            style={{width: 200, height: 100}}
+          />
+        </View>
+        <View>
+          <LoginInput
+            placeholder={'Please Enter Email address'}
+            placeholderColor={'black'}
+            icon={'mail'}
+            setValues={text => setEmail(text)}
+          />
+        </View>
+        <View>
+          <PasswordInput
+            placeholder={'Please Enter Password'}
+            placeholderColor={'black'}
+            icon={'lock'}
+            setValues={text => setPassword(text)}
+            pass={true}
+          />
+        </View>
+        <View>
+          <LoginInput
+            placeholder={'Enter Full Name'}
+            placeholderColor={'black'}
+            icon={'user'}
+            setValues={text => setName(text)}
+          />
+        </View>
+        <View>
+          <LoginInput
+            placeholder={'Please Enter Phone Number'}
+            placeholderColor={'black'}
+            icon={'phone'}
+            setValues={text => setNumber(text)}
+          />
+          <LoginInput
+            placeholder={'Referral code'}
+            placeholderColor={'black'}
+            icon={'team'}
+            setValues={text => setReferral_code(text)}
+          />
+          <View style={{marginTop: 15}}>
+            <RadioButton.Group
+              onValueChange={value => setUser_type(value)}
+              value={user_type}>
+              <RadioButton.Item color="orange" label="Bartender" value={1} />
+              <RadioButton.Item color="orange" label="User" value={2} />
+              <RadioButton.Item color="orange" label="Business" value={3} />
+            </RadioButton.Group>
+          </View>
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            flexDirection: 'row',
+            padding: 20,
+          }}>
+          <Checkbox
+            status={checked ? 'checked' : 'unchecked'}
+            color="orange"
+            onPress={() => {
+              setChecked(!checked);
+            }}
+          />
+          <Text style={{paddingLeft: 10}}>
+            Are you sure you acccept{' '}
+            <Text
+              style={{color: 'orange', textDecorationLine: 'underline'}}
+              onPress={() => navigation.navigate('Privacy')}>
+              Privacy Policy
+            </Text>{' '}
+            and{' '}
+            <Text
+              style={{color: 'orange', textDecorationLine: 'underline'}}
+              onPress={() => navigation.navigate('Terms')}>
+              Terms and Condition
+            </Text>
+          </Text>
+        </View>
+        <ButtonInput title={'Get Started!'} onPress={handleLogin} />
       </View>
-      <View>
-      <Text style={styles.subtitle}>Email</Text>
-      <TextInput
-      style={styles.input}
-      placeholder="Enter email or phone"
-      placeholderTextColor='white'
-      onChangeText={(text) => setEmail(text)}
-      />
-      </View>
-      <View>
-      <Text style={styles.subtitle}>Password</Text>
-      <TextInput
-      style={styles.input}
-      placeholder="Enter Password"
-      secureTextEntry
-      placeholderTextColor='white'
-      onChangeText={(text) => setPassword(text)}
-      />
-      </View>
-      <View>
-      <Text style={styles.subtitle}>FullName</Text>
-      <TextInput
-      style={styles.input}
-      placeholder="Enter Full Name"
-      placeholderTextColor='white'
-      onChangeText={(text) => setName(text)}
-      />
-      </View>
-      <View>
-      <Text style={styles.subtitle}>Role</Text>
-      <TextInput
-      style={styles.input}
-      placeholder="Enter Role"
-      placeholderTextColor='white'
-      onChangeText={(text) => setRole(text)}
-      />
-      </View>
-      <Button title="Get Started!" color={"#FFC500"} onPress={handleLogin} />
-
-    </View>
+    </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFA500',
-    width:"100%"
+
+    backgroundColor: 'white',
+    width: '100%',
   },
   header: {
     marginBottom: 50,

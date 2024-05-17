@@ -1,4 +1,12 @@
 {
-  "name": "Bartender_App",
-  "displayName": "Bartender_App"
+  "name": "Bartinder",
+  "displayName": "Bartinder",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-9019633061186947~2972494068"
+
+  },
+  "ios": {
+    "useFrameworks": "static"
+  }
+  
 }

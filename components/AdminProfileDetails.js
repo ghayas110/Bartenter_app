@@ -3,15 +3,16 @@ import { View, Text, StyleSheet, ImageBackground,TouchableOpacity,ScrollView } f
 import Header from './Header';
 import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
+import baseUrl from '../global';
 
-export default function AdminProfileDetails({name,email,PhoneNumber}) {
+export default function AdminProfileDetails({name,email,number,signature_drink,payment_link,speciality,image}) {
   const [rating, setRating] = useState(0);
-  
+
   return (
 
     <ScrollView style={styles.card}>
   
-      <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
+      <ImageBackground source={image!=""?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={styles.image}>
         <Text style={styles.title}>{name}</Text>
         
       </ImageBackground>
@@ -25,30 +26,18 @@ export default function AdminProfileDetails({name,email,PhoneNumber}) {
  </View>
  <View style={styles.section}>
  <Text>Speciality</Text>
- <Text>Shots</Text>
+ <Text>{speciality}</Text>
  </View>
  <View style={styles.section}>
  <Text>Phone</Text>
- <Text style={{color:'#FFA500'}}>{PhoneNumber}</Text>
+ <Text style={{color:'#FFA500'}}>{number}</Text>
  </View>
- <View style={styles.section}>
- <Text>Signature Drink</Text>
- <Text>Shots</Text>
- </View>
+
  <View style={styles.section}>
  <Text>Personal Payment Link</Text>
- <Text>cashapp/cashapp</Text>
+ <Text>{payment_link}</Text>
  </View>
- <View style={styles.rating}>
- <Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>Rating and Reviews</Text>
 
-<RatingCard rating={2} text="Great work"/>
-<RatingCard rating={5} text="Great work"/>
-<RatingCard rating={4.5} text="Great work"/>
-
-
-
- </View>
     </ScrollView>
   );
 }

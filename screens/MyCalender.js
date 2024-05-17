@@ -1,55 +1,247 @@
-import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View ,ScrollView} from 'react-native'
-import React from 'react'
+import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry, Alert, Button, Image} from 'react-native'
+import React ,{useState,useEffect} from 'react'
 import Header from '../components/Header'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation ,useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import messaging from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
+import DatePicker from 'react-native-modern-datepicker';
+import {Agenda} from 'react-native-calendars';
+import moment from 'moment';
+const baseUrl = require('../global')
 
-const MyCalender = () => {
-const navigation =useNavigation()
-  const data = [
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"15 or Less",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
-    {  name: 'John Brown',email:"csjguy@gmail.com",theme:"Red and White",PhoneNumber:'03002661456',DateTime: "November 7 2024", image: require('../assets/map.png') },
+const MyCalender = ({route}) => {
+  const [userState, setuserState] = useState(11)
+  const [selectedDate, setSelectedDate] = useState("");
+  const [users, setusers] = useState("")
+  const [data, setdata] = useState()
+  const [bookedEvents, setBookedEvents] = useState([])
+  const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
+  const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(false);
+  const [items, setItems] = useState({
+    '2024-05-01': [{ name: 'Meeting with Client', time: '10:00 AM' }],
+    '2024-05-03': [{ name: 'Lunch with Team', time: '12:30 PM' }],
+    '2024-05-06': [{ name: 'Conference Call', time: '2:00 PM' }],
+    '2024-05-10': [{ name: 'Project Deadline', time: 'End of Day' }],
+  });
 
-    
-  ];
-  const Item = ({ PhoneNumber, name,email, DateTime,theme, image, onPress }) => (
-    <TouchableOpacity onPress={onPress} style={styles.card}>
-    <ImageBackground source={image} style={styles.image}>
+  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-9019633061186947/9389211687';
+  const [subscribed, setSubscribed] = useState();
+  useEffect(() => {
+    async function replacementFunction() {
+      const value = await AsyncStorage.getItem('data');
+      AsyncStorage.setItem('data', value)
+      setusers(JSON.parse(value));
+      setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+      handleSubmit(JSON.parse(value));
+      getAllPosts(JSON.parse(value))
+      ValidateUserSubscription(JSON.parse(value))
+    }
+    replacementFunction()
+    getDeviceToken()
+  }, [userState,route,isFocused,selectedDate]);
+
+const getDeviceToken =async()=>{
+ 
+  let token = await messaging().getToken();
+
+  }
+  useEffect(() => {
+    const unsubscribeBackground = messaging().onMessage(async remoteMessage => {
+      const notifeeData = remoteMessage;
+     
+      const permission = await notifee.requestPermission();
+      const channelId = await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+      });
+
+      await notifee.displayNotification({
+        title: notifeeData.notification.title,
+        body: notifeeData.notification.body,
+        android: {
+          channelId,
+          // pressAction is needed if you want the notification to open the app when pressed
+          pressAction: {
+            id: 'default',
+          },
+          
+        },
+      });
       
-    </ImageBackground>
-
-    <Text style={styles.text1}>{name}</Text>
+    });
 
 
- 
-    <Text style={styles.text}>{theme}</Text>
+    return unsubscribeBackground;
+  }, []);
+
+  const handleSubmit = async (userss) => {
+    try {
+      await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${userss.access_token}`
+        },
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          if (dataa?.users.length > 0) {
+            setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
+            setdata(dataa?.users[0])
+          }
+        });
+    } catch (error) {
+      // Alert.alert('An error occurred while processing your request.');
+    }
+
+  }
+  const ValidateUserSubscription=async(userss)=>{
 
 
+    try {
+      fetch(`${baseUrl}/subscription/CheckSubscription`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+     const subscriptions=dataa.subscription_status[0]
+  
+        setSubscribed(subscriptions)
+  
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
 
-    <Text style={styles.text}>{DateTime}</Text>
 
+}
+  const getAllPosts = async (value) => {
+    try {
+  
+  
    
+  
+      await fetch(`https://bartender-backend.digitalmobix.com/posts/GetAllBookedPosts`, {
+        method: 'GET',
+        headers: {
+          
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${users.access_token}`
+        }
+      }).then(response => response.json())
+        .then(data => {
  
-  </TouchableOpacity>
-  );
-  const renderItem = ({ item }) => (
-    <Item name={item.name} email={item.email} image={item.image} theme={item.theme} PhoneNumber={item.PhoneNumber} DateTime={item.DateTime} onPress={() => navigation.navigate('BookedDetails', {item})}/>
-  );
+      
+ 
+          if (data) {
+            setBookedEvents(data)
+          }
+          else{
+            setBookedEvents([])
+          }
+        })
+    } catch (error) {
+      // Alert.alert('An error occurred while processing your request.');
+
+    }
+  }
+const navigation =useNavigation()
+
+  
+ 
   return (
-    <View>
-    <Header title="Booked Events" headerShown={true}/>
+    <>
+   
+      {
+        isLoading  ?
+        <>
+          <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
+            <ActivityIndicator size="large" />
+          </View> 
 
- <FlatList
- data={data}
- renderItem={renderItem}
- keyExtractor={(item) => item.id}
- />
+        </>:
+         <>
+         {
 
+       
+         bookedEvents.length > 0?
+         <>
+          <Header title="My Calender" headerShown={true}/>
+
+          {subscribed?.subscription_status!=1?
+      <Image source={require('../assets/banner.jpeg')}/>
+            :null}
+         
+            <Agenda
+            items={bookedEvents}
+            renderItem={(item)=>  <TouchableOpacity  style={styles.card}>
+
+
+            <Text style={styles.text1}>{item.title}</Text>
+        
+        
+         
+        
+        
+        
+            <Text style={{ fontSize: 16,
+              color: 'grey', // white color for better visibility on image
+              marginBottom: 5,
+              fontSize:14,
+              fontWeight:'bold'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+        
+         
+         
+          </TouchableOpacity>}
+          />
+            </>
+        :
+        <>
+        <Header title="My Calender" headerShown={true}/>
+        {subscribed?.subscription_status!=1?
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+                :null}
+        <Agenda
+        items={bookedEvents}
+        renderItem={(item)=>  <TouchableOpacity onPress={() => navigation.navigate('BookedDetails', {item})} style={styles.card}>
+
+
+        <Text style={styles.text1}>{item.title}</Text>
     
-
-    </View>
+    
+     
+    
+    
+    
+        <Text style={{ fontSize: 16,
+          color: 'grey', // white color for better visibility on image
+          marginBottom: 5,
+          fontSize:14,
+          fontWeight:'bold'}}>{item.time}</Text>
+    
+     
+     
+      </TouchableOpacity>}
+      />
+       
+        </>
+         }
+        </>      
+      }
+     
+    </>
   )
 }
 
@@ -66,14 +258,14 @@ const styles = StyleSheet.create({
         justifyContent:'space-between'
           },
       card: {
-        borderRadius: 6,
+        borderRadius: 10,
         elevation: 3,
         backgroundColor: '#fff',
         shadowOffset: { width: 1, height: 1 },
         shadowColor: '#333',
         shadowOpacity: 0.3,
         shadowRadius: 2,
-        marginHorizontal: 4,
+        marginHorizontal: 10,
         marginVertical: 6,
         padding: 20
       },
@@ -96,6 +288,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'black', // white color for better visibility on image
         marginBottom: 5,
+        fontWeight:'bold'
 
       },
       text1: {
@@ -118,5 +311,19 @@ const styles = StyleSheet.create({
          borderRadius:30,
          width :60,height :60, 
          justifyContent:'center',alignItems:'center'
-       }
+       },
+       containerSpinner: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center', 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      },
+      horizontalSpinner: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 20, 
+        borderRadius: 10,
+        backgroundColor: '#fff', 
+        
+      }
 })

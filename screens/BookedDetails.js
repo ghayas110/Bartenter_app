@@ -1,12 +1,114 @@
-import {StyleSheet, Text, View,TouchableOpacity,FlatList,Image} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, View,TouchableOpacity,FlatList,Image, Alert} from 'react-native';
+import React ,{useState,useEffect}from 'react';
 import HeaderDetails from '../components/HeaderDetails';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-const BookedDetails = () => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
+import ButtonInput from '../components/ButtonInput';
+import Toast from 'react-native-toast-message';
+import moment from 'moment';
+const baseUrl = require('../global')
+const BookedDetails = ({route}) => {
+  const [userState, setuserState] = useState(11)
+  const [users, setusers] = useState("")
+  const [data2, setdata] = useState()
+  const [comment, setComment] = useState([])
+  const [imageUri, setImageUri] = useState('');
+  const [imageUris, setImageUris] = useState('');
+  useEffect(() => {
+    async function replacementFunction() {
+      const value = await AsyncStorage.getItem('data');
+      AsyncStorage.setItem('data', value)
+      setusers(JSON.parse(value));
+      setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+      handleSubmit(JSON.parse(value));
+      handleComments(JSON.parse(value))
+    }
+    replacementFunction()
+  }, [userState,route]);
+
+  const handleSubmit = async (userss) => {
+    try {
+      await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${userss.access_token}`
+        },
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          if (dataa?.users.length > 0) {
+            setImageUri(`${baseUrl}${dataa?.users[0]?.image}`)
+            setdata(dataa?.users)
+          }
+        });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+
+  };
+  const handleComments = async (userss) => {
+    const commentData={
+      post_id:data.post_id
+    }
+    try {
+      await fetch(`${baseUrl}/comments/GetAllCommentsById`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${userss.access_token}`
+        },
+        body:JSON.stringify(commentData)
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          if (dataa?.data.length > 0) {
+      setComment(dataa.data)
+          }
+        });
+    } catch (error) {
+    }
+
+  };
+
+  const handleCancel = async  postId => {
+    try {
+      const JsonBody = {post_id: postId};
+      await fetch(`${baseUrl}/posts/CancelBookedPost`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          'accesstoken': `Bearer ${users.access_token}`
+        },
+        body: JSON.stringify(JsonBody),
+      })
+        .then(response => response.json())
+        .then(dataa => {
+          console.log(dataa,JsonBody,"lllll")
+          if(dataa?.success==="Success"){            
+            Toast.show({
+            type: 'success',
+            text1: 'Job Cancel',
+            text2: 'Job has been cancel 👋',
+          });
+          navigation.goBack();
+          }
+    
+        });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+
+  };
     const navigation = useNavigation()
-    const data = [
-        { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"03002661456" },
+    const data = route.params.item
+    const datas = [
+        { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
         
       ];
       const commentData = [
@@ -17,8 +119,8 @@ const BookedDetails = () => {
         <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
      
-    
-        <Image source={image} style={{ width: 50, height: 50,borderRadius:50 }} />
+      
+        <Image source={imageUri==''?{uri:imageUri}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:50 }} />
         <View style={{marginLeft:15}}>
         <Text style={{color:'black'}}>{name}</Text>
         <Text style={{color:'black'}}>{role}</Text>
@@ -29,82 +131,89 @@ const BookedDetails = () => {
         </View>
         </TouchableOpacity>
       );
-      const CommentItem = ({ id, name, comment, image,date }) => (
-        <TouchableOpacity  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      const CommentItem = ({ id, name, comment, image,created_at }) => (
+        <View  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center',flexWrap:'wrap' }}>
      
     
-        <Image source={image} style={{ width: 50, height: 50,borderRadius:50 }} />
+        <Image source={{uri:`${baseUrl}${image}`}} style={{ width: 50, height: 50,borderRadius:50 }} />
         <View style={{marginLeft:15}}>
-        <View style={{display:'flex',flexDirection:'row'}}>
+
+
         <Text style={{color:'black'}}>{name}  </Text>
-        <Text style={{color:'black',fontSize:11}}>{date}</Text>
+        <Text style={{color:'black',fontSize:11}}>{created_at.split('GMT')[0]}</Text>
         </View>
-        <View style={{width:"70%",backgroundColor:'#f6f6f6',borderRadius:20,padding:20}}>
-        <Text style={{color:'black'}}>{comment}</Text>
+        <View style={{marginTop:15}}>
+        <View style={{display:'flex',flexDirection:'row'}}>
+        <View style={{width:"100%",backgroundColor:'#f6f6f6',borderRadius:20,padding:20}}>
+        <Text style={{color:'black',flexWrap:'wrap'}}>{comment}</Text>
         </View>
+        </View>
+      
         </View>
         </View>
    
-        </TouchableOpacity>
+        </View>
       );
       const renderComment = ({ item }) => (
-        <CommentItem name={item.name} comment={item.comment} image={item.image} date={item.date}
-        // onPress={() => navigation.navigate('DetailScreen', {item})}
-        />
+        <CommentItem name={item.name} comment={item.comment} image={item.image} created_at={item.created_at}        />
       );
       const renderItem = ({ item }) => (
-        <Item name={item.name} role={item.role} image={item.image} onPress={() => navigation.navigate('DetailScreen', {item})}/>
+        <Item name={item.name} role='Bartender' image={imageUri} onPress={() => navigation.navigate('DetailScreen', {item})}/>
       );
   return (
     <View style={styles.container}>
       <HeaderDetails title="Booked"/>
       <View >
+
       <View
       style={styles.section}>
-        <Text style={{marginBottom: 10}}># of people</Text>
-        <Text style={{fontWeight: 'bold'}}> 15 or Less</Text>
+        <Text style={{marginBottom: 10,color:"black"}}>Job Title</Text>
+        <Text style={{fontWeight: 'bold',color:"black"}}> {data?.title} </Text>
       </View>
 
       <View
       style={styles.section}>
-        <Text style={{marginBottom: 10}}>Date and time</Text>
-        <Text>7 November 2024 12:23:23 PM </Text>
+        <Text style={{marginBottom: 10,color:"black"}}>Date and time</Text>
+        <Text style={{color:"black"}}>{data?.booked_at} </Text>
       </View>
       <View
       style={styles.section}>
-        <Text style={{marginBottom: 10}}>Event Duration</Text>
-        <Text>7 hours </Text>
+        <Text style={{marginBottom: 10,color:"black"}}>Time</Text>
+        <Text style={{color:"black"}}>{data?.time} </Text>
       </View>
 
-      <View
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          width: '100%',
-          padding: 10,
-        }}>
-        <Text style={{marginBottom: 10}}>Phone Number</Text>
-        <Text>999-999-999 </Text>
+    
       </View>
+      {userState==1?
+      <View style={{justifyContent:'center', flexDirection: 'row', alignItems: 'center'}}>
+
+
+         <ButtonInput title={"Cancel Booking"} onPress={()=>handleCancel(data?.job_id)}/>
       </View>
+      :null}
+      {userState==2?
       <View style={{padding:10}}>
       <Text style={{fontWeight:'bold',color:'black'}}>Confirmed Bartender</Text>
       <FlatList
-      data={data}
+      data={data2}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
     />
       </View>
-      <View style={{padding:10}}>
-      <Text style={{fontWeight:'bold',color:'black'}}>comments</Text>
+             :null}
+      <Text style={{fontWeight:'bold',color:'black',padding:10}}>Comments</Text>
+      <ScrollView style={{padding:10}}>
+        <View>
+
+
       <FlatList
-      data={commentData}
+      data={comment}
       renderItem={renderComment}
       keyExtractor={(item) => item.id}
     />
-      </View>
+     </View>
+      </ScrollView>
       <View>
       <View  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',paddingHorizontal: 20, }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -112,7 +221,7 @@ const BookedDetails = () => {
   
       <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:50 }} />
       <View style={{marginLeft:15}}>
-      <TouchableOpacity style={{display:'flex',flexDirection:'row'}} onPress={()=>navigation.navigate('CommentScreen')}>
+      <TouchableOpacity style={{display:'flex',flexDirection:'row'}} onPress={()=>navigation.navigate('CommentScreen',data)}>
       <Text style={{color:'orange'}}>Add comment...  </Text>
    
       </TouchableOpacity>

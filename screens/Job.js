@@ -1,18 +1,107 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View,TouchableOpacity,SafeAreaView } from 'react-native'
+import React, { useState,useEffect } from 'react'
 import Header from '../components/Header'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const Job = () => {
-  return (
-    <View>
-    <Header title="Jobs" headerShown={true}/>
-  
-    <View style={styles.container}>
-    <Icon name="glass-cocktail" size={80} color="#ccc" />
-    <Text style={styles.text}>No Jobs Avalible</Text>
+import Icon from 'react-native-vector-icons/AntDesign';
+import { useNavigation ,useIsFocused} from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import Icons from '../components/Icons';
+import MapComponent from '../components/MApComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import baseUrl from '../global';
+import Geolocation from '@react-native-community/geolocation';
+const Job = ({route}) => {
+  const isFocused = useIsFocused();
+  const [users,setusers]=useState("")
+  const[userState,setuserState]=useState(11)
+  const [position, setPosition] = useState();
+   
 
-  </View>
+  const handleSubmit = async (userr) => {
+   
+    console.log(userr,"kkk")
+    try {
+      fetch(`${baseUrl}/posts/GetAllAvailablePostsLocation?lat=${userr?.latitude}&long=${userr?.longitude}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${users?.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data,"mera")
+     setData(data.data)
+      });
+    } catch (error) {
+      console.log('An error occurred while processing your request.',error);
+    }
+ 
+};
+
+
+  useEffect(()=>{
+    async function replacementFunction(){
+    const value = await AsyncStorage.getItem("data");
+      setusers(JSON.parse(value))
+      Geolocation.requestAuthorization();
+    
+    Geolocation.getCurrentPosition((pos) => {
+      const crd = pos.coords;
+     
+      setPosition({
+        latitude: crd.latitude,
+        longitude: crd.longitude,
+        latitudeDelta: 0.0421,
+        longitudeDelta: 0.0421,
+      });
+      position && handleSubmit(position);
+       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
+    })
+    }
+    replacementFunction()
+
+  },[userState,isFocused])
+
+  const navigation =useNavigation()
+  const [data, setData] = useState();
+  const count = useSelector((state) => state.auth.user)
+
+
+
+
+  const Item = ({ id, post_title,post_type,image, onPress }) => (
+    <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+   
+
+   
+    <View style={{marginLeft:15}}>
+    <Text style={{color:'black'}}>{post_title}</Text>
+
+    <Text style={{color:'black'}}>{post_type}</Text>
     </View>
+    </View>
+    <View>
+    <Icon name="right" size={24} color="black" />
+    </View>
+    </TouchableOpacity>
+  );
+  const renderItem = ({ item }) => (
+    <Item post_title={item.post_title} post_type={item.post_type}   
+     onPress={() => navigation.navigate('JobDetail', {item})}
+    />
+  );
+  return (
+    <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
+    <Header title="Jobs" headerShown={false} onPress={()=>handleSubmit(position)}/>
+   
+<View>
+<MapComponent  dataSend={data} />
+</View>
+ 
+ 
+    </SafeAreaView>
   )
 }
 
