@@ -19,16 +19,17 @@ const Header = ({title,headerShown,onPress}) => {
     {
       title=="Notification"?<Icon name="settings-outline" size={24} color="#fff" />:""
     }
-    {title=="Job"?
+    {title=="Jobs"?
     <TouchableOpacity style={styles.siders} onPress={onPress}>
     
-    <Icon name="add" size={24} color="#fff" />
-    <Text style={{color:'white',fontSize:14}}>Add Jobs</Text>
+    <Icons.MaterialCommunityIcons name="refresh" size={24} color="#fff" />
+  
     </TouchableOpacity>:null}
     {title=="Profile"?
     <TouchableOpacity onPress={()=>navigation.navigate("EditProfile")}>
     <Icons.AntDesign name="edit" size={24} color="#fff" />
     </TouchableOpacity>:null}
+    
     </View>
     <Text style={styles.headerText}>{title}</Text>
     {headerShown?

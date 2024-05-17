@@ -17,7 +17,7 @@ const Job = ({route}) => {
    
 
   const handleSubmit = async (userr) => {
-    console.log(`/posts/GetAllAvailablePostsLocation?lat=${userr?.latitude}&long=${userr?.longitude}`)
+   
     console.log(userr,"kkk")
     try {
       fetch(`${baseUrl}/posts/GetAllAvailablePostsLocation?lat=${userr?.latitude}&long=${userr?.longitude}`, {
@@ -94,7 +94,7 @@ const Job = ({route}) => {
   );
   return (
     <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
-    <Header title="Jobs" headerShown={false} onPress={()=>navigation.navigate('AddJob')}/>
+    <Header title="Jobs" headerShown={false} onPress={()=>handleSubmit(position)}/>
    
 <View>
 <MapComponent  dataSend={data} />

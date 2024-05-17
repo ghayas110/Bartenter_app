@@ -39,10 +39,7 @@ const Notification = () => {
       const dataa = await response.json();
      
      
-      //const sortedData = dataa.data.sort((a, b) => b.latest_updated_at - a.latest_updated_at);
-      // const sortedDatas = dataa.data.sort((a, b) =>
-      //   a.latest_updated_at.toISOString().localeCompare(b.latest_updated_at.toISOString()));
-      // console.log(sortedDatas,"ikl")
+    
       setData(dataa.data);
      
      
@@ -52,14 +49,7 @@ const Notification = () => {
     }
 };
 
-// console.log(sortedData)
-// const sortedItem = useMemo(()=>{
-//   if(datas){
-//     // setData(sortedData)
-//     return sortedData(datas)
-//   }
-//   return datas;
-// },[datas])
+
 
 const handleSeen = async (userss) => {
   try {

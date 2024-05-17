@@ -133,12 +133,12 @@ const BottomTabNavigator = () => {
             ),
           }} />
         </>
-        : userState != 3 || userState == 2 ?
+        : userState == 3 || userState == 2 ?
           <>
             <Tab.Screen initialParams={{ prop: true }} name="PendingEvents" component={PendingStackNavigator} options={{
               tabBarIcon: ({ color, size }) => (
                 <Image source={require('../assets/png/1-04.png')} style={{ width: 25, height: 20, objectFit: 'contain' }} />
-              ),
+              ), tabBarLabel:"Events"
             }} />
 
             <Tab.Screen name="Bartender" component={BartenderStackNavigator} options={{

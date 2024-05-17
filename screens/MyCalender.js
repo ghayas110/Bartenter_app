@@ -27,7 +27,7 @@ const MyCalender = ({route}) => {
     '2024-05-10': [{ name: 'Project Deadline', time: 'End of Day' }],
   });
 
-  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-9019633061186947/9389211687';
   const [subscribed, setSubscribed] = useState();
   useEffect(() => {
     async function replacementFunction() {
@@ -156,33 +156,8 @@ const getDeviceToken =async()=>{
   }
 const navigation =useNavigation()
 
-  const Item = ({ PhoneNumber, name,email, DateTime,theme, image, onPress }) => {
-   
-    return(
-    <TouchableOpacity onPress={onPress} style={styles.card}>
-
-
-    <Text style={styles.text1}>{name}</Text>
-
-
+  
  
-    <Text style={styles.text}>{theme}</Text>
-
-
-
-    <Text style={{ fontSize: 16,
-      color: 'grey', // white color for better visibility on image
-      marginBottom: 5,
-      fontSize:14,
-      fontWeight:'bold'}}>{moment(DateTime).format('MMMM Do YYYY, h:mm:ss a')}</Text>
-
- 
- 
-  </TouchableOpacity>
-  )}
-  const renderItem = ({ item }) => (
-    <Item name={item?.title} time={item?.time} onPress={() => navigation.navigate('BookedDetails', {item})}/>
-  );
   return (
     <>
    
@@ -232,6 +207,12 @@ const navigation =useNavigation()
         :
         <>
         <Header title="My Calender" headerShown={true}/>
+        {subscribed?.subscription_status!=1?
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+                :null}
         <Agenda
         items={bookedEvents}
         renderItem={(item)=>  <TouchableOpacity onPress={() => navigation.navigate('BookedDetails', {item})} style={styles.card}>

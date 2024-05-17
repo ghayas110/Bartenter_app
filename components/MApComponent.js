@@ -39,7 +39,7 @@ const MapComponent = ({onPress,dataSend}) => {
         focusable
    
       >
-      {console.log(position)}
+
         {dataSend?.map((item,index) =>(
           <View key={index}>
        

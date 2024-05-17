@@ -22,8 +22,6 @@ const Otp = ({ onLogin,route }) => {
   const handleInputChange = (index, value) => {
     const newOtp = [...otp];
     newOtp[index] = value;
-
-    // Move to the next input if a digit is entered
     if (value !== '') {
       const nextIndex = index + 1;
       if (nextIndex < 4) {
@@ -36,8 +34,6 @@ const Otp = ({ onLogin,route }) => {
 
   const handleBackspace = (index) => {
     const newOtp = [...otp];
-
-    // Move to the previous input on backspace
     if (index > 0) {
       const prevIndex = index - 1;
       inputRefs.current[prevIndex].focus();

@@ -39,6 +39,7 @@ const AddJobScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const data = Array.from({length: 350}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
   const datas = Array.from({length: 6}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
+  const datal = Array.from({length: 35}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
 
   useEffect(() => {
     async function replacementFunction() {
@@ -152,7 +153,7 @@ const AddJobScreen = () => {
             Toast.show({
               type: 'error',
               text1: 'Job Not Created',
-              text2: 'Job has not been created 👋'
+              text2: `${data?.message}`
             });
           }
         });
@@ -193,7 +194,7 @@ const AddJobScreen = () => {
     </View>
   </SafeAreaView>
   <ScrollView 
-  keyboardShouldPersistTaps='always'
+  keyboardShouldPersistTaps="handled"
 
   >
     <View style={{ padding: 15, width: windowWidth }}>
@@ -243,36 +244,50 @@ const AddJobScreen = () => {
         Select Event Duration
         </Text>
         <SelectList 
-          searchPlaceholder=" Event Duration"
-          setSelected={(val) => setevent_duration(val)} 
-          data={datas} 
-          save="value"
-          dropdownItemStyles={{color:"black"}}
-          boxStyles={{color:"black"}}
-          placeholder=" Event Duration"
-        />
+        searchPlaceholder=""
+      
+        setSelected={(val) => setevent_duration(val)} 
+        data={datas} 
+        inputStyles={{color:'grey'}}
+        dropdownTextStyles={{color:'grey'}}
+        
+        dropdownStyles={{color:'grey'}}
+        save="value"
+        dropdownItemStyles={{color:"grey"}}
+        boxStyles={{color:"grey",}}
+        placeholder='Select Event Duration'
+      />
       
    
          <Text  style={styles.dropdownButtonTxtStyle}>Number of People</Text>
-          <SelectList 
-          searchPlaceholder=" Enter No. of People"
-          setSelected={(val) => setno_of_people(val)} 
-          data={data} 
-          save="value"
-          dropdownItemStyles={{color:"black"}}
-          boxStyles={{color:"black"}}
-          placeholder='Select No. of People'
-        />
+         <SelectList
+      searchPlaceholder=" "
+      setSelected={(val) => setno_of_people(val)} 
+      inputStyles={{color:'grey'}}
+      dropdownTextStyles={{color:'grey'}}
+ 
+      data={data} 
+      save="value"
+      dropdownItemStyles={{color:"grey"}}
+      boxStyles={{color:"grey"}}
+      
+      placeholder='Select No. of People'
+    />
         <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Note): For more than 350 people contact our website.</Text>
-
-          <FormInput
-            titleName={"# no of Bartender"}
-            keyboardType="numeric"
-            placeholderColor={'grey'}
-            setValues={text => setNo_of_bartenders(text)}
-          // iconss={"menuunfold"}
-          />
-             
+        <Text  style={styles.dropdownButtonTxtStyle}>Number of Bartenders</Text>
+        <SelectList
+        searchPlaceholder=" "
+        setSelected={(val) => setNo_of_bartenders(val)} 
+        inputStyles={{color:'grey'}}
+        dropdownTextStyles={{color:'grey'}}
+    
+        data={datal} 
+        save="value"
+        dropdownItemStyles={{color:"grey"}}
+        boxStyles={{color:"grey"}}
+        
+        placeholder='Select No. of Bartenders'
+      />
 
           <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartender would be enough for 35 people.</Text>
         </View>

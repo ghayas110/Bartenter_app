@@ -191,7 +191,7 @@ const EditProfileScreen = ({ route }) => {
       type: resumeUriimage?.type,
       name: `${new Date()}resume_image.pdf`,
     };
-    // console.log(file,Resume,Certification)
+  
     const formData = new FormData();
     imageUriflag ? formData.append('file', file) : "";
     formData.append('name', name);

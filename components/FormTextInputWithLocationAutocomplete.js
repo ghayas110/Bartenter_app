@@ -8,26 +8,43 @@ const FormTextInputWithLocationAutocomplete = ({ setValues }) => {
     ref.current?.setAddressText('Some Text');
   }, []);
   return (
-    <ScrollView>
+    <>
     <GooglePlacesAutocomplete
         GooglePlacesDetailsQuery={{ fields: "geometry" }}
         fetchDetails={true}
-        disableScroll={true}
+        
         placeholder="Your Location"
+      
+        textInputProps={{placeholderTextColor:'grey'}}
         query={{
           key: "AIzaSyD6NYSHgL0LaWPeLGfPQM3CE0cWu8q5gyM",
           language: "en",
+         
         }}
         onPress={(data, details = null) => {
-          console.log(JSON.stringify(details.geometry.location),JSON.stringify(data.description),"dsd");
+         
   const latlng =details.geometry.location
     const loc= data.description
-    console.log(latlng + loc)
+
           setValues({location:loc, latlng:latlng});
        
         }}
+        enablePoweredByContainer={false}
+        styles={{
+          
+          textInput: {
+            height: 38,
+            color: '#5d5d5d',
+            fontSize: 12,
+          },   predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+          description : {color : 'grey'},
+          loader:{flexDirection:'row',justifyContent:'flex-end',height:20}
+
+        }}
         onFail={(error) => console.error(error)} />
-    </ScrollView>
+    </>
   );
 };
 

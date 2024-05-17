@@ -81,8 +81,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy "store", "play"
         multiDexEnabled true
-        versionCode 10
-        versionName "0.0.2"
+        versionCode 22
+        versionName "0.0.7"
     }
    
 

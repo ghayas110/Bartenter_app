@@ -28,6 +28,8 @@ import AboutHeader from '../components/AboutHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { types } from 'react-native-document-picker';
 import baseUrl from '../global';
+import { SelectList } from 'react-native-dropdown-select-list';
+import Toast from 'react-native-toast-message';
 const AddJobScreen2 = () => {
   const navigation = useNavigation()
   const [users, setusers] = useState("")
@@ -41,6 +43,10 @@ const AddJobScreen2 = () => {
     replacementFunction()
 
   }, [])
+  const data = Array.from({length: 350}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
+  const datas = Array.from({length: 6}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
+  const datal = Array.from({length: 35}, (_, index) => ({ key: `${index + 1}`, value: `${index + 1}` }));
+
   const count = useSelector(state => state.auth.user);
   const [post_type, setpost_type] = useState('bartender');
   const [post_title, setpost_title] = useState();
@@ -92,7 +98,7 @@ const [imageUriflag, setImageUriflag] = useState(false);
     };
  
     
-    // console.log(file,Resume,Certification)
+   
     const formData = new FormData();
     formData.append('attachment', Images);
     formData.append('host_name', hostname);
@@ -103,11 +109,9 @@ const [imageUriflag, setImageUriflag] = useState(false);
     formData.append('no_of_people', no_of_people);
     formData.append('theme', theme);
     formData.append('event_location', location);
-    // formData.append('event_location', event_location?.location);
-    // formData.append('event_lng', event_location?.latlng.lng);
-    // formData.append('event_lat', event_location?.latlng.lat);
-    formData.append('event_lng', 31.000000);
-    formData.append('event_lat', -100.000000);
+ 
+    formData.append('event_lng', event_location?.latlng.lng);
+    formData.append('event_lat', event_location?.latlng.lat);
     formData.append('no_of_bartenders', no_of_bartenders);
     formData.append('post_type', post_type);
     formData.append('bartender_hourly_rate', selectedSpecialty);
@@ -130,7 +134,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
     Toast.show({
       type: 'error',
       text1: 'Job Not Created',
-      text2: 'Job has not been created 👋'
+      text2: `${data.message}`
     });
   }
   return;
@@ -151,7 +155,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
         .then(data => {
       
           setIsLoading(false)
-          if (data.message == "Created") {
+          if (data.message == "Full Time Job Created") {
             Toast.show({
               type: 'success',
               text1: 'Job Created',
@@ -163,7 +167,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
             Toast.show({
               type: 'error',
               text1: 'Job Not Created',
-              text2: 'Job has not been created 👋'
+              text2: `${data?.message}`
             });
           }
         });
@@ -221,13 +225,8 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
           
         />
 
-{/* <FormTextInputWithLocationAutocomplete setValues={setevent_location} /> */}
-<FormTextInput
-          placeholder={'Location'}
-          placeholderColor={'grey'}
-       
-          setValues={text => setLocation(text)}
-        />
+<FormTextInputWithLocationAutocomplete setValues={setevent_location} />
+
         <FormTextInput
           placeholder={'Phone Number'}
           placeholderColor={'grey'}
@@ -258,32 +257,57 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
           setValues={text => setpost_title(text)}
         />
         <View >
-          <FormInput
-            titleName={"Event Duration"}
-            iconss={"menuunfold"}
-            placeholderColor={'grey'}
-            keyboardType="numeric"
-            setValues={text => setevent_duration(text)}
-          />
-          
-          <FormInput
-            titleName={"# no of people"}
-            keyboardType="numeric"
-            placeholderColor={'grey'}
-            setValues={text => setno_of_people(text)}
-            iconss={"menuunfold"}
-          />
+        <Text style={styles.dropdownButtonTxtStyle}>
+        Select Event Duration
+        </Text>
+        <SelectList 
+        searchPlaceholder=""
+      
+        setSelected={(val) => setevent_duration(val)} 
+        data={datas} 
+        inputStyles={{color:'grey'}}
+        dropdownTextStyles={{color:'grey'}}
+        
+        dropdownStyles={{color:'grey'}}
+        save="value"
+        dropdownItemStyles={{color:"grey"}}
+        boxStyles={{color:"grey",}}
+        placeholder='Select Event Duration'
+      />
+    
+      <Text  style={styles.dropdownButtonTxtStyle}>Number of People</Text>
+      <SelectList
+      searchPlaceholder=" "
+      setSelected={(val) => setno_of_people(val)} 
+      inputStyles={{color:'grey'}}
+      dropdownTextStyles={{color:'grey'}}
+ 
+      data={data} 
+      save="value"
+      dropdownItemStyles={{color:"grey"}}
+      boxStyles={{color:"grey"}}
+      
+      placeholder='Select No. of People'
+    />
+    <Text  style={styles.dropdownButtonTxtStyle}>Number of Bartenders</Text>
+    <SelectList
+    searchPlaceholder=" "
+    setSelected={(val) => setNo_of_bartenders(val)} 
+    inputStyles={{color:'grey'}}
+    dropdownTextStyles={{color:'grey'}}
 
-          <FormInput
-            titleName={"# no of bartenders"}
-            keyboardType="numeric"
-            placeholderColor={'grey'}
-            setValues={text => setNo_of_bartenders(text)}
-          // iconss={"menuunfold"}
-          />
+    data={datal} 
+    save="value"
+    dropdownItemStyles={{color:"grey"}}
+    boxStyles={{color:"grey"}}
+    
+    placeholder='Select No. of Bartenders'
+  />
+
+       
              
 
-          <Text style={{fontWeight:"bold",color:"black",fontSize:13}}>(Suggestion): 1 bartender would be enough for 35 people.</Text>
+          <Text style={{fontWeight:"bold",color:"grey",fontSize:13}}>(Suggestion): 1 bartender would be enough for 35 people.</Text>
         </View>
         
         <FormTextInput
@@ -292,26 +316,19 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
           setValues={text => setTheme(text)}
         />
    
-{/* 
-        <FormTextInput
-          placeholder={'Location'}
-          placeholderColor={'grey'}
-          setValues={text => setevent_location(text)}
-        /> */}
+
         <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 10 }}>
-          <Text style={{ textAlign: 'center', color: "black", fontWeight: 800 }}>Below Please select the rate you are willing to pay bartender per hour. If you are finding that your event is not being booked by bartender we suggest that you review your hourly rate. </Text>
+          <Text style={{ textAlign: 'center', color: "grey", fontWeight: 800 }}>Below Please select the rate you are willing to pay bartender per hour. If you are finding that your event is not being booked by bartender we suggest that you review your hourly rate. </Text>
         </View>
         <View>
-          <Text style={{ color: "black", fontWeight: "bold", lineHeight: 17 }}>Bartender Hourly Rate</Text>
+          <Text style={{ color: "grey", fontWeight: "bold", lineHeight: 17 }}>Bartender Hourly Rate</Text>
           <SpecialtySelector
             specialties={hourlyRate}
             onSpecialtySelected={handleSpecialtySelected}
           />
         </View>
-        {/* <ButtonInput title={"Create Event"} onPress={()=>handleSubmit()}/> 
-
-        */}
-              <Text style={{ color: "black", fontWeight: "bold", lineHeight: 17 }}>Attachment</Text>
+  
+              <Text style={{ color: "grey", fontWeight: "bold", lineHeight: 17 }}>Attachment</Text>
             <TouchableOpacity
                 style={{
                   backgroundColor: '#ECECEC',
@@ -329,7 +346,7 @@ if (!post_title || !hostname || !contact_phone || !event_date || !event_time || 
                     <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
                     <Icons.AntDesign name="file1"  size={20} />
                     
-                      <Text style={{ color: 'black' }}>{imageUriimage?.fileName}</Text>
+                      <Text style={{ color: 'grey' }}>{imageUriimage?.fileName}</Text>
                     </View>
                     <Icons.AntDesign name={"closecircle"} />
                   </View>
@@ -356,9 +373,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     display: 'flex'
   },
+  dropdownButtonTxtStyle: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: '400',
+    color: 'grey',
+    paddingVertical:10
+  },
   title: {
     fontWeight: "bold",
-    color: 'black',
+    color: 'grey',
     fontSize: 15,
     textAlign: "center"
   },
