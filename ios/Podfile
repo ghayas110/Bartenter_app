@@ -9,11 +9,11 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 # Need to confirm if this is needed.
-
 pod 'Firebase', :modular_headers => true
-pod 'FirebaseCoreInternal', :modular_headers => true
 pod 'FirebaseCore', :modular_headers => true
+pod 'FirebaseCoreInternal', :modular_headers => true
 pod 'GoogleUtilities', :modular_headers => true
+pod 'FirebaseMessaging', :modular_headers => true 
 # pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging', :modular_headers => true
 # pod 'RNFirebase', :path => '../node_modules/react-native-firebase/iOS'
 # pod 'RNFBMessaging', :modular_headers => true
