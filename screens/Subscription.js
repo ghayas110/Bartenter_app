@@ -8,10 +8,8 @@ import { Linking } from 'react-native'
 import baseUrl from '../global'
 
 const items = Platform.select({
-  ios: {
-    skus: ['bart29'],
-    //  andDangerouslyFinishTransactionAutomaticallyIOS: false
-  },
+  ios: ['bart29'],
+   
   android: {
     skus: ['bart29.9','bart29.99']
   }
