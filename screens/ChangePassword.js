@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormInput from '../components/FormInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -60,7 +60,14 @@ const ChangePassword = ({route}) => {
   
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+    <TouchableOpacity style={{position:'absolute',top:45,left:20}}  onPress={() => navigation.goBack()}>
+    <Icons.Ionicons
+      name="arrow-back"
+      style={{color: 'black',padding:10}}
+      size={27}
+    />
+  </TouchableOpacity>
     <View style={styles.header}>
     <Image source={require('../assets/logomain.png')} style={{ width: 200, height: 100 }} />
       </View>
@@ -93,7 +100,7 @@ const ChangePassword = ({route}) => {
       </View>
 
       <ButtonInput title={"Change Password"} onPress={handleSubmit}/>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -9,8 +9,8 @@ import baseUrl from '../global'
 
 const items = Platform.select({
   ios: {
-    sku: 'bart_699_1m',
-    andDangerouslyFinishTransactionAutomaticallyIOS: false
+    skus: ['bart29'],
+    //  andDangerouslyFinishTransactionAutomaticallyIOS: false
   },
   android: {
     skus: ['bart29.9','bart29.99']
@@ -68,6 +68,7 @@ const Subscription = ({ navigation }) => {
             console.log("error finding items");
           })
           .then((res) => {
+            console.log(res,"res")
             setProducts(res);
           });
 

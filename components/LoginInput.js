@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View,TextInput, TouchableOpacity, Dimensions } from 'react-native'
 import React,{useState} from 'react'
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icons from './Icons';
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const LoginInput = ({placeholder,placeholderColor,setValues,icon,pass}) => {
+ 
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -25,6 +27,7 @@ const LoginInput = ({placeholder,placeholderColor,setValues,icon,pass}) => {
   />
  
   </View>
+  
   )
 }
 
@@ -44,9 +47,9 @@ const styles = StyleSheet.create({
         borderWidth:StyleSheet.hairlineWidth
       },
       input: {
-        marginLeft: 10,
         flex: 1,
-        color:'black',
-        width:"1005",
+        marginLeft: 10,
+        height:windowHeight*0.06,
+        color: 'black',
       },
 })

@@ -118,7 +118,7 @@ const LoginScreen = () => {
       <TouchableOpacity style={{padding:20,color:'white'}} onPress={() => navigation.navigate('ForgotPassScreen')}>
       <Text style={{color:'orange',textDecorationLine:'underline'}}>Forgot Password?</Text>
       </TouchableOpacity>
-      <RadioButton.Group  onValueChange={value => setUser_type(value)} value={user_type}>
+      <RadioButton.Group style={styles.checkBoxBorder} onValueChange={value => setUser_type(value)} value={user_type}>
       <RadioButton.Item color='orange' label="Admin" value={0} />
       <RadioButton.Item color='orange' label="Bartender" value={1} />
       <RadioButton.Item color='orange' label="User" value={2} />
@@ -137,6 +137,14 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  checkBoxBorder: {
+    height:33,
+    width:33,
+    borderWidth: 0,
+    borderColor: 'black',
+    borderRadius: 5,
+    backgroundColor: 'black',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',

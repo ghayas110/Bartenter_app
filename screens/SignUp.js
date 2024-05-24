@@ -175,14 +175,19 @@ const SignUp = () => {
             flexDirection: 'row',
             padding: 20,
           }}>
+          <View style={checked ?styles.checkBoxBorder:styles.checkBoxBorderU}>
           <Checkbox
+            
             status={checked ? 'checked' : 'unchecked'}
-            color="orange"
+            color="white"
+            // uncheckedColor={"redr"}
+
             onPress={() => {
               setChecked(!checked);
             }}
           />
-          <Text style={{paddingLeft: 10}}>
+        </View>
+          <Text style={{marginLeft:30}}>
             Are you sure you acccept{' '}
             <Text
               style={{color: 'orange', textDecorationLine: 'underline'}}
@@ -209,8 +214,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
   },
+  checkBoxBorderU:{
+    height:20,
+    width:20,
+    borderWidth: 1,
+    borderColor: 'black',
+
+    backgroundColor: 'transparent',
+  },
+  checkBoxBorder: {
+    height:33,
+    width:33,
+    borderWidth: 0,
+    borderColor: 'black',
+    borderRadius: 5,
+    backgroundColor: 'orange',
+  
+  },
   header: {
-    marginBottom: 50,
+    marginTop: 50,
   },
   title: {
     fontSize: 24,

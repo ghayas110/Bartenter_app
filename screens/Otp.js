@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useRef } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import ButtonInput from '../components/ButtonInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../redux/reducers/authReducer';
@@ -99,8 +99,8 @@ const Otp = ({ onLogin,route }) => {
       }
   };
   return (
-    <>
-    <TouchableOpacity style={{backgroundColor:'white'}} onPress={() => navigation.goBack()}>
+    <SafeAreaView style={styles.container}>
+    <TouchableOpacity style={{position:'absolute',top:45,left:20}}  onPress={() => navigation.goBack()}>
     <Icons.Ionicons
       name="arrow-back"
       style={{color: 'black',padding:10}}
@@ -108,7 +108,7 @@ const Otp = ({ onLogin,route }) => {
     />
   </TouchableOpacity>
 
-    <View style={styles.container}>
+    <View style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
     
       <Text style={styles.title}>OTP Verification</Text>
       <Text style={styles.subtitle}>Please enter OTP from your Email</Text>
@@ -135,7 +135,7 @@ const Otp = ({ onLogin,route }) => {
    
       
     </View>
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -145,8 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    paddingTop: 40,
-    padding:20
+  
   },
   title: {
     fontSize: 24,
@@ -162,10 +161,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     
     marginVertical: 60,
-    alignItems:'center',
-    justifyContent:"center",
-    display:'flex',
-    width:'100%'
+
   },
   input: {
     height: 40,

@@ -29,6 +29,8 @@
 		9E5BCBC82BFCF4EC002136ED /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E5BCBB42BFCF4EC002136ED /* Zocial.ttf */; };
 		9E7088BB2BE54C82000A54E7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		9E925D1A2BE5707600933ACD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E925D192BE5707500933ACD /* GoogleService-Info.plist */; };
+		9EB01B322BFF97BD0020118A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EB01B312BFF97BD0020118A /* StoreKit.framework */; };
+		9EB01B342BFFAB3E0020118A /* StoreKitConfiguration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 9EB01B332BFFAB3E0020118A /* StoreKitConfiguration.storekit */; };
 		9EC97B992BE540EF00AAB6A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EC97B982BE540EF00AAB6A5 /* LaunchScreen.storyboard */; };
 		9EC97BA02BE5438900AAB6A5 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9EC97B9F2BE5438900AAB6A5 /* AppDelegate.mm */; };
 		9EC97BA22BE543BB00AAB6A5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC97BA12BE543BB00AAB6A5 /* main.m */; };
@@ -76,6 +78,8 @@
 		9E5BCBB42BFCF4EC002136ED /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
 		9E87A0982BE562F000F0F4DF /* FirebaseMessaging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseMessaging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E925D192BE5707500933ACD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9EB01B312BFF97BD0020118A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		9EB01B332BFFAB3E0020118A /* StoreKitConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfiguration.storekit; sourceTree = "<group>"; };
 		9EC97B982BE540EF00AAB6A5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Bartender_App/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9EC97B9E2BE5435600AAB6A5 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Bartender_App/AppDelegate.h; sourceTree = "<group>"; };
 		9EC97B9F2BE5438900AAB6A5 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Bartender_App/AppDelegate.mm; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EB01B322BFF97BD0020118A /* StoreKit.framework in Frameworks */,
 				9EE3D5B92BE58DEA00C4F634 /* Foundation.framework in Frameworks */,
 				A01356545FD7F4EA9C0498CC /* Pods_Bartinder.framework in Frameworks */,
 			);
@@ -145,6 +150,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9EB01B312BFF97BD0020118A /* StoreKit.framework */,
 				9EE3D5B82BE58DEA00C4F634 /* Foundation.framework */,
 				9EE3D5B62BE58D9A00C4F634 /* RNFBMessaging.framework */,
 				9E87A0982BE562F000F0F4DF /* FirebaseMessaging.framework */,
@@ -165,6 +171,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				9EB01B332BFFAB3E0020118A /* StoreKitConfiguration.storekit */,
 				9E5BCBB52BFCF4EC002136ED /* Fonts */,
 				9E925D192BE5707500933ACD /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Bartinder */,
@@ -329,6 +336,7 @@
 				9E5BCBC82BFCF4EC002136ED /* Zocial.ttf in Resources */,
 				9E5BCBC32BFCF4EC002136ED /* Ionicons.ttf in Resources */,
 				9E5BCBBC2BFCF4EC002136ED /* FontAwesome5_Regular.ttf in Resources */,
+				9EB01B342BFFAB3E0020118A /* StoreKitConfiguration.storekit in Resources */,
 				9E5BCBB82BFCF4EC002136ED /* EvilIcons.ttf in Resources */,
 				9E5BCBBB2BFCF4EC002136ED /* FontAwesome5_Brands.ttf in Resources */,
 				9E5BCBC02BFCF4EC002136ED /* FontAwesome6_Solid.ttf in Resources */,
