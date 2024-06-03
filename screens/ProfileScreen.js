@@ -83,7 +83,7 @@ const ProfileScreen = ({route}) => {
   );
   return (
     
-      <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
+      <SafeAreaView style={{backgroundColor:"white",height:'100%', flex:1}}>
       <Header title="Profile"/>
     {userState == 1 ? 
       <View>

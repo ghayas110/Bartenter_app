@@ -8,10 +8,14 @@
   ],
   "settings" : {
     "_applicationInternalID" : "6502832300",
+    "_askToBuyEnabled" : true,
+    "_billingGracePeriodEnabled" : true,
+    "_billingIssuesEnabled" : true,
     "_developerTeamID" : "WH4N5LC6DS",
     "_failTransactionsEnabled" : false,
     "_lastSynchronizedDate" : 738175815.07034194,
     "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : true,
     "_storefront" : "USA",
     "_storeKitErrors" : [
       {

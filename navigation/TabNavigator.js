@@ -19,6 +19,7 @@ import Subscription from "../screens/Subscription";
 import Icons from "../components/Icons";
 import Notification from "../screens/Notification";
 import notifee from '@notifee/react-native';
+import { withIAPContext } from "react-native-iap";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {

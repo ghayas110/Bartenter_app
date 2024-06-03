@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%', // specify the width
-    height: 400, // specify the height
+    height: 350, // specify the height
     justifyContent: "flex-end",
     alignItems: 'flex-start', // center the text horizontally
     marginBottom: 20,

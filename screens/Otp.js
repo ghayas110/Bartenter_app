@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useRef } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView, ScrollView, KeyboardAvoidingView } from 'react-native';
 import ButtonInput from '../components/ButtonInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../redux/reducers/authReducer';
@@ -99,6 +99,14 @@ const Otp = ({ onLogin,route }) => {
       }
   };
   return (
+    <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={
+      Platform.OS === 'ios'
+        ? 'padding'
+        : 'height'
+    }
+  >
     <SafeAreaView style={styles.container}>
     <TouchableOpacity style={{position:'absolute',top:45,left:20}}  onPress={() => navigation.goBack()}>
     <Icons.Ionicons
@@ -136,6 +144,7 @@ const Otp = ({ onLogin,route }) => {
       
     </View>
     </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
