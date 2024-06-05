@@ -37,8 +37,20 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>$(PRODUCT_NAME) calendar events</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera usage description</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) location use</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>$(PRODUCT_NAME) location use</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>$(PRODUCT_NAME) location use</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires to access your photo library to show images</string>
+	<key>Privacy - Media Library Usage Description</key>
+	<string>$(PRODUCT_NAME) media library use</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -82,19 +94,5 @@
 	<false/>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
-	<key>NSCalendarsUsageDescription</key>
-      <string>$(PRODUCT_NAME) calendar events</string>
-	  <key>NSCameraUsageDescription</key>
-<string>Camera usage description</string>
-<key>NSPhotoLibraryUsageDescription</key>
-      <string>This app requires to access your photo library to show images</string>
-	  <key>NSLocationAlwaysUsageDescription</key>
-      <string>$(PRODUCT_NAME) location use</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-      <string>$(PRODUCT_NAME) location use</string>
-	   <key>Privacy - Media Library Usage Description</key>
-      <string>$(PRODUCT_NAME) media library use</string>
-	   <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-      <string>$(PRODUCT_NAME) location use</string>
 </dict>
 </plist>

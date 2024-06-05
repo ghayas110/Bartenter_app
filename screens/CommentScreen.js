@@ -11,8 +11,7 @@ const CommentScreen = ({route}) => {
     const navigation = useNavigation()
     const [comment, setComment] = useState()
     const [isLoading, setIsLoading] = useState(false);
-const post_id=route.params.post_id
-   
+
     const[userState,setuserState]=useState(11)
   const [users,setusers]=useState("")
   const [data, setdata] = useState() 
@@ -26,15 +25,16 @@ const post_id=route.params.post_id
           
   }
   replacementFunction()
+  console.log(route.params,"rorororor")
   }, [userState,isFocused]);
   const handleSubmit = async () => {
     setIsLoading(true)
     const comentData={
-      post_id:post_id,
+      post_id:route?.params?.job_id,
       comment:comment
       
     }
-
+console.log(comentData)
     try {
      await fetch(`${baseUrl}/comments/CreateComment`, {
         method: 'POST',
@@ -47,6 +47,7 @@ const post_id=route.params.post_id
       })
       .then(response => response.json())
       .then(dataa => {
+        console.log(dataa)
         if(dataa?.message=="success"){
         
           Alert.alert(
@@ -55,7 +56,7 @@ const post_id=route.params.post_id
             [
               {
                 text: 'OK',
-                onPress: () => navigation.goBack(),
+                onPress: () => navigation.navigate('BookedDetails',{item:route?.params,bool:true}),
                 style: 'cancel',
               }
             ]
@@ -66,17 +67,19 @@ const post_id=route.params.post_id
        
       });
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
+      console.log('An error occurred while processing your request.');
     }}
   return (
     <View>
     <AboutHeader screen={"comment"} name={"Comment"} onPress={handleSubmit}/>
+    <View style={{padding:20}}>
     <TextInput
     style={styles.input}
-    placeholder="Enter comment"
-    placeholderTextColor='black'
+    placeholder="Enter Your comment here"
+    placeholderTextColor='grey'
     onChangeText={(text) => setComment(text)}
     />
+    </View>
     </View>
   )
 }

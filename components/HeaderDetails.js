@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: "relative",
     backgroundColor: '#FFA500',
-    paddingTop: 20,
+    padding: 40,
     paddingBottom: 10,
   },
   headerText: {

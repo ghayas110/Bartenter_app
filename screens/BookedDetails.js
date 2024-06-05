@@ -1,33 +1,77 @@
-import {StyleSheet, Text, View,TouchableOpacity,FlatList,Image, Alert} from 'react-native';
-import React ,{useState,useEffect}from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import HeaderDetails from '../components/HeaderDetails';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import ButtonInput from '../components/ButtonInput';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
-const baseUrl = require('../global')
-const BookedDetails = ({route}) => {
-  const [userState, setuserState] = useState(11)
-  const [users, setusers] = useState("")
-  const [data2, setdata] = useState()
-  const [comment, setComment] = useState([])
+import ChatInput from "../components/ChatInput";
+import LoginInput from '../components/LoginInput';
+const baseUrl = require('../global');
+
+const BookedDetails = ({ route }) => {
+  // console.log(route?.params, "tyyytytyytyytyty");
+  // const[flag,setflag]=useState()
+  // if(route.params.bool){
+  // setflag(route.params.bool)
+  // }
+  // console.log(flag,"flfllflflflflf")
+  // const isFocused = useIsFocused();
+  const [userState, setuserState] = useState(11);
+  const [users, setusers] = useState("");
+  const [data2, setdata] = useState();
+  const [maindata, mainsetdata] = useState();
+  const [comment, setComment] = useState([]);
+  const [commentWritten, setCommentWritten] = useState([]);
   const [imageUri, setImageUri] = useState('');
   const [imageUris, setImageUris] = useState('');
+
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem('data');
-      AsyncStorage.setItem('data', value)
-      setusers(JSON.parse(value));
-      setuserState(JSON.parse(value)?.user_data[0]?.user_type);
-      handleSubmit(JSON.parse(value));
-      handleComments(JSON.parse(value))
+      if (value) {
+        AsyncStorage.setItem('data', value);
+        const parsedValue = JSON.parse(value);
+        setusers(parsedValue);
+        setuserState(parsedValue?.user_data[0]?.user_type);
+        handleSubmit(parsedValue);
+        handleComments(parsedValue);
+        handleSubmit2(parsedValue);
+      }
+      // setflag(false)
+      // console.log("hello")
     }
-    replacementFunction()
-  }, [userState,route]);
+    replacementFunction();
+  }, []);
 
+  const handleSubmit2 = async users => {
+    try {
+  
+      await fetch(
+        `${baseUrl}/posts/GetAllBookedBartenderByPostId/${route?.params?.job_id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': 'BarTenderAPI',
+            accesstoken: `Bearer ${users.access_token}`,
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(dataa => {
+        //  console.log(dataa,"sssss")
+        
+          mainsetdata(dataa.posts);
+        });
+    } catch (error) {
+      setActivityLoader(false);
+      Alert.alert('An error occurred while processing your request.');
+    }
+  };
   const handleSubmit = async (userss) => {
     try {
       await fetch(`${baseUrl}/users/GetUserById/${userss.user_data[0].id}`, {
@@ -40,9 +84,11 @@ const BookedDetails = ({route}) => {
       })
         .then(response => response.json())
         .then(dataa => {
+        
           if (dataa?.users.length > 0) {
             setImageUri(`${baseUrl}${dataa?.users[0]?.image}`)
             setdata(dataa?.users)
+
           }
         });
     } catch (error) {
@@ -51,9 +97,11 @@ const BookedDetails = ({route}) => {
 
   };
   const handleComments = async (userss) => {
+    // console.log(data?.job_id)
     const commentData={
-      post_id:data.post_id
+      post_id:data?.job_id
     }
+
     try {
       await fetch(`${baseUrl}/comments/GetAllCommentsById`, {
         method: 'POST',
@@ -66,6 +114,7 @@ const BookedDetails = ({route}) => {
       })
         .then(response => response.json())
         .then(dataa => {
+          //  console.log(dataa)
           if (dataa?.data.length > 0) {
       setComment(dataa.data)
           }
@@ -74,7 +123,43 @@ const BookedDetails = ({route}) => {
     }
 
   };
+  const handleSubmitComment = async () => {
 
+    const comentData={
+      post_id:data?.job_id,
+      comment:commentWritten
+      
+    }
+
+    try {
+     await fetch(`${baseUrl}/comments/CreateComment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${users.access_token}`
+        },
+        body: JSON.stringify(comentData),
+      })
+      .then(response => response.json())
+      .then(dataa => {
+        console.log(dataa)
+        if(dataa?.message=="success"){
+        
+          Toast.show({
+            type: 'success',
+            text1: 'Comment',
+            text2: 'Comment Posted Successfully👋',
+          });
+        }
+        setCommentWritten('')
+     handleComments(users)
+ 
+       
+      });
+    } catch (error) {
+      console.log('An error occurred while processing your request.');
+    }}
   const handleCancel = async  postId => {
     try {
       const JsonBody = {post_id: postId};
@@ -89,7 +174,7 @@ const BookedDetails = ({route}) => {
       })
         .then(response => response.json())
         .then(dataa => {
-          console.log(dataa,JsonBody,"lllll")
+          // console.log(dataa,JsonBody,"lllll")
           if(dataa?.success==="Success"){            
             Toast.show({
             type: 'success',
@@ -106,7 +191,7 @@ const BookedDetails = ({route}) => {
 
   };
     const navigation = useNavigation()
-    const data = route.params.item
+    const data = route?.params?.item
     const datas = [
         { id: 1, name: 'John Brown', role: 'Bartender', image: require('../assets/userpic.jpg'),email:'csjguy@gmail.com',PhoneNumber:"999-999-999" },
         
@@ -161,6 +246,7 @@ const BookedDetails = ({route}) => {
       const renderItem = ({ item }) => (
         <Item name={item.name} role='Bartender' image={imageUri} onPress={() => navigation.navigate('DetailScreen', {item})}/>
       );
+   
   return (
     <View style={styles.container}>
       <HeaderDetails title="Booked"/>
@@ -220,13 +306,18 @@ const BookedDetails = ({route}) => {
    
   
       <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:50 }} />
-      <View style={{marginLeft:15}}>
-      <TouchableOpacity style={{display:'flex',flexDirection:'row'}} onPress={()=>navigation.navigate('CommentScreen',data)}>
-      <Text style={{color:'orange'}}>Add comment...  </Text>
-   
-      </TouchableOpacity>
-    
+      <View >
+      <View style={{display:'flex',flexDirection:'row',width:250}} >
+      <LoginInput 
+      placeholder={"Please Enter Comment"}
+      placeholderColor={"grey"}
+      setValues={(text) => setCommentWritten(text)}
+      value={commentWritten}
+      />
       </View>
+      </View>
+      <ChatInput title={"Send"} onPress ={handleSubmitComment} />
+
       </View>
   
       </View>

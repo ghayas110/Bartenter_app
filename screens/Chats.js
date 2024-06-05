@@ -16,6 +16,7 @@ const isFocused = useIsFocused();
 const [users, setusers] = useState("")
 const [searchQuery, setSearchQuery] = useState("");
 const socketUrl = 'https://bartinder-socket.digitalmobix.com'
+
 const handleSearch = (text) => {
   setSearchQuery(text);
   if (text === "") {

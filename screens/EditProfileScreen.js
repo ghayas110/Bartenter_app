@@ -85,6 +85,7 @@ const EditProfileScreen = ({ route }) => {
   const [certificationUriimage, setCertificationUriimage] = useState();
   const [resumeUriimage, setResumeUriimage] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [imageFileName, setImageFileName] = useState("profile.png");
 
   const handleTrainingSelected = training => {
     setSelectedTraining(training);
@@ -112,6 +113,10 @@ const EditProfileScreen = ({ route }) => {
         setUriFunction(uri);
         seturi(uri2)
         setflag(true)
+        const fileName = uri.split('/').pop();
+  const fileType = fileName.split('.').pop();
+  setImageFileName(`${fileName.substring(0,10)}.${fileType}`)
+  console.log(fileName, fileType);
       }
     });
   };
@@ -126,6 +131,8 @@ const EditProfileScreen = ({ route }) => {
       setUriFunction(uri);
       seturi(uri2)
       setflag(true)
+
+      
       
  
     } catch(err) {
@@ -151,6 +158,7 @@ const EditProfileScreen = ({ route }) => {
       }).then(
         response => response.json())
         .then(data => {
+          console.log(data, "final")
           if (data.message === 'Success') {
             setName(data?.users[0]?.name)
             setuserTypes(data?.users[0]?.user_type)
@@ -327,7 +335,7 @@ const EditProfileScreen = ({ route }) => {
                           marginRight: 10,
                         }}
                       />
-                      <Text style={{ color: 'black' }}>Profileimg.png</Text>
+                      <Text style={{ color: 'black' }}>{imageFileName}</Text>
                     </View>
                     <Icons.AntDesign name={"closecircle"} />
                   </View>
@@ -336,7 +344,7 @@ const EditProfileScreen = ({ route }) => {
                 )}
               </TouchableOpacity>
               <FormTextInput
-                placeholder={'Please enter Phone Number'}
+                placeholder={'Please Enter Phone Number'}
                 placeholderColor={'grey'}
                 icon={'phone'}
                 setValues={text => setNumber(text)}
@@ -344,11 +352,12 @@ const EditProfileScreen = ({ route }) => {
                 title={'Phone'}
                 keyboardType="numeric"
               />
+         
               {
-                userTypes==2?"":
+                userTypes==2 || userTypes == 0?"":
                <>
                 <Text style={{ fontWeight: 'bold', color: 'black' }}>
-                Please Select your speciality
+                Please Select Your Speciality
               </Text>
               <SpecialtySelector
                 specialties={specialitys}
@@ -359,18 +368,19 @@ const EditProfileScreen = ({ route }) => {
               }
             
             {
-                userTypes==1?"":
+                userTypes==1|| userTypes == 0 ? <></>:
               <FormInput
-                titleName={'Please select your Signature Drink'}
+                titleName={'Please Select Your Signature Drink'}
                 placeholder={'Moscow Mule'}
                 iconss={'menuunfold'}
                 placeholderColor={'grey'}
                 setValues={text => setsignature_drink(text)}
-                currentvalue={signature_drink}
+                currentvalue={signature_drink === "null"  ? " " :signature_drink}
+                
               />
             }
             {
-                userTypes==2?"":
+                userTypes==2|| userTypes == 0?"":
              <>
               <Text style={{ fontWeight: 'bold', color: 'black', marginTop: 20 }}>
                 Do you have alchohol seller and server training?
@@ -395,16 +405,22 @@ const EditProfileScreen = ({ route }) => {
                   marginBottom: 15,
                 }}
                 onPress={()=>selectDoc(setCertificationUri,setCertificationUriimage,setCertificationUriflag)}>
-                {certificationUri ? (
+                {(certificationUri || certificationUriflag) ? (
                   <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: "100%" }}>
                     <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
                     <Icons.AntDesign name="file1"  size={20} />
-                      <Text style={{ color: 'black' }}>{certificationUriimage?.name}</Text>
+                      <Text style={{ color: 'black' }}>{certificationUriimage?.name ? certificationUriimage?.name : certificationUri ? "Doc.pdf" : "Doc.pdf"   }</Text>
                     </View>
                     <Icons.AntDesign name={"closecircle"} />
                   </View>
                 ) : (
-                  <Icons.AntDesign name="user" size={70} />
+                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: "100%" }}>
+                  <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
+                  <Icons.AntDesign name="file1"  size={20} />
+                    <Text style={{ color: 'black' }}>Upload Document</Text>
+                  </View>
+                  <Icons.AntDesign name={"closecircle"} />
+                </View>
                 )}
               </TouchableOpacity>
               <Text style={{ color: 'grey', marginTop: 20 }}>Please Add Your Bartinding Resume</Text>
@@ -421,16 +437,21 @@ const EditProfileScreen = ({ route }) => {
                   marginBottom: 15,
                 }}
                 onPress={() => selectDoc(setResumeUri, setResumeUriimage, setResumeUriflag)}>
-                {resumeUri ? (
+                {(resumeUriflag || resumeUri) ? (
                   <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: "100%" }}>
                     <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
                     <Icons.AntDesign name="file1"  size={20} />
-                      <Text style={{ color: 'black' }}>{resumeUriimage?.name}</Text>
+                      <Text style={{ color: 'black' }}>{resumeUriimage?.name ? resumeUriimage.name : resumeUri ? "Doc.pdf" : "Doc.pdf"}</Text>
                     </View>
                     <Icons.AntDesign name={"closecircle"} />
                   </View>
                 ) : (
-                  <Icons.AntDesign name="user" size={70} />
+                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', width: "100%" }}>
+                  <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', }}>
+                  <Icons.AntDesign name="file1"  size={20} />
+                    <Text style={{ color: 'black' }}>Upload Document</Text>
+                  </View>
+                </View>
                 )}
               </TouchableOpacity>
               <FormTextInput
@@ -439,7 +460,8 @@ const EditProfileScreen = ({ route }) => {
                 placeholderColor={'grey'}
                 title={'Personal Payment Link'}
                 setValues={text => setPaymentLink(text)}
-                currentvalue={paymentLink}
+                currentvalue={paymentLink === "null"  ? " " :paymentLink}
+                
               />
            
              </>

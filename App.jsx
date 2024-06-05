@@ -152,7 +152,7 @@ const App = () => {
               initialParams={true}
             />
             <Drawer.Screen
-              name="EditProfile"
+              name="Edit Profile"
               initialParams={true}
               component={EditProfileScreen}
             />

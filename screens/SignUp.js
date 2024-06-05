@@ -17,6 +17,7 @@ import LoginInput from '../components/LoginInput';
 import Toast from 'react-native-toast-message';
 import baseUrl from '../global';
 import {ScrollView} from 'react-native-gesture-handler';
+import { SelectList } from 'react-native-dropdown-select-list';
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,6 +27,7 @@ const SignUp = () => {
   const [referral_code, setReferral_code] = useState('');
   const [checked, setChecked] = React.useState(false);
   const navigation = useNavigation();
+  const refer = ["Facebook","Instagram","Twitter","Website","Google",'Other']
   const validateEmail = email => {
     var re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -54,9 +56,10 @@ const SignUp = () => {
             number: number,
             password: password,
             user_type: user_type,
-            referral_code: referral_code,
+            referred_from: referral_code,
           }),
         })
+
           .then(response => response.json())
           .then(data => {
             console.log(data);
@@ -151,12 +154,21 @@ const SignUp = () => {
             icon={'phone'}
             setValues={text => setNumber(text)}
           />
-          <LoginInput
-            placeholder={'Referral code'}
-            placeholderColor={'black'}
-            icon={'team'}
-            setValues={text => setReferral_code(text)}
-          />
+        <View style ={{paddingTop:10}}>
+        <SelectList
+        searchPlaceholder=" "
+        setSelected={text => setReferral_code(text)}
+        inputStyles={{color:'grey'}}
+        dropdownTextStyles={{color:'grey'}}
+        
+        data={refer} 
+        save="value"
+        dropdownItemStyles={{color:"grey"}}
+        boxStyles={{color:"grey"}}
+        
+        placeholder='Refered From'
+        />
+        </View>
           <View style={{marginTop: 15}}>
             <RadioButton.Group
               onValueChange={value => setUser_type(value)}

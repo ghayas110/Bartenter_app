@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Icons from './Icons';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const LoginInput = ({placeholder,placeholderColor,setValues,icon,pass}) => {
+const LoginInput = ({placeholder,placeholderColor,setValues,icon,pass,value}) => {
  
 
   const togglePasswordVisibility = () => {
@@ -18,6 +18,7 @@ const LoginInput = ({placeholder,placeholderColor,setValues,icon,pass}) => {
     <Icon name={icon} size={20} color="orange" />
 
     <TextInput
+    value={value}
     style={styles.input}
     placeholder={placeholder}
     placeholderTextColor={placeholderColor}

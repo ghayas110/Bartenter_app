@@ -143,6 +143,7 @@ const getDeviceToken =async()=>{
       
  
           if (data) {
+            console.log(data)
             setBookedEvents(data)
           }
           else{

@@ -146,7 +146,7 @@ justifyContent:'center'
   },
   image: {
     width: '100%', 
-    height: 350, 
+    height: 358, 
     justifyContent: "flex-end",
     alignItems: 'flex-start',
     marginBottom: 10,

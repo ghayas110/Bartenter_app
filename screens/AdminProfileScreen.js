@@ -77,7 +77,7 @@ const navigation = useNavigation();
   );
   return (
     <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
-    <Header title="Admin" headerShown={false}/>
+    <Header title="User" headerShown={false}/>
   
     
     <FlatList

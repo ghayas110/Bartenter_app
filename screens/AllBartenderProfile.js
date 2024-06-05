@@ -15,6 +15,7 @@ import baseUrl from '../global';
 export default function AllBartenderProfile({route}) {
 
     const id = route.params.id
+    console.log(id)
   const isFocused = useIsFocused();
   const [rating, setRating] = useState(0);
   const [isEnabled, setIsEnabled] = useState(false);
@@ -57,7 +58,7 @@ export default function AllBartenderProfile({route}) {
             return response.json()
           })
           .then(chat => {
-          
+          console.log(chat)
             setRat(chat.data)
           }).catch(err=>{
             console.log(err,"dddd")
@@ -131,17 +132,21 @@ data?.image==""?
 <Text style={{color:'black',fontWeight:"700"}}>Payment Link</Text>
 <Text style={{color:'grey',fontWeight:"700"}}>{data?.payment_link}</Text>
 </View>
+<View style={styles.section}>
+<Text style={{color: 'black', fontWeight: '700'}}>Rating</Text>
 
+<RatingCard rating={data?.average_rating} />
+</View>
 
 <View style={styles.rating}>
 <Text style={{color:'black',fontSize:16,fontWeight:'bold'}}>Rating and Reviews</Text>
 
-{rat.map((digit, index) => (
+{rat?rat.map((digit, index) => (
     <>
    
         <RatingCard rating={digit.rating} text={digit.reviewer}/>
     </>
-        ))}
+        )):"No Rating Yet"}
 
 
 

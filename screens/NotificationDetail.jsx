@@ -241,7 +241,8 @@ const NotificationDetail = ({route}) => {
                 </View>
                 :
               <>
-           
+             { usertype !=2?
+              <>
                 {data.length > 0 ? (
                   <>
                     <ButtonInput
@@ -257,8 +258,11 @@ const NotificationDetail = ({route}) => {
                     />
                   </>
                 )}
-              </>
+              </>:
+              <></>
               }
+              </>
+            }
               </View>
 
              

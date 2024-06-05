@@ -98,7 +98,7 @@ useEffect(() => {
   );
   const renderItem = ({ item }) => (
     // item.seen_status==0 && item.sender !==userId ?
-    <Item name={item.name} image={item.image}  onPress={()=>{navigation.navigate('Bartinder',item)}}/>
+    <Item name={item.name} image={item.image}  onPress={()=>{navigation.navigate('Bartender',item)}}/>
   );
   return (
     <SafeAreaView>

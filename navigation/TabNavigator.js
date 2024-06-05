@@ -20,6 +20,8 @@ import Icons from "../components/Icons";
 import Notification from "../screens/Notification";
 import notifee from '@notifee/react-native';
 import { withIAPContext } from "react-native-iap";
+import BookedDetails from "../screens/BookedDetails";
+import Analytics from "../screens/Analytics";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -111,11 +113,7 @@ const BottomTabNavigator = () => {
           <Icons.MaterialCommunityIcons name="play-box-outline" color={color} size={size} />
         ),
       }} />
-      <Tab.Screen name="Subscription" component={Subscription} options={{
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="play" color={color} size={size} />
-        ),
-      }} />
+  
       {userState == 1 ?
         <>
           <Tab.Screen name="Job" component={JobStackNavigator} initialParams={true} options={{
@@ -133,6 +131,11 @@ const BottomTabNavigator = () => {
               <Icons.AntDesign name="wechat" color={color} size={size} />
             ),
           }} />
+          <Tab.Screen name="Subscription" component={Subscription} options={{
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="play" color={color} size={size} />
+            ),
+          }} />
         </>
         : userState == 3 || userState == 2 ?
           <>
@@ -141,10 +144,15 @@ const BottomTabNavigator = () => {
                 <Image source={require('../assets/png/1-04.png')} style={{ width: 25, height: 20, objectFit: 'contain' }} />
               ), tabBarLabel:"Events"
             }} />
-
+        
             <Tab.Screen name="Bartender" component={BartenderStackNavigator} options={{
               tabBarIcon: ({ color, size }) => (
                 <Icons.AntDesign name="user" color={color} size={size} />
+              ),
+            }} />
+            <Tab.Screen name="Subscription" component={Subscription} options={{
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="play" color={color} size={size} />
               ),
             }} />
             <Tab.Screen name="Chats" component={ContactStackNavigator} options={{
@@ -152,18 +160,26 @@ const BottomTabNavigator = () => {
                 <Icons.AntDesign name="wechat" color={color} size={size} />
               ),
             }} />
-
+          
 
           </>
           : null
       }
 
       {userState == 0 ?
+        <>
+    
         <Tab.Screen name="User" component={AdminStackNavigator} options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="people-outline" color={color} size={size} />
           ),
         }} />
+        <Tab.Screen name="Analytics" component={Analytics} options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="bar-chart-outline" color={color} size={size} />
+          ),
+        }} />
+        </>
         : null}
       {userState != 0 ?
         <Tab.Screen name="Notification" component={NotificationStackNavigator} options={{

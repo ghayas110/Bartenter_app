@@ -27,7 +27,9 @@ export default function Messagescreen({ route }) {
   const [currentChatMessage, setCurrentChatMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null);
-  const socketUrl = 'https://bartinder-socket.digitalmobix.com'
+   const socketUrl = 'https://bartinder-socket.digitalmobix.com'
+  // const socketUrl = 'https://fz3rqbgd-3000.euw.devtunnels.ms'
+
   const [imageUri, setImageUri] = useState();
   const [imageUriimage, setImageUriimage] = useState();
   const [files,setFiles]= useState();
@@ -224,16 +226,16 @@ const[skeleton,setskeleton]=useState(false)
 <View style={styles.messageInputContainer}>
 
 <TextInput
-style={{color:'black',borderBottomWidth:0}}
+style={{color:'black',borderBottomWidth:0,height:50}}
 value={currentChatMessage}
 onChangeText={(value) => setCurrentChatMessage(value)}
 placeholder="Enter your message"
 placeholderTextColor={"black"}
 />
 </View>
-{
-  currentChatMessage!=""?<ChatInput title={"Send"} onPress={sendMessage}/>:""
-}
+
+  <ChatInput title={"Send"} onPress={sendMessage}/>
+
   <TouchableOpacity style={{alignItems:'center',justifyContent:'center', marginLeft:20}}
     onPress={() => handleSelectImage(setImageUri, setImageUriimage)}>
 

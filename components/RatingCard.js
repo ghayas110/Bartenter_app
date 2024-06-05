@@ -6,10 +6,11 @@ const RatingCard = ({rating,text}) => {
   return (
     <View style={styles.ratingcard}>
           <Text style={{color:'black',fontWeight:'bold'}}>{text}</Text>
+          
     <StarRating
     rating={rating}
 
-    starSize={23}
+    starSize={19}
   />
 
     </View>
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         elevation: 3,
         padding:10,
-        margin:10,
+      
         backgroundColor: '#fff',
         shadowOffset: { width: 1, height: 1 },
         shadowColor: '#333',

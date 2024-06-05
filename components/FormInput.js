@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View,TextInput, TouchableOpacity, Dimensions } from 'react-native'
 import React,{useState} from 'react'
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icons from './Icons';
 
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const FormInput = ({titleName,placeholder,placeholderColor,setValues,icon,pass,currentvalue,edit,iconss,title,keyboardType}) => {
  
   return (
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         paddingHorizontal: 5,
+        
         marginTop: 10,
         borderRadius:10,
         borderColor:'black',
@@ -50,6 +52,7 @@ const styles = StyleSheet.create({
       input: {
         marginLeft: 10,
         flex: 1,
+        height:windowHeight*0.06,
         color:'black'
       },
 })

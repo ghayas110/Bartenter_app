@@ -24,6 +24,7 @@ const FormTextInput = ({
   title,
   keyboardType,
 }) => {
+  
   return (
     <View style={{marginTop: 5}}>
       <Text style={{color: placeholderColor}}>{title}</Text>
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 0,
+    height:windowHeight*0.06,
     color: 'black',
   },
 });
