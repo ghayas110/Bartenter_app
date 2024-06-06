@@ -40,6 +40,7 @@ const BookedDetails = ({ route }) => {
         handleSubmit(parsedValue);
         handleComments(parsedValue);
         handleSubmit2(parsedValue);
+        setImageUris(`${baseUrl}/${JSON.parse(value).user_data[0].image}`)
       }
       // setflag(false)
       // console.log("hello")
@@ -305,7 +306,7 @@ const BookedDetails = ({ route }) => {
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
    
   
-      <Image source={require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:50 }} />
+      <Image source={imageUri?{ uri: imageUri }:require('../assets/cardimg.png')} style={{width: 50, height: 50,borderRadius:50}} />
       <View >
       <View style={{display:'flex',flexDirection:'row',width:250}} >
       <LoginInput 

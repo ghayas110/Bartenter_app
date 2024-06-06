@@ -5,14 +5,14 @@ import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
 import baseUrl from '../global';
 
-export default function AdminProfileDetails({name,email,number,signature_drink,payment_link,speciality,image}) {
+export default function AdminProfileDetails({name,email,number,signature_drink,payment_link,speciality,image,referal}) {
   const [rating, setRating] = useState(0);
 
   return (
 
     <ScrollView style={styles.card}>
   
-      <ImageBackground source={image!=""?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={styles.image}>
+      <ImageBackground source={image!=("" || " ")?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={styles.image}>
         <Text style={styles.title}>{name}</Text>
         
       </ImageBackground>
@@ -26,7 +26,7 @@ export default function AdminProfileDetails({name,email,number,signature_drink,p
  </View>
  <View style={styles.section}>
  <Text>Speciality</Text>
- <Text>{speciality}</Text>
+ <Text>{speciality?speciality:""}</Text>
  </View>
  <View style={styles.section}>
  <Text>Phone</Text>
@@ -35,9 +35,12 @@ export default function AdminProfileDetails({name,email,number,signature_drink,p
 
  <View style={styles.section}>
  <Text>Personal Payment Link</Text>
- <Text>{payment_link}</Text>
+ <Text>{payment_link?payment_link:""}</Text>
  </View>
-
+ <View style={styles.section}>
+ <Text> Refer From</Text>
+ <Text>{referal?referal:""}</Text>
+ </View>
     </ScrollView>
   );
 }

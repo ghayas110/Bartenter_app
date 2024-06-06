@@ -149,13 +149,17 @@ const App = () => {
             <Drawer.Screen
               name="ChangePassword"
               component={ChangePassword}
+              options={{title:"Change Password"}}
               initialParams={true}
             />
             <Drawer.Screen
-              name="Edit Profile"
+              name="EditProfile"
+              options={{title:"Edit Profile"}}
               initialParams={true}
-              component={EditProfileScreen}
-            />
+              component={EditProfileScreen}            
+            >
+            
+            </Drawer.Screen>
             <Drawer.Screen name="Privacy Policy" component={PrivacyPolicy} />
             <Drawer.Screen name="Terms Condition" component={TermsCondition} />
           </Drawer.Navigator>
