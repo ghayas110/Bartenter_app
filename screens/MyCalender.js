@@ -130,7 +130,7 @@ const getDeviceToken =async()=>{
   
    
   
-      await fetch(`https://bartender-backend.digitalmobix.com/posts/GetAllBookedPosts`, {
+      await fetch(`${baseUrl}/posts/GetAllBookedPosts`, {
         method: 'GET',
         headers: {
           
@@ -176,7 +176,7 @@ const navigation =useNavigation()
        
          bookedEvents.length > 0?
          <>
-          <Header title="My Calender" headerShown={true}/>
+          <Header title="My Calender" />
 
           {subscribed?.subscription_status!=1?
       <Image source={require('../assets/banner.jpeg')}/>
@@ -198,7 +198,9 @@ const navigation =useNavigation()
               color: 'grey', // white color for better visibility on image
               marginBottom: 5,
               fontSize:14,
-              fontWeight:'bold'}}>{moment(item.time).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+              fontWeight:'bold'}}>  {` ${moment(item?.time, "HH:mm:ss").format(
+                'LTS'
+              )}`}</Text>
         
          
          
@@ -207,7 +209,7 @@ const navigation =useNavigation()
             </>
         :
         <>
-        <Header title="My Calender" headerShown={true}/>
+        <Header title="My Calender" />
         {subscribed?.subscription_status!=1?
           <BannerAd
           unitId={adUnitId}
@@ -230,7 +232,9 @@ const navigation =useNavigation()
           color: 'grey', // white color for better visibility on image
           marginBottom: 5,
           fontSize:14,
-          fontWeight:'bold'}}>{item.time}</Text>
+          fontWeight:'bold'}}>{` ${moment(item?.time, "HH:mm:ss").format(
+            'LTS'
+          )}`}</Text>
     
      
      

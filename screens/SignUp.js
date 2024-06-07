@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  Dimensions,
 } from 'react-native';
+import Icons from '../components/Icons';
 import {useNavigation} from '@react-navigation/native';
 import ButtonInput from '../components/ButtonInput';
 import {Checkbox, RadioButton} from 'react-native-paper';
@@ -17,7 +19,11 @@ import LoginInput from '../components/LoginInput';
 import Toast from 'react-native-toast-message';
 import baseUrl from '../global';
 import {ScrollView} from 'react-native-gesture-handler';
-import { SelectList } from 'react-native-dropdown-select-list';
+import {SelectList} from 'react-native-dropdown-select-list';
+import HeaderDetails from '../components/HeaderDetails';
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,10 +33,19 @@ const SignUp = () => {
   const [referral_code, setReferral_code] = useState('');
   const [checked, setChecked] = React.useState(false);
   const navigation = useNavigation();
-  const refer = ["Facebook","Instagram","Twitter","Website","Google",'Other']
+  const refer = [
+    'Facebook',
+    'Instagram',
+    'Twitter',
+    'Website',
+    'Google',
+    'Other',
+  ];
   const validateEmail = email => {
-    var re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    // var re =
+    // /^([a-zA-Z0-9~`!@#\$%\^&\\(\)_\-\+={\[\}\]\|\\:;"'<,>\.\?\/  ])@([a-zA-Z0-9]+)\.(com+)$/;
+
+    var re = /^[a-zA-Z0-9_\.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-\.]+$/;
     return re.test(email);
   };
   const handleLogin = async () => {
@@ -59,7 +74,6 @@ const SignUp = () => {
             referred_from: referral_code,
           }),
         })
-
           .then(response => response.json())
           .then(data => {
             console.log(data);
@@ -110,18 +124,26 @@ const SignUp = () => {
   };
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <View style={{flex:1}}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icons.Ionicons name="chevron-back" size={40} color="orange" />
+          </TouchableOpacity>
+        </View>
+        <View style={{flex:2 }}>
+          <Image
+            source={require('../assets/mainlogo.png')}
+            style={{width: 180, height: 100}}
+          />
+        </View>
+        <View style={{flex:1}}></View>
+      </View>
       <View
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <View style={styles.header}>
-          <Image
-            source={require('../assets/mainlogo.png')}
-            style={{width: 200, height: 100}}
-          />
-        </View>
         <View>
           <LoginInput
             placeholder={'Please Enter Email address'}
@@ -154,21 +176,19 @@ const SignUp = () => {
             icon={'phone'}
             setValues={text => setNumber(text)}
           />
-        <View style ={{paddingTop:10}}>
-        <SelectList
-        searchPlaceholder=" "
-        setSelected={text => setReferral_code(text)}
-        inputStyles={{color:'grey'}}
-        dropdownTextStyles={{color:'grey'}}
-        
-        data={refer} 
-        save="value"
-        dropdownItemStyles={{color:"grey"}}
-        boxStyles={{color:"grey"}}
-        
-        placeholder='Refered From'
-        />
-        </View>
+          <View style={{paddingTop: 10}}>
+            <SelectList
+              searchPlaceholder=" "
+              setSelected={text => setReferral_code(text)}
+              inputStyles={{color: 'grey'}}
+              dropdownTextStyles={{color: 'grey'}}
+              data={refer}
+              save="value"
+              dropdownItemStyles={{color: 'grey'}}
+              boxStyles={{color: 'grey'}}
+              placeholder="Refered From"
+            />
+          </View>
           <View style={{marginTop: 15}}>
             <RadioButton.Group
               onValueChange={value => setUser_type(value)}
@@ -187,19 +207,19 @@ const SignUp = () => {
             flexDirection: 'row',
             padding: 20,
           }}>
-          <View style={checked ?styles.checkBoxBorder:styles.checkBoxBorderU}>
-          <Checkbox
-            
-            status={checked ? 'checked' : 'unchecked'}
-            color="white"
-            // uncheckedColor={"redr"}
+          <View
+            style={checked ? styles.checkBoxBorder : styles.checkBoxBorderU}>
+            <Checkbox
+              status={checked ? 'checked' : 'unchecked'}
+              color="white"
+              // uncheckedColor={"redr"}
 
-            onPress={() => {
-              setChecked(!checked);
-            }}
-          />
-        </View>
-          <Text style={{marginLeft:30}}>
+              onPress={() => {
+                setChecked(!checked);
+              }}
+            />
+          </View>
+          <Text style={{marginLeft: 30}}>
             Are you sure you acccept{' '}
             <Text
               style={{color: 'orange', textDecorationLine: 'underline'}}
@@ -225,26 +245,31 @@ const styles = StyleSheet.create({
 
     backgroundColor: 'white',
     width: '100%',
+    height: windowHeight,
   },
-  checkBoxBorderU:{
-    height:20,
-    width:20,
+  checkBoxBorderU: {
+    height: 20,
+    width: 20,
     borderWidth: 1,
     borderColor: 'black',
 
     backgroundColor: 'transparent',
   },
   checkBoxBorder: {
-    height:33,
-    width:33,
+    height: 33,
+    width: 33,
     borderWidth: 0,
     borderColor: 'black',
     borderRadius: 5,
     backgroundColor: 'orange',
-  
   },
   header: {
-    marginTop: 50,
+    marginTop: 0,
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: windowWidth,
   },
   title: {
     fontSize: 24,

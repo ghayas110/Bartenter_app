@@ -1,12 +1,13 @@
 import React,{useState,useEffect} from 'react';
-import { View, Text, StyleSheet, ImageBackground,ActivityIndicator,ScrollView, Switch } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground,ActivityIndicator,ScrollView, Switch, Dimensions } from 'react-native';
 import Header from './Header';
 import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import baseUrl from '../global';
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 export default function ProfileDetails({name,user_type,email,PhoneNumber,speciality,signatureDrink}) {
   const isFocused = useIsFocused();

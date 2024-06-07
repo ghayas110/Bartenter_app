@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image,TouchableOpacity,FlatList ,ActivityIndicator,Alert } from 'react-native'
+import { StyleSheet, Text, View,Image,TouchableOpacity,FlatList ,ActivityIndicator,Alert, Dimensions } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import Header from '../components/Header'
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
@@ -6,6 +6,8 @@ const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from '../components/Icons';
 import moment from 'moment';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const PendingEvents = ({ route }) => {
   const [userState, setuserState] = useState(11)
   const [users, setusers] = useState("")
@@ -81,13 +83,18 @@ const PendingEvents = ({ route }) => {
   }
 
 const navigation =useNavigation()
-  const Item = ({ id, name,eventdate, role,onPress,hide_post}) => (
+  const Item = ({ id, name,eventdate, role,onPress,hide_post,event_time}) => (
     <TouchableOpacity key={id}  onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
    
     <View style={{marginLeft:15}}>
     <Text style={{color:'black'}}>{name}</Text>
-    <Text style={{color:'grey'}}>{moment(eventdate).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+    <Text style={{color:'grey'}}>  {`${moment(eventdate).format(
+      'MMMM Do YYYY'
+    )}, ${moment(event_time, "HH:mm:ss").format(
+      'LTS'
+    )}`}
+    </Text>
     {/* <Text style={{color:'grey',fontSize:12}}>{role}</Text> */}
     </View>
     </View>
@@ -103,7 +110,7 @@ const navigation =useNavigation()
     </TouchableOpacity>
   )
   const renderItem = ({ item }) => (
-    <Item name={item.post_title} eventdate={item.event_date} role={userState} image={item.image} hide_post={item.hide_post} onPress={()=>navigation.navigate('JobDetail',item)}/>
+    <Item name={item.post_title} eventdate={item.event_date} role={userState} image={item.image} hide_post={item.hide_post} event_time={item?.event_time} onPress={()=>navigation.navigate('JobDetail',item)}/>
   );
   return (
     <>
@@ -115,15 +122,18 @@ const navigation =useNavigation()
      <Header title="Pending Events" headerShown={false}/>
     {
      myEvents.length>0?
+    
      <FlatList
      data={myEvents}
      renderItem={renderItem}
      keyExtractor={(item) => item.id}
      />
+    
      :<Text style={{color:"black",textAlign:"center",fontSize:20}}>No Pending events</Text>
     }
      </View>
     }
+    {console.log(myEvents[0])}
     </>
    
   )
@@ -133,10 +143,9 @@ export default PendingEvents
 
 const styles = StyleSheet.create({
     container: {
-        width:'auto',
-        height:"87%",
-         justifyContent: 'center',
-         alignItems: 'center',
+       
+        //  justifyContent: 'center',
+        //  alignItems: 'center',
          backgroundColor: '#fff',
        },
        text: {
@@ -154,7 +163,8 @@ const styles = StyleSheet.create({
          justifyContent:'center',alignItems:'center'
        },
        FlatList:{
-        paddingBottom:40
+        // paddingBottom:40
+        marginBottom : windowHeight * 0.2
        },
        DetailButton:{color:'black',
        justifyContent:'center',

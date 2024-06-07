@@ -107,7 +107,99 @@ const AddJobScreen = () => {
     });
   };
   const handleSubmit = async () => {
-    setIsLoading(true)
+    // Validate all fields
+    if (!hostname) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please enter the host name.'
+      });
+      return;
+    }
+    if (!contact_phone) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please enter the contact phone.'
+      });
+      return;
+    }
+    if (!post_title) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please enter the event name.'
+      });
+      return;
+    }
+    if (!event_date) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please select the event date.'
+      });
+      return;
+    }
+    if (!event_time) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please select the event time.'
+      });
+      return;
+    }
+    if (!no_of_people) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please select the number of people.'
+      });
+      return;
+    }
+    if (!theme) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please enter the theme.'
+      });
+      return;
+    }
+    if (!event_location) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please enter the event location.'
+      });
+      return;
+    }
+    if (!no_of_bartenders) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please select the number of bartenders.'
+      });
+      return;
+    }
+    if (!selectedSpecialty) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please select the bartender hourly rate.'
+      });
+      return;
+    }
+    if (!event_duration) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Field',
+        text2: 'Please select the event duration.'
+      });
+      return;
+    }
+  
+    // All fields are valid, proceed with API call
+    setIsLoading(true);
+  
     const JsonBody = {
       host_name: hostname,
       contact_phone: contact_phone,
@@ -123,13 +215,11 @@ const AddJobScreen = () => {
       post_type: post_type,
       bartender_hourly_rate: selectedSpecialty,
       event_duration: event_duration,
-      zip_code:9999
-    }
-
-
+      zip_code: 9999
+    };
+  
     try {
-      fetch(`${baseUrl}/posts/CreatePost`, {
-
+      const response = await fetch(`${baseUrl}/posts/CreatePost`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,30 +227,33 @@ const AddJobScreen = () => {
           'x-api-key': 'BarTenderAPI',
         },
         body: JSON.stringify(JsonBody),
-      })
-        .then(response => response.json())
-        .then(data => {
-          setIsLoading(false)
-          if (data.message == "Created") {
-            Toast.show({
-              type: 'success',
-              text1: 'Job Created',
-              text2: 'Job has been created 👋'
-            });
-       
-            navigation.goBack()
-          } else {
-            Toast.show({
-              type: 'error',
-              text1: 'Job Not Created',
-              text2: `${data?.message}`
-            });
-          }
+      });
+      const data = await response.json();
+      setIsLoading(false);
+      if (data.message === "Created") {
+        Toast.show({
+          type: 'success',
+          text1: 'Job Created',
+          text2: 'Job has been created 👋'
         });
+        navigation.goBack();
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Job Not Created',
+          text2: `${data?.message}`
+        });
+      }
     } catch (error) {
+      setIsLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'An error occurred while creating the job.'
+      });
     }
-
   };
+  
   const onChangeEnd = (event, selectedDate) => {
     const currentDate = selectedDate || event;
     setShowPicker(Platform.OS === 'ios');
@@ -229,7 +322,7 @@ const AddJobScreen = () => {
           <DateTimePicker
             testID="startDateTimePicker"
             value={event_date}
-            mode="date"
+            mode="datetime"
             display="default"
             onChange={onChangeEnd}
           />

@@ -17,7 +17,8 @@ const LoginScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const validateEmail = (email) => {
-    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    // var re = /^([a-zA-Z0-9~`!@#\$%\^&\\(\)_\-\+={\[\}\]\|\\:;"'<,>\.\?\/  ])@([a-zA-Z0-9]+)\.(com+)$/;
+    var re = /^[a-zA-Z0-9_\.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-\.]+$/;
     return re.test(email);
   };
   const handleLogin = async () => {

@@ -258,9 +258,12 @@ const JobDetailsScreen = ({route}) => {
             <Text style={styles.labels}>Date and Time</Text>
 
             <Text style={{color: 'black', fontWeight: 'bold'}}>
-              {moment(route.params.event_date).format(
-                'MMMM Do YYYY, h:mm:ss a',
-              )}
+              {`${moment(route.params.event_date).format(
+                'MMMM Do YYYY'
+              )}, ${moment(route.params.event_time, "HH:mm:ss").format(
+                'LTS'
+              )}`}
+              
             </Text>
           </View>
           <View style={styles.section}>
@@ -276,14 +279,8 @@ const JobDetailsScreen = ({route}) => {
               $ {parseFloat(route?.params?.bartender_hourly_rate).toFixed(2)}
             </Text>
           </View>
-          <View style={styles.section}>
-            <Text style={styles.labels}>Timestamp</Text>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>
-              {' '}
-              {route.params.event_time}
-            </Text>
-          </View>
-          <View style={styles.section}>
+       
+          <View style={{...styles.section,...styles.location}}>
             <Text style={styles.labels}>Location</Text>
             <Text style={{color: 'black', fontWeight: 'bold'}}>
               {route.params.event_location}{' '}
@@ -305,12 +302,7 @@ const JobDetailsScreen = ({route}) => {
             />
           </View>
 
-          <View style={styles.section}>
-            <Text style={styles.labels}>Unique Id</Text>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>
-              {route.params.post_uuid}
-            </Text>
-          </View>
+        
 
           <MapView
             style={styles.map}
@@ -411,5 +403,8 @@ const styles = StyleSheet.create({
   },
   loaderWrapper:{
     paddingTop:10
+  },
+  location:{
+    flexWrap:'wrap'
   }
 });

@@ -3,9 +3,9 @@ import { TouchableOpacity, Text, Dimensions, StyleSheet } from 'react-native';
 import Icons from "../components/Icons";
 const { width, height } = Dimensions.get('window');
 
-const ChatInput = ({onPress,title,icon}) => {
+const ChatInput = ({onPress,title,icon , styleChat}) => {
   return (
-    <TouchableOpacity style={title === "Create Event" || title === "Take Job" || title === "Start Chat " ? styles.buttons : styles.button} onPress={onPress}>
+    <TouchableOpacity style={title === "Create Event" || title === "Take Job" || title === "Start Chat " ? {...styles.buttons,...styleChat} : {...styles.button, ...styleChat}} onPress={onPress}>
       {/* <Text style={styles.text}>{title} </Text> */}
       <Icons.Ionicons name="send" size={24} color="black" />
     </TouchableOpacity>

@@ -161,6 +161,7 @@ const NotificationDetail = ({route}) => {
         </View>
         :(
           <View>
+          {console.log(userdata,"sss")}
                         <View style={styles.section}>
             
                         
@@ -196,9 +197,11 @@ const NotificationDetail = ({route}) => {
                           <Text style={styles.labels}>Date and Time</Text>
             
                           <Text style={{color: 'black', fontWeight: 'bold'}}>
-                            {moment(userdata.event_date).format(
-                              'MMMM Do YYYY, h:mm:ss a',
-                            )}
+                          {`${moment(userdata.event_date).format(
+                            'MMMM Do YYYY'
+                          )}, ${moment(userdata.event_time, "HH:mm:ss").format(
+                            'LTS'
+                          )}`}
                           </Text>
                         </View>
                         <View style={styles.section}>
@@ -211,7 +214,7 @@ const NotificationDetail = ({route}) => {
                           <Text style={styles.labels}>Hourly Rate</Text>
                           <Text style={{color: 'black', fontWeight: 'bold'}}>
                             {' '}
-                            $ {parseFloat(route?.params?.bartender_hourly_rate).toFixed(2)}
+                            $ {parseFloat(userdata?.bartender_hourly_rate).toFixed(2)}
                           </Text>
                         </View>
                         <View style={styles.section}>
@@ -221,7 +224,7 @@ const NotificationDetail = ({route}) => {
                             {userdata.event_time}
                           </Text>
                         </View>
-                        <View style={styles.section}>
+                        <View style={{...styles.section,...styles.location}}>
                           <Text style={styles.labels}>Location</Text>
                           <Text style={{color: 'black', fontWeight: 'bold'}}>
                             {userdata.event_location}{' '}
@@ -312,5 +315,8 @@ export default NotificationDetail;
     },
     loaderWrapper:{
       paddingTop:10
+    },
+    location:{
+      flexWrap:'wrap'
     }
   });

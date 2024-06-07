@@ -16,9 +16,7 @@ const Header = ({title,headerShown,onPress}) => {
       </TouchableOpacity>
     }
  
-    {
-      title=="Notification"?<Icon name="settings-outline" size={24} color="#fff" />:""
-    }
+    
     {title=="Jobs"?
     <TouchableOpacity style={styles.siders} onPress={onPress}>
     

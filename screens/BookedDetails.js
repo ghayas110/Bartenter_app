@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Alert, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import HeaderDetails from '../components/HeaderDetails';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -11,6 +11,7 @@ import moment from 'moment';
 import ChatInput from "../components/ChatInput";
 import LoginInput from '../components/LoginInput';
 const baseUrl = require('../global');
+const windowWidth = Dimensions.get('window').width;
 
 const BookedDetails = ({ route }) => {
   // console.log(route?.params, "tyyytytyytyytyty");
@@ -262,12 +263,14 @@ const BookedDetails = ({ route }) => {
       <View
       style={styles.section}>
         <Text style={{marginBottom: 10,color:"black"}}>Date and time</Text>
-        <Text style={{color:"black"}}>{data?.booked_at} </Text>
+        <Text style={{color:"black"}}>{moment(data.booked_at).format("YYYY-MM-DD hh:mm:ss A")} </Text>
       </View>
       <View
       style={styles.section}>
         <Text style={{marginBottom: 10,color:"black"}}>Time</Text>
-        <Text style={{color:"black"}}>{data?.time} </Text>
+        <Text style={{color:"black"}}>{`${moment(data.time, "HH:mm:ss").format(
+          'hh:mm:ss A'
+        )}`} </Text>
       </View>
 
     
@@ -302,26 +305,25 @@ const BookedDetails = ({ route }) => {
      </View>
       </ScrollView>
       <View>
-      <View  style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',paddingHorizontal: 20, }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View  style={{justifyContent:'center', flexDirection: 'row', alignItems: 'center',width:windowWidth * 0.9 ,paddingHorizontal : 10, alignSelf:"center",  marginBottom : 20 }}>
+      
    
   
-      <Image source={imageUri?{ uri: imageUri }:require('../assets/cardimg.png')} style={{width: 50, height: 50,borderRadius:50}} />
-      <View >
-      <View style={{display:'flex',flexDirection:'row',width:250}} >
+      
+      <Image source={imageUri?{ uri: imageUri }:require('../assets/cardimg.png')} style={{width: 50, height: 50,borderRadius:50/2}} />
       <LoginInput 
       placeholder={"Please Enter Comment"}
       placeholderColor={"grey"}
       setValues={(text) => setCommentWritten(text)}
       value={commentWritten}
+      styled={{marginTop: 0, marginHorizontal:10}}
       />
+      <ChatInput title={"Send"} onPress ={handleSubmitComment} styleChat = {{marginLeft:0,}} />
       </View>
-      </View>
-      <ChatInput title={"Send"} onPress ={handleSubmitComment} />
+      
 
-      </View>
   
-      </View>
+      
       </View>
     </View>
   );

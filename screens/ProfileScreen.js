@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View,SafeAreaView, TouchableOpacity,FlatList,Image } from 'react-native'
+import { Button, StyleSheet, Text, View,SafeAreaView, TouchableOpacity,FlatList,Image, Dimensions, ScrollView } from 'react-native'
 import React,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -13,6 +13,9 @@ import ProfileDetails from '../components/ProfileDetails';
 import UserDetails from '../components/UserDetails';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import baseUrl from '../global';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const ProfileScreen = ({route}) => {
   const [users,setusers]=useState("")
   useEffect(() => {
@@ -83,27 +86,29 @@ const ProfileScreen = ({route}) => {
   );
   return (
     
-      <SafeAreaView style={{backgroundColor:"white",height:'100%', flex:1}}>
+      <SafeAreaView style={{backgroundColor:"white", flex:1}}>
       <Header title="Profile"/>
-    {userState == 1 ? 
-      <View>
-    <ProfileDetails name={data?.name} user_type={data?.user_type} speciality={data?.speciality} signatureDrink={data?.signature_drink} />
-      </View>
-      :userState == 2 ? 
-  <View>
-  <UserDetails name={data?data.name:""} prop={"truururu"} />
-  </View>
-    :userState == 3 ?
-    <View>
-    <UserDetails name={data?data.name:""} prop={userState} />
-    </View>:
-  <View>
-  <UserDetails name={data?data.name:""} prop={userState} />
-  </View>
-  
-
-    }
+      <ScrollView style={{height : windowHeight}}>
+      {userState == 1 ? 
+        <View>
+        <ProfileDetails name={data?.name} user_type={data?.user_type} speciality={data?.speciality} signatureDrink={data?.signature_drink} />
+        </View>
+        :userState == 2 ? 
+        <View>
+        <UserDetails name={data?data.name:""} prop={"truururu"} />
+        </View>
+        :userState == 3 ?
+        <View>
+        <UserDetails name={data?data.name:""} prop={userState} />
+        </View>:
+        <View>
+        <UserDetails name={data?data.name:""} prop={userState} />
+        </View>
+        
+        
+      }
       
+      </ScrollView>
   
       </SafeAreaView>
  
