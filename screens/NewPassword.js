@@ -6,6 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
+import baseUrl from '../global';
+import Icons from '../components/Icons';
+import Toast from 'react-native-toast-message';
 
 const NewPassword = ({route}) => {
     const [email, setEmail] = useState(route?.params?.bodys?.email);
@@ -35,10 +38,16 @@ const NewPassword = ({route}) => {
         .then(response => response.json())
         .then(data => {
           if (data.message==="Success") {
-            Alert.alert("Login","Password Changed Successfully")
+            Toast.show({
+              type: 'success',
+              text1: 'Password Changed Successfully👋',
+            });
             navigation.navigate('Login')
           } else {
-            Alert.alert("Login","Login Faliure")
+            Toast.show({
+              type: 'error',
+              text1: 'Something went wrong!👋',
+            });
           }
         });
       } catch (error) {
@@ -52,6 +61,13 @@ const NewPassword = ({route}) => {
 
   return (
     <View style={styles.container}>
+    <TouchableOpacity style={{position:'absolute',top:45,left:20}}  onPress={() => navigation.goBack()}>
+    <Icons.Ionicons
+    name="arrow-back"
+    style={{color: 'orange',padding:10}}
+    size={27}
+    />
+    </TouchableOpacity>
     <View style={styles.header}>
     <Image source={require('../assets/logomain.png')} style={{ width: 200, height: 100 }} />
       </View>
@@ -62,7 +78,7 @@ const NewPassword = ({route}) => {
       <View>
     
       <PasswordInput 
-      placeholder={"Please enter Password"}
+      placeholder={"Please Enter Password"}
       placeholderColor={"black"}
       icon={"lock"}
       setValues={(text) => setPassword(text)}

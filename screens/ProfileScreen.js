@@ -56,7 +56,7 @@ const ProfileScreen = ({route}) => {
         }
       });
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
+    console.log('An error occurred while processing your request.');
     }
  
 };

@@ -111,7 +111,7 @@ const Otp = ({ onLogin,route }) => {
     <TouchableOpacity style={{position:'absolute',top:45,left:20}}  onPress={() => navigation.goBack()}>
     <Icons.Ionicons
       name="arrow-back"
-      style={{color: 'black',padding:10}}
+      style={{color: 'orange',padding:10}}
       size={27}
     />
   </TouchableOpacity>

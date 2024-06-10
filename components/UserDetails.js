@@ -56,15 +56,17 @@ const handleSubmit = async (userss) => {
 
   return (
 <>
+  {console.log(data)}
     {
       isLoading?
     <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
      <ActivityIndicator size="large" />
     </View>
       :
+    
       <ScrollView style={styles.card}>
       {
-        data?.image==""?
+        data?.image && data?.image.length <= 3 ?
         <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
             
           </ImageBackground>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert,Image, SafeAreaView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormInput from '../components/FormInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,8 +7,11 @@ import ButtonInput from '../components/ButtonInput';
 import { RadioButton } from 'react-native-paper'
 import LoginInput from '../components/LoginInput';
 import Icons from '../components/Icons';
+import baseUrl from '../global';
+import Toast from 'react-native-toast-message';
 
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const ForgotPassScreen =  ()=> {
   const [email, setEmail] = useState('');
 
@@ -39,13 +42,19 @@ const ForgotPassScreen =  ()=> {
           })
           .then(response => response.json())
           .then(data => {
+            console.log(data)
             if(data.message=="Success"){
-              Alert.alert('otp sent Successfull')
- 
+              Toast.show({
+                type: 'success',
+                text1: 'Otp sent to your email👋',
+              });
                navigation.navigate('OtpForget',{bodys})
             }
             else{
-              Alert.alert('ForgotPassScreen Failed Please try Again')
+              Toast.show({
+                type: 'error',
+                text1: `${data.data}`,
+              });
             }
           
          
@@ -68,7 +77,7 @@ const ForgotPassScreen =  ()=> {
     <TouchableOpacity style={{position:'absolute',top:45,left:20}} onPress={() => navigation.goBack()}>
     <Icons.Ionicons
       name="arrow-back"
-      style={{color: 'black',padding:10}}
+      style={{color: 'orange',padding:10}}
       size={27}
     />
   </TouchableOpacity>
@@ -79,10 +88,11 @@ const ForgotPassScreen =  ()=> {
       </View>
       <View>
       <LoginInput 
-      placeholder={"Please enter Email address"}
+      placeholder={"Please Enter Email address"}
       placeholderColor={"black"}
       icon={"mail"}
       setValues={(text) => setEmail(text)}
+      styled={{width: windowWidth * 0.9}}
       
       />
       </View>
@@ -97,9 +107,9 @@ const ForgotPassScreen =  ()=> {
       <RadioButton.Item color='orange' label="Buisness" value={3} />
     </RadioButton.Group>
       </View>
-      <ButtonInput title={"Get Started!"} onPress={handleSubmit}/>
-
-    </View>
+      
+      </View>
+      <ButtonInput title={"Submit"} onPress={handleSubmit} styled={{justifyContent:"center"}}/>
     </SafeAreaView>
   );
 };
@@ -110,10 +120,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   padding:20,
   alignItems:'center',
-  justifyContent:'center'
+  
   },
   header: {
-    marginBottom: 50,
+    // marginBottom: 50,
+    justifyContent: 'center',
+    alignItems:'center',
   },
   title: {
     fontSize: 24,

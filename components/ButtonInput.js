@@ -3,9 +3,9 @@ import { TouchableOpacity, Text, Dimensions, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 const { width, height } = Dimensions.get('window');
 
-const ButtonInput = ({onPress,title,icon,disabled}) => {
+const ButtonInput = ({onPress,title,icon,disabled, styled}) => {
   return (
-    <TouchableOpacity style={title === "Create Gig" || title === "Create Full Time Job" || title === "Take Job" || title === "Start Chat " ? styles.buttons : styles.button} onPress={onPress}>
+    <TouchableOpacity style={title === "Create Gig" || title === "Create Full Time Job" || title === "Take Job" || title === "Start Chat " ? {...styles.buttons,...styled} : {...styles.button,...styled}} onPress={onPress}>
       <Text style={styles.text}>{title} </Text>
       <Icon name={icon} size={20} color="white"/>
     </TouchableOpacity>

@@ -5,6 +5,7 @@ import {getSubscriptions, initConnection, purchaseUpdatedListener, requestSubscr
 import ButtonInput from '../components/ButtonInput';
 import Header from '../components/Header';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import baseUrl from '../global';
 
   const items = Platform.select({
     ios: {

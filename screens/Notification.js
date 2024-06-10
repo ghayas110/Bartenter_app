@@ -92,7 +92,8 @@ const handleSeen = async (userss) => {
     <SafeAreaView style={{ flex:1}}>
       <Header title="Notification" headerShown={false} />
 
-     
+ 
+    { datas && datas?.length > 0 ?
         <FlatList
           style={styles.flatlistBorder}
           data={datas}
@@ -101,8 +102,11 @@ const handleSeen = async (userss) => {
           
           keyExtractor={(item) => item.id}
         />
-
-
+:
+<View  style={{display:'flex',alignItems:'center',justifyContent:'center',marginTop:10}}>
+<Text style= {{fontSize:20}}>No Notification Available</Text>
+</View>
+      }
 
     </SafeAreaView>
   )

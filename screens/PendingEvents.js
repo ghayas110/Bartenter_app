@@ -48,7 +48,7 @@ const PendingEvents = ({ route }) => {
           }
         });
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
+      console.log(error,'An error occurred while processing your request.');
     }
 
   };
@@ -77,7 +77,7 @@ const PendingEvents = ({ route }) => {
           }
         })
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
+      console.log(error,'An error occurred while processing your request.');
 
     }
   }
@@ -129,7 +129,7 @@ const navigation =useNavigation()
      keyExtractor={(item) => item.id}
      />
     
-     :<Text style={{color:"black",textAlign:"center",fontSize:20}}>No Pending events</Text>
+     :<Text style={{color:"black",textAlign:"center",fontSize:20,marginTop:10}}>No Pending events</Text>
     }
      </View>
     }

@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useRef } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import ButtonInput from '../components/ButtonInput';
 import { useNavigation } from '@react-navigation/native';
 import baseUrl from '../global';
+import Icons from '../components/Icons';
 const OtpForget = ({route}) => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const [email, setEmail] = useState(route?.params?.bodys?.email);
@@ -83,32 +84,51 @@ const bodys ={email:email,user_type:user_type}
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>OTP Verification</Text>
-      <Text style={styles.subtitle}>Please enter OTP from your Email</Text>
-      <View style={styles.inputContainer}>
-        {otp.map((digit, index) => (
-          <TextInput
-            key={index}
-            ref={(ref) => (inputRefs.current[index] = ref)}
-            style={styles.input}
-            maxLength={1}
-            value={digit}
-            placeholderTextColor='white'
-            onChangeText={(value) => handleInputChange(index, value)}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === 'Backspace') {
-                handleBackspace(index);
-              }
-            }}
-          />
-        ))}
-      </View>
-      <ButtonInput title={"Continue"} onPress={handleSubmit}/>
-   
-      
-    </View>
-  );
+    <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={
+      Platform.OS === 'ios'
+        ? 'padding'
+        : 'height'
+    }
+  >
+  <SafeAreaView style={styles.container}>
+  <TouchableOpacity style={{position:'absolute',top:45,left:20}}  onPress={() => navigation.goBack()}>
+  <Icons.Ionicons
+  name="arrow-back"
+  style={{color: 'orange',padding:10}}
+  size={27}
+  />
+  </TouchableOpacity>
+ 
+  
+  <Text style={styles.title}>OTP Verification</Text>
+  <Text style={styles.subtitle}>Please Enter OTP from your Email</Text>
+  <View style={styles.inputContainer}>
+  {otp.map((digit, index) => (
+    <TextInput
+    key={index}
+    ref={(ref) => (inputRefs.current[index] = ref)}
+    style={styles.input}
+    maxLength={1}
+    value={digit}
+    placeholderTextColor='white'
+    onChangeText={(value) => handleInputChange(index, value)}
+    onKeyPress={({ nativeEvent }) => {
+      if (nativeEvent.key === 'Backspace') {
+        handleBackspace(index);
+      }
+    }}
+    />
+  ))}
+  </View>
+  <ButtonInput title={"Continue"} onPress={handleSubmit}/>
+  
+  
+
+  </SafeAreaView>
+  </KeyboardAvoidingView>
+);
 };
 
 const styles = StyleSheet.create({
@@ -117,8 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    paddingTop: 40,
-    padding:20
   },
   title: {
     fontSize: 24,

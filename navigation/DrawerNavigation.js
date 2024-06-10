@@ -59,7 +59,7 @@ function CustomDrawer(props) {
   return (
     <DrawerContentScrollView {...props}>
       <View style={{marginTop:-10, flex: 1, backgroundColor: 'orange', padding: 25 }}>
-      <Image source={imageUri?{ uri: imageUri }:require('../assets/cardimg.png')} style={{width: 50, height: 50,borderRadius:50}} />
+      <Image source={imageUri?.length<=44 ? require('../assets/cardimg.png'):{ uri: imageUri }} style={{width: 50, height: 50,borderRadius:50}} />
         <View style={{paddingTop:15}}>
      
         <Text style={{color:"white",fontSize:20,fontWeight:'700'}}>{data?.name}</Text>

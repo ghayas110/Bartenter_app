@@ -59,48 +59,49 @@ const ChangePassword = ({route}) => {
   };
   
 
-  return (
-    <SafeAreaView style={styles.container}>
+  return (<>
     <TouchableOpacity style={{position:'absolute',top:45,left:20}}  onPress={() => navigation.goBack()}>
     <Icons.Ionicons
-      name="arrow-back"
-      style={{color: 'black',padding:10}}
-      size={27}
+    name="arrow-back"
+    style={{color: 'black',padding:10}}
+    size={27}
     />
-  </TouchableOpacity>
+    </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
     <View style={styles.header}>
     <Image source={require('../assets/logomain.png')} style={{ width: 200, height: 100 }} />
-      </View>
-      <View>
-
-   
-      </View>
-      <View>
+    </View>
+    <View>
     
-      <PasswordInput 
-      placeholder={"Please enter Password"}
-      placeholderColor={"black"}
-      icon={"lock"}
-      setValues={(text) => setPassword(text)}
-      pass={true}
-      type={"password"}
-      />
-      <PasswordInput 
-      placeholder={"Please Confirm Password"}
-      placeholderColor={"black"}
-      icon={"lock"}
-      setValues={(text) => setcpassword(text)}
-      pass={true}
-      type={"password"}
-      />
-   
-      </View>
-      <View>
-
-      </View>
-
-      <ButtonInput title={"Change Password"} onPress={handleSubmit}/>
+    
+    </View>
+    <View>
+    
+    <PasswordInput 
+    placeholder={"Please Enter Password"}
+    placeholderColor={"black"}
+    icon={"lock"}
+    setValues={(text) => setPassword(text)}
+    pass={true}
+    type={"password"}
+    />
+    <PasswordInput 
+    placeholder={"Please Confirm Password"}
+    placeholderColor={"black"}
+    icon={"lock"}
+    setValues={(text) => setcpassword(text)}
+    pass={true}
+    type={"password"}
+    />
+    
+    </View>
+    <View>
+    
+    </View>
+    
+    <ButtonInput title={"Change Password"} onPress={handleSubmit}/>
     </SafeAreaView>
+    </>
   );
 };
 
