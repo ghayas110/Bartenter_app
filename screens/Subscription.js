@@ -144,7 +144,7 @@ const Subscription = () => {
       if (purchaseUpdateSubscription) purchaseUpdateSubscription.remove();
       if (purchaseErrorSubscription) purchaseErrorSubscription.remove();
   
-        IAP.endConnection();
+        // IAP.endConnection();
  
 
     };
@@ -172,7 +172,8 @@ const Subscription = () => {
                       <Image source={require('../assets/logo.png')} />
                       <Text style={styles.productTitle}>{product.title}</Text>
                       <Text style={styles.productDescription}>{product.description}</Text>
-                      <Text style={styles.productPrice}>${product.price}</Text>
+                      {console.log(product.subscriptionOfferDetails[0]?.pricingPhases.pricingPhaseList[0].formattedPrice,"ssss")}
+                   {Platform.OS==="ios"?   <Text style={styles.productPrice}>${product.price}</Text>:<Text>{product?.subscriptionOfferDetails[0]?.pricingPhases?.pricingPhaseList[0]?.formattedPrice}</Text>}
                       <ButtonInput title={"Subscribe"} onPress={() => handleBuySubscription(product)}/>
                     </View>
                   ))

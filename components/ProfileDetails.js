@@ -98,7 +98,7 @@ const handleAvalibilaty = async () => {
   
  
   {
-data?.image==""?
+data?.image && data?.image.length <= 3?
 <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
     
   </ImageBackground>

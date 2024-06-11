@@ -158,7 +158,7 @@ export default function BartenderProfile({route}) {
         <>
           <ScrollView style={styles.card}>
             <View>
-              {data?.image == '' ? (
+              {data?.image && data?.image.length <= 3 ? (
                 <ImageBackground
                   source={require('../assets/cardimg.png')}
                   style={styles.image}></ImageBackground>

@@ -148,6 +148,7 @@ const GetRating =  (userss) => {
   };
   return (
 <>
+{console.log(data,"gh")}
 {
   isLoading?
   <View style={[styles.containerSpinner, styles.horizontalSpinner]}>
@@ -159,7 +160,7 @@ const GetRating =  (userss) => {
 <HeaderDetails title={name}/>
  
   {
-data?.image==""?
+data?.image && data?.image.length <= 3?
 <ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
     
   </ImageBackground>
