@@ -36,11 +36,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Camera usage description</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) location use</string>
+	<string>$(PRODUCT_NAME) App would like to access your location for Job Search</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) location use</string>
+	<string>$(PRODUCT_NAME) App would like to access your location for Job Search</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) location use</string>
+	<string>$(PRODUCT_NAME) App would like to access your location for Job Search</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires to access your photo library to show images</string>
 	<key>Privacy - Media Library Usage Description</key>

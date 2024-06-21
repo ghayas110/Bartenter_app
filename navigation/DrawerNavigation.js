@@ -57,6 +57,8 @@ function CustomDrawer(props) {
 };
 
   return (
+  <>
+
     <DrawerContentScrollView {...props}>
       <View style={{marginTop:-10, flex: 1, backgroundColor: 'orange', padding: 25 }}>
       <Image source={imageUri?.length<=44 ? require('../assets/cardimg.png'):{ uri: imageUri }} style={{width: 50, height: 50,borderRadius:50}} />
@@ -75,6 +77,13 @@ function CustomDrawer(props) {
        
       </View>
     </DrawerContentScrollView>
+    <View style={{borderTopWidth:1,borderTopColor:'grey',marginBottom:20}}>
+      <TouchableOpacity onPress={()=>props.onLogin()} style={{paddingLeft:20,paddingBottom:50,paddingTop:30,color:'red'}} >
+   <Text style={{color:'red',fontWeight:'500'}}>Delete Your Account</Text>
+   </TouchableOpacity>
+    </View>
+ 
+      </>
   );
 }
 

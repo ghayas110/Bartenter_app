@@ -31,6 +31,8 @@ import PrivacyPolicy from './screens/PrivacyPolicy';
 import TermsCondition from './screens/TermsCondition';
 import baseUrl from './global';
 import messaging from '@react-native-firebase/messaging';
+import Deleteuser from './screens/Deleteuser';
+import { Alert } from 'react-native';
 
 
 
@@ -71,12 +73,12 @@ const toastConfig = {
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const Drawer = createDrawerNavigator();
-  const [users, setusers] = useState('');
+  const [users, setusers] = useState();
   useEffect(() => {
     async function checkLoginStatus() {
       const value = await AsyncStorage.getItem('data');
    
-      setusers(JSON.parse(value))
+      setusers(JSON.parse(value).user_data[0].id)
       if (value !== null) {
 
         setIsLoggedIn(true);
@@ -94,7 +96,7 @@ const App = () => {
 
     const value = await AsyncStorage.getItem('data');
     const access_token1 = JSON.parse(value)
-
+    
     try {
       fetch(`${baseUrl}/users/Logout`, {
         method: 'POST',
@@ -123,7 +125,81 @@ const App = () => {
       console.log('An error occurred while processing your request.', error);
     }
   };
+  const DeleteInstant = async () => {
+    let token = await messaging().getToken();
 
+    const value = await AsyncStorage.getItem('data');
+    const access_token1 = JSON.parse(value)
+    Alert.alert(
+      'Delete Account',
+      'Are you sure you want to delete your account permanently?',
+      [
+        {
+          text: 'Cancel',
+          onPress:  () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Confirm', onPress: () => DeleteUser()},
+      ],
+     
+      )
+  
+  };
+  const DeleteUser=async ()=>{
+    let token = await messaging().getToken();
+
+    const value = await AsyncStorage.getItem('data');
+    const access_token1 = JSON.parse(value)
+    try {
+      console.log(access_token1?.user_data[0].id,users,"userData")
+      console.log("Deleted USer")
+      fetch(`${baseUrl}/users/DeleteUser`, {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          id: access_token1?.user_data[0].id,
+        }),
+      
+      }).then(response => {
+        return response.json();
+      })
+      .then(chat => {
+        Toast.show({
+          type: 'success',
+          text1: 'User Data Deleted ',
+          text2: 'User Data Deleted Successfully'
+        });
+       fetch(`${baseUrl}/users/Logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'BarTenderAPI',
+          accesstoken: `Bearer ${access_token1.access_token}`,
+        },
+        body: JSON.stringify({
+          FCM_token: `${token}`,
+        }),
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(chat => {
+
+          setIsLoggedIn(false)
+          AsyncStorage.clear()
+        })
+          })
+     
+
+        .catch(err => {
+          console.log(err, 'dddd');
+        });
+    } catch (error) {
+      console.log('An error occurred while processing your request.', error);
+    }
+  }
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -132,7 +208,7 @@ const App = () => {
             screenOptions={{
               headerShown: false,
             }}
-            drawerContent={props => <CustomDrawer {...props} />}>
+            drawerContent={props => <CustomDrawer {...props} onLogin={()=>DeleteInstant()}/>}>
             <Drawer.Screen name="Home" component={BottomTabNavigator} />
             <Drawer.Screen name="About" component={BartenderHomeScreen} />
             <Drawer.Screen name="SignOut">
@@ -146,6 +222,7 @@ const App = () => {
                 />
               )}
             </Drawer.Screen>
+      
             <Drawer.Screen
               name="ChangePassword"
               component={ChangePassword}
@@ -162,6 +239,7 @@ const App = () => {
             </Drawer.Screen>
             <Drawer.Screen name="Privacy Policy" component={PrivacyPolicy} />
             <Drawer.Screen name="Terms Condition" component={TermsCondition} />
+          
           </Drawer.Navigator>
         ) : (
           <AuthStack.Navigator

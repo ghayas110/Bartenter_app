@@ -8,6 +8,7 @@ import { RadioButton } from 'react-native-paper'
 import PasswordInput from '../components/PasswordInput';
 import { useSelector } from 'react-redux'
 import baseUrl from '../global';
+import Icons from '../components/Icons';
 const ChangePassword = ({route}) => {
   const [users,setusers]=useState("")
   useEffect(()=>{
@@ -60,14 +61,15 @@ const ChangePassword = ({route}) => {
   
 
   return (<>
+   
+    <SafeAreaView style={styles.container}>
     <TouchableOpacity style={{position:'absolute',top:45,left:20}}  onPress={() => navigation.goBack()}>
     <Icons.Ionicons
     name="arrow-back"
-    style={{color: 'black',padding:10}}
+    style={{color: 'orange',padding:10}}
     size={27}
     />
     </TouchableOpacity>
-    <SafeAreaView style={styles.container}>
     <View style={styles.header}>
     <Image source={require('../assets/logomain.png')} style={{ width: 200, height: 100 }} />
     </View>

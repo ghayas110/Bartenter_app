@@ -10,6 +10,7 @@ import {
   Image,
   Linking,
 } from 'react-native';
+
 import {
   getSubscriptions,
   initConnection,
@@ -20,6 +21,8 @@ import ButtonInput from '../components/ButtonInput';
 import Header from '../components/Header';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import baseUrl from '../global';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const items = Platform.select({
   ios: {
@@ -36,6 +39,7 @@ const Subscription = () => {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState('');
   const [subscribed, setSubscribed] = useState();
+  const navigation = useNavigation()
   useEffect(() => {
     async function fetchData() {
       const value = await AsyncStorage.getItem('data');
@@ -200,24 +204,48 @@ const Subscription = () => {
         <>
           <Header title="Subscription" headerShown={false} />
           <ScrollView contentContainerStyle={styles.scrollContent}>
-            {(Platform.OS === 'ios' && products.length > 0) ? (
-              products.map((product, index) => (
-                <View key={index} style={styles.productContainer}>
-                  <Image source={require('../assets/logo.png')} />
-                  <Text style={styles.productTitle}>{product.title}</Text>
-                  <Text style={styles.productDescription}>
-                    {product.description}
-                  </Text>
+            {Platform.OS === 'ios' && products.length > 0 ? (
+              <View style={styles.productContainers}>
+                {products.map((product, index) => (
+                  <View key={index} style={styles.productContainer}>
+                    <Text style={styles.productTitle}>{product.title}</Text>
+                    <Image source={require('../assets/logo.png')} />
+                    <View>
+                      <Text style={styles.productPrice}>
+                        Duration: {product?.subscriptionPeriodNumberIOS}{' '}
+                        {(product?.subscriptionPeriodUnitIOS).toLowerCase()}{' '}
+                      </Text>
+                      <Text style={styles.productPrice}>
+                        Description: {product?.description}
+                      </Text>
 
-                  <Text style={styles.productPrice}>${product.price}</Text>
+                      <Text style={styles.productPrice}>
+                        Price of Subscription:{product?.localizedPrice}
+                      </Text>
+                        <Text style={styles.productDescription}>
+                      Payment will be charged to your iTunes account at confirmation
+                      of purchase. The subscription automatically renews unless
+                      auto-renew is turned off at least 24 hours before the end of
+                      the current period.you may also refer to our {""}
+                      <Text style={{fontWeight:'bold',}} onPress={()=>navigation.navigate('Terms Condition')}>
+                      terms of use
+                      </Text> and {""}
+                         <Text style={{fontWeight:'bold',}} onPress={()=>navigation.navigate('Privacy Policy')}>
+                         privacy policy
+                         </Text>
+                    </Text>
+                    </View>
 
-                  <ButtonInput
-                    title={'Subscribe'}
-                    onPress={() => handleBuySubscription(product)}
-                  />
-                </View>
-              ))
-            ) : (Platform.OS === 'android' && products.length > 0) ? (
+           
+                  
+                             <ButtonInput
+                      title={`${product?.localizedPrice} per ${(product?.subscriptionPeriodUnitIOS).toLowerCase()}`}
+                      onPress={() => handleBuySubscription(product)}
+                    />
+                  </View>
+                ))}
+              </View>
+            ) : Platform.OS === 'android' && products.length > 0 ? (
               products.map((product, index) => (
                 <View key={index} style={styles.productContainer}>
                   <Image source={require('../assets/logo.png')} />
@@ -266,10 +294,19 @@ const styles = StyleSheet.create({
   productContainer: {
     borderWidth: 1,
     width: '80%',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     padding: 30,
     borderRadius: 20,
+    display: 'flex',
+    marginBottom: 20,
+  },
+  productContainers: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    display: 'flex',
     marginBottom: 20,
   },
   productTitle: {
@@ -278,8 +315,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   productDescription: {
-    fontSize: 16,
-    marginBottom: 10,
+    fontSize: 12,
+    marginTop: 10,
   },
   productPrice: {
     fontSize: 16,

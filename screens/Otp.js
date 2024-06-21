@@ -76,7 +76,12 @@ const Otp = ({ onLogin,route }) => {
                if (data.message == "Success") {
                
                 await AsyncStorage.setItem('data', JSON.stringify(data));
-                Geolocation.requestAuthorization();
+                if(user_type!=0){
+
+                  Geolocation.requestAuthorization();
+            }else{
+              console.log("He is Admin")
+            }
                 
                  onLogin()
                } else {

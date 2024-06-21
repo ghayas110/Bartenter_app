@@ -193,6 +193,7 @@ const SignUp = () => {
             <RadioButton.Group
               onValueChange={value => setUser_type(value)}
               value={user_type}>
+       
               <RadioButton.Item color="orange" label="Bartender" value={1} />
               <RadioButton.Item color="orange" label="User" value={2} />
               <RadioButton.Item color="orange" label="Business" value={3} />

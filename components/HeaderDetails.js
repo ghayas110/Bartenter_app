@@ -17,7 +17,7 @@ const HeaderDetails = ({title, headerShown}) => {
       <View style={styles.headerContainer}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={{display: "flex",flexDirection: "row",position: "absolute",left: 0, top: 20}}>
+          style={{display: "flex",flexDirection: "row",position: "absolute",left: 0, top:20}}>
           <Icon name="left" size={24} color="#fff" />
           <Text style={{color: '#fff', fontSize: 17}}>Back</Text>
         </TouchableOpacity>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: "relative",
     backgroundColor: '#FFA500',
-    padding: 40,
+    padding: 20,
     paddingBottom: 10,
   },
   headerText: {
