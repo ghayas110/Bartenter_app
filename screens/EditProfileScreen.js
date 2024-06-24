@@ -175,11 +175,11 @@ const EditProfileScreen = ({ route }) => {
             setSelectedSpecialty(specialitys.filter(data => data == `${spe}`)[0])
             setIsLoading(false)
           } else {
-            Alert.alert(data.data);
+            console.log(data.data);
           }
         });
     } catch (error) {
-
+console.log(error)
     }
   }
   const handleSubmit = async () => {
@@ -205,13 +205,14 @@ const EditProfileScreen = ({ route }) => {
     formData.append('name', name);
     formData.append('user_id', users?.user_data[0]?.id)
     formData.append('number', number);
-    formData.append('speciality', selectedSpecialty);
+    formData.append('speciality', selectedSpecialty==undefined?"":selectedSpecialty);
     formData.append('signature_drink', signature_drink);
     formData.append('payment_link', paymentLink);
     resumeUriflag ? formData.append('resume', Resume) : "";
     certificationUriflag ? formData.append('certificate', Certification) : "";
     formData.append('alcohol_serving', selectedTraing == 'Yes' ? 1 : 0)
     formData.append('dob', dob_date.toString())
+console.log(formData,"meraUser")
 
     try {
       await fetch(`${baseUrl}/userProfile/updateProfiles`, {
@@ -230,6 +231,7 @@ const EditProfileScreen = ({ route }) => {
 
         })
         .then(data => {
+         
           if (data.success === 'success') {
             setIsLoading(false);
 
@@ -248,7 +250,7 @@ const EditProfileScreen = ({ route }) => {
             ]
             )
           } else {
-            Alert.alert(data.data);
+            console.log(data.data);
           }
         });
 

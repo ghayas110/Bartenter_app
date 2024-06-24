@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry, Alert, Button, Image} from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity,ActivityIndicator, View ,ScrollView, TurboModuleRegistry, Alert, Button, Image, Platform} from 'react-native'
 import React ,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
@@ -27,7 +27,8 @@ const MyCalender = ({route}) => {
     '2024-05-10': [{ name: 'Project Deadline', time: 'End of Day' }],
   });
 
-  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-9019633061186947/9389211687';
+  const adUnitId = Platform.OS("android") ? 'ca-app-pub-9019633061186947/9389211687' : "ca-app-pub-9019633061186947/1453616961";
+  // const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-9019633061186947/9389211687';
   const [subscribed, setSubscribed] = useState();
   useEffect(() => {
     async function replacementFunction() {
@@ -218,6 +219,9 @@ const navigation =useNavigation()
                 :null}
         <Agenda
         items={bookedEvents}
+          renderEmptyData={() => {
+    return <View style={{display:'flex',height:"100%",alignItems:'center',justifyContent:'center'}}><Text>No Data Found</Text></View>;
+  }}
         renderItem={(item)=>  <TouchableOpacity onPress={() => navigation.navigate('BookedDetails', {item})} style={styles.card}>
 
 

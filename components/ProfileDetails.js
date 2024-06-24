@@ -1,16 +1,19 @@
 import React,{useState,useEffect} from 'react';
-import { View, Text, StyleSheet, ImageBackground,ActivityIndicator,ScrollView, Switch, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground,ActivityIndicator,ScrollView, Switch, Dimensions, Button } from 'react-native';
 import Header from './Header';
 import StarRating from 'react-native-star-rating-widget';
 import RatingCard from './RatingCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import baseUrl from '../global';
+import ButtonInput from './ButtonInput';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function ProfileDetails({name,user_type,email,PhoneNumber,speciality,signatureDrink}) {
   const isFocused = useIsFocused();
+  const navigation = useNavigation()
   const [userAvalible, setuserAvalible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -50,7 +53,7 @@ export default function ProfileDetails({name,user_type,email,PhoneNumber,special
 
         setIsLoading(false)
         if(dataa?.users){
-          setImageUri(`${baseUrl}/${dataa?.users[0]?.image}`)
+          setImageUri(`${baseUrl}${dataa?.users[0]?.image}`)
           setdata(dataa?.users[0])
           dataa?.users[0]?.availability==0?
           setIsEnabled(false):setIsEnabled(true)
@@ -99,9 +102,14 @@ const handleAvalibilaty = async () => {
  
   {
 data?.image && data?.image.length <= 3?
-<ImageBackground source={require('../assets/cardimg.png')} style={styles.image}>
-    
-  </ImageBackground>
+<>
+<ImageBackground source={require('../assets/user.jpeg')} style={styles.image}>
+
+<View style={{alignItems:"center",justifyContent:'center' , width:windowWidth}}>
+<ButtonInput title={"Update Your Profile"} onPress={()=>navigation.navigate('EditProfile')}/>
+</View>
+</ImageBackground>
+</>
   :
   <ImageBackground source={{uri: imageUri}} style={styles.image}>
     
