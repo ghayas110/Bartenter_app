@@ -169,7 +169,7 @@ const[skeleton,setskeleton]=useState(false)
   };
   return (
     <>
-      <HeaderDetails />
+      <HeaderDetails title={"Messages"}/>
       <View style={styles.container}>
         <FlatList
           ref={flatListRef}
