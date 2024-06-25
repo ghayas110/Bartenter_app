@@ -6,9 +6,11 @@ import {
   Button,
   StyleSheet,
   TouchableOpacity,
+  Platform,
   Alert,
   Image,
   Dimensions,
+  SafeAreaView,
 } from 'react-native';
 import Icons from '../components/Icons';
 import {useNavigation} from '@react-navigation/native';
@@ -123,20 +125,17 @@ const SignUp = () => {
     }
   };
   return (
-    <ScrollView style={styles.container}>
+  <SafeAreaView style={styles.container}>
+
+    <ScrollView >
       <View style={styles.header}>
         <View style={{flex:1}}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={{marginTop:15}} onPress={() => navigation.goBack()}>
             <Icons.Ionicons name="chevron-back" size={40} color="orange" />
           </TouchableOpacity>
         </View>
-        <View style={{flex:2 }}>
-          <Image
-            source={require('../assets/mainlogo.png')}
-            style={{width: 180, height: 100}}
-          />
-        </View>
-        <View style={{flex:1}}></View>
+   
+     
       </View>
       <View
         style={{
@@ -144,6 +143,12 @@ const SignUp = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
+             <View >
+          <Image
+            source={require('../assets/mainlogo.png')}
+            style={{width: 180, height: 100}}
+          />
+        </View>
         <View>
           <LoginInput
             placeholder={'Please Enter Email address'}
@@ -209,10 +214,11 @@ const SignUp = () => {
             padding: 20,
           }}>
           <View
-            style={checked ? styles.checkBoxBorder : styles.checkBoxBorderU}>
+             style={Platform.OS=="ios" ? (checked ? styles.checkBoxBorder : styles.checkBoxBorderU):(styles.check)}
+            >
             <Checkbox
               status={checked ? 'checked' : 'unchecked'}
-              color="white"
+              color={Platform.OS=="ios" ?"white" :"orange"}
               // uncheckedColor={"redr"}
 
               onPress={() => {
@@ -220,7 +226,7 @@ const SignUp = () => {
               }}
             />
           </View>
-          <Text style={{marginLeft: 30}}>
+          <Text style={{marginLeft: 30,lineHeight:20.3}}>
             Are you sure you acccept{' '}
             <Text
               style={{color: 'orange', textDecorationLine: 'underline'}}
@@ -238,6 +244,7 @@ const SignUp = () => {
         <ButtonInput title={'Get Started!'} onPress={handleLogin} />
       </View>
     </ScrollView>
+      </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
@@ -246,7 +253,7 @@ const styles = StyleSheet.create({
 
     backgroundColor: 'white',
     width: '100%',
-    height: windowHeight,
+    
   },
   checkBoxBorderU: {
     height: 20,
@@ -303,6 +310,9 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 20,
   },
+  check:{
+  color:"black"
+  }
 });
 
 export default SignUp;

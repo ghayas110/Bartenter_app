@@ -40,6 +40,7 @@ const NotificationDetail = ({route}) => {
       }
       replacementFunction();
     }, []);
+
   const handleData = async users => {
     try {
       setActivityLoader1(true);
@@ -152,6 +153,9 @@ const NotificationDetail = ({route}) => {
     };
     var latitude = parseFloat(userdata?.event_lat);
     var longitude = parseFloat(userdata?.event_lng);
+const dp = users && data && data?.filter((x,y)=>x?.bartender_id==users.user_data[0].id)
+console.log(dp,"dp");
+
   return (
     <>
     <HeaderDetails title="Event Details" />
@@ -246,7 +250,8 @@ const NotificationDetail = ({route}) => {
               <>
              { usertype !=2?
               <>
-                {data.length > 0 ? (
+            {console.log(data,"lll")}
+                {(data && data?.length > 0 && users && dp && dp.length > 0) ? (
                   <>
                     <ButtonInput
                       title={'Cancel Job'}

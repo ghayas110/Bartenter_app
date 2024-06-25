@@ -111,9 +111,8 @@ data?.image && data?.image.length <= 3?
 </ImageBackground>
 </>
   :
-  <ImageBackground source={{uri: imageUri}} style={styles.image}>
-    
-  </ImageBackground>
+  <ImageBackground source={{uri: imageUri}} style={styles.image}></ImageBackground>
+
 }
   <View style={styles.maintitle}>
   <Text style={styles.titlemain}>Welcome {data?.name}.</Text>

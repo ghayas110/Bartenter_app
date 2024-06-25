@@ -27,7 +27,7 @@ const MyCalender = ({route}) => {
     '2024-05-10': [{ name: 'Project Deadline', time: 'End of Day' }],
   });
 
-  const adUnitId = Platform.OS("android") ? 'ca-app-pub-9019633061186947/9389211687' : "ca-app-pub-9019633061186947/1453616961";
+  const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/9389211687' : "ca-app-pub-9019633061186947/1453616961";
   // const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-9019633061186947/9389211687';
   const [subscribed, setSubscribed] = useState();
   useEffect(() => {

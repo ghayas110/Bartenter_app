@@ -34,7 +34,7 @@ function CustomDrawer(props) {
   replacementFunction()
   }, [userState,props]);
   const navigation =useNavigation()
-console.log(imageUri,"3333")
+
   const handleSubmit = async () => {
 
     try {
