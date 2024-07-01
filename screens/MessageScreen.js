@@ -18,12 +18,14 @@ import ChatInput from "../components/ChatInput";
 import { launchImageLibrary } from "react-native-image-picker";
 import { configureLayoutAnimations } from "react-native-reanimated/lib/typescript/reanimated2/core";
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import baseUrl from "../global";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Messagescreen({ route }) {
   const [userId, setUserId] = useState(0);
+  const [subscribed, setSubscribed] = useState(); 
   const [currentChatMessage, setCurrentChatMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null);
@@ -40,10 +42,36 @@ export default function Messagescreen({ route }) {
       const value = await AsyncStorage.getItem("data");
       AsyncStorage.setItem("data", value);
       setUserId(JSON.parse(value).user_data[0].id);
+      ValidateUserSubscription(JSON.parse(value))
     }
     fetchData();
   }, []);
-
+  const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/5654933464' : "ca-app-pub-9019633061186947/2017906941";
+  const ValidateUserSubscription=async(userss)=>{
+  
+  
+    try {
+      fetch(`${baseUrl}/subscription/CheckSubscription`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+     const subscriptions=dataa.subscription_status[0]
+  
+        setSubscribed(subscriptions)
+  
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+  
+  
+  }
   // const socket = useRef(io("https://bartendersocket.logomish.com"));
   const socket = useRef(io(`${socketUrl}`));
   
@@ -170,6 +198,13 @@ const[skeleton,setskeleton]=useState(false)
   return (
     <>
       <HeaderDetails title={"Messages"}/>
+
+          {subscribed?.subscription_status!=1?
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+                :null}
       <View style={styles.container}>
         <FlatList
           ref={flatListRef}

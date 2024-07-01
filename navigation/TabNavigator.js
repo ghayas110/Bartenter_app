@@ -141,7 +141,7 @@ const BottomTabNavigator = () => {
           <>
             <Tab.Screen initialParams={{ prop: true }} name="PendingEvents" component={PendingStackNavigator} options={{
               tabBarIcon: ({ color, size }) => (
-                <Image source={require('../assets/png/1-04.png')} style={{ width: 25, height: 20, objectFit: 'contain' }} />
+                <Icons.MaterialIcons name="event-available" color={color} size={size} />
               ), tabBarLabel:"Events"
             }} />
         

@@ -9,12 +9,13 @@ import MapComponent from '../components/MApComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import baseUrl from '../global';
 import Geolocation from '@react-native-community/geolocation';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 const Job = ({route}) => {
   const isFocused = useIsFocused();
   const [users,setusers]=useState("")
   const[userState,setuserState]=useState(11)
   const [position, setPosition] = useState();
-   
+  const [subscribed, setSubscribed] = useState(); 
 
   const handleSubmit = async (userr) => {
    
@@ -45,7 +46,7 @@ const Job = ({route}) => {
     const value = await AsyncStorage.getItem("data");
       setusers(JSON.parse(value))
       Geolocation.requestAuthorization();
-    
+     ValidateUserSubscription(JSON.parse(value))
     Geolocation.getCurrentPosition((pos) => {
       const crd = pos.coords;
      
@@ -62,7 +63,32 @@ const Job = ({route}) => {
     replacementFunction()
 
   },[userState,isFocused])
+  const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/5846505152' : "ca-app-pub-9019633061186947/6971884564";
+  const ValidateUserSubscription=async(userss)=>{
 
+
+    try {
+      fetch(`${baseUrl}/subscription/CheckSubscription`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+     const subscriptions=dataa.subscription_status[0]
+  
+        setSubscribed(subscriptions)
+  
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+
+
+}
   const navigation =useNavigation()
   const [data, setData] = useState();
   const count = useSelector((state) => state.auth.user)
@@ -95,7 +121,12 @@ const Job = ({route}) => {
   return (
     <SafeAreaView style={{backgroundColor:"white",height:'100%'}}>
     <Header title="Jobs" headerShown={false} onPress={()=>handleSubmit(position)}/>
-   
+             {subscribed?.subscription_status!=1?
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+                :null}
 <View>
 <MapComponent  dataSend={data} />
 </View>

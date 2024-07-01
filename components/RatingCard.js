@@ -9,7 +9,7 @@ const RatingCard = ({rating,text}) => {
           
     <StarRating
     rating={rating}
-
+onChange={()=>""}
     starSize={19}
   />
 

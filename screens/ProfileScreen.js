@@ -13,10 +13,11 @@ import ProfileDetails from '../components/ProfileDetails';
 import UserDetails from '../components/UserDetails';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import baseUrl from '../global';
-
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const ProfileScreen = ({route}) => {
+  const [subscribed, setSubscribed] = useState();
   const [users,setusers]=useState("")
   useEffect(() => {
     async function replacementFunction(){
@@ -24,10 +25,36 @@ const ProfileScreen = ({route}) => {
           setusers(JSON.parse(value));
           setuserState(JSON.parse(value)?.user_data[0]?.user_type);
           handleSubmit(JSON.parse(value));
+          ValidateUserSubscription(JSON.parse(value))
     }
     replacementFunction()
   }, [route]);
+  const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/9785750166' : "ca-app-pub-9019633061186947/8616138723";
+  const ValidateUserSubscription=async(userss)=>{
+
+
+    try {
+      fetch(`${baseUrl}/subscription/CheckSubscription`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+     const subscriptions=dataa.subscription_status[0]
   
+        setSubscribed(subscriptions)
+  
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+
+
+}
   const navigation = useNavigation();
   const [selectedId, setSelectedId] = useState(null);
   const count = useSelector((state) => state.auth.user)
@@ -88,6 +115,12 @@ const ProfileScreen = ({route}) => {
     
       <SafeAreaView style={{backgroundColor:"white", flex:1}}>
       <Header title="Profile"/>
+           {userState != 0 && subscribed?.subscription_status!=1?
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+                :null}
       <ScrollView style={{height : windowHeight}}>
       {userState == 1 ? 
         <View>

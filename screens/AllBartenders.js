@@ -7,6 +7,7 @@ import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import SelectDropdown from 'react-native-select-dropdown'
 import FormTextInput from '../components/FormTextInput';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import baseUrl from '../global';
 const AllBartenders = () => {
 const [userId, setuserId] = useState(0)
@@ -15,6 +16,7 @@ const [userId, setuserId] = useState(0)
  const [speciality, setspeciality] = useState("")
  const [availabilties, setavailabilties] = useState("1")
  const [ratings, setratings] = useState("null")
+ const [subscribed, setSubscribed] = useState(); 
 const navigation = useNavigation();
 const isFocused = useIsFocused();
 const [users, setusers] = useState("")
@@ -35,9 +37,36 @@ useEffect(() => {
     setusers(JSON.parse(value))
     setuserId(JSON.parse(value).user_data[0].id);
     AllChats(JSON.parse(value))
+    ValidateUserSubscription(JSON.parse(value))
   }
   replacementFunction()
 }, [isFocused,availabilties,ratings,speciality]);
+const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/2536781695' : "ca-app-pub-9019633061186947/8118897977";
+const ValidateUserSubscription=async(userss)=>{
+
+
+  try {
+    fetch(`${baseUrl}/subscription/CheckSubscription`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key':'BarTenderAPI',
+        'accesstoken':`Bearer ${userss.access_token}`
+      },
+    })
+    .then(response => response.json())
+    .then(dataa => {
+   const subscriptions=dataa.subscription_status[0]
+
+      setSubscribed(subscriptions)
+
+    });
+  } catch (error) {
+    Alert.alert('An error occurred while processing your request.');
+  }
+
+
+}
   const AllChats = async (userss) => {
     // Your existing login logic
    
@@ -171,6 +200,12 @@ useEffect(() => {
     </View>
  
     </SafeAreaView>
+    {subscribed?.subscription_status!=1?
+      <BannerAd
+      unitId={adUnitId}
+      size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+    />
+            :null}
     <View style={styles.container}>
     <FlatList
     data={data}

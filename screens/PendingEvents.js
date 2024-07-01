@@ -6,11 +6,14 @@ const baseUrl = require('../global')
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from '../components/Icons';
 import moment from 'moment';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const PendingEvents = ({ route }) => {
   const [userState, setuserState] = useState(11)
   const [users, setusers] = useState("")
+  const [subscribed, setSubscribed] = useState(); 
   const [data, setdata] = useState()
   const [myEvents, setMyEvents] = useState([])
   const [imageUri, setImageUri] = useState(`${baseUrl}/${users?.image}` || '');
@@ -25,10 +28,36 @@ const PendingEvents = ({ route }) => {
       setuserState(JSON.parse(value)?.user_data[0]?.user_type);
       handleSubmit(JSON.parse(value));
       getAllPosts(JSON.parse(value)?.user_data[0]?.id)
+            ValidateUserSubscription(JSON.parse(value))
     }
     replacementFunction()
   }, [userState,route,isFocused]);
-
+ const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/7789108378' : "ca-app-pub-9019633061186947/1865029552";
+  const ValidateUserSubscription=async(userss)=>{
+  
+  
+    try {
+      fetch(`${baseUrl}/subscription/CheckSubscription`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+     const subscriptions=dataa.subscription_status[0]
+  
+        setSubscribed(subscriptions)
+  
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+  
+  
+  }
   const handleSubmit = async (userss) => {
     try {
       await fetch(`${baseUrl}/users/GetUserById/${userss?.user_data[0]?.id}`, {
@@ -120,6 +149,12 @@ const navigation =useNavigation()
    </View> :
      <View style={styles.FlatList}>
      <Header title="Pending Events" headerShown={false}/>
+         {subscribed?.subscription_status!=1?
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+                :null}
     {
      myEvents.length>0?
     

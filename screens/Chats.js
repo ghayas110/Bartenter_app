@@ -6,13 +6,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import baseUrl from '../global';
-
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 const Chats = () => {
 const [userId, setuserId] = useState(0)
  const [data, setdata] = useState()
  const [datas, setdatas] = useState()
 const navigation = useNavigation();
 const isFocused = useIsFocused();
+const [subscribed, setSubscribed] = useState(); 
 const [users, setusers] = useState("")
 const [searchQuery, setSearchQuery] = useState("");
 const socketUrl = 'https://bartinder-socket.digitalmobix.com'
@@ -34,11 +35,38 @@ useEffect(() => {
     const value = await AsyncStorage.getItem('data');
     AsyncStorage.setItem('data', value)
     setusers(JSON.parse(value))
+    ValidateUserSubscription(JSON.parse(value))
     setuserId(JSON.parse(value).user_data[0].id);
     AllChats(JSON.parse(value).user_data[0].id,JSON.parse(value).user_data[0].user_type)
   }
   replacementFunction()
 }, [isFocused]);
+const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/4712552739' : "ca-app-pub-9019633061186947/7568233636";
+const ValidateUserSubscription=async(userss)=>{
+
+
+  try {
+    fetch(`${baseUrl}/subscription/CheckSubscription`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key':'BarTenderAPI',
+        'accesstoken':`Bearer ${userss.access_token}`
+      },
+    })
+    .then(response => response.json())
+    .then(dataa => {
+   const subscriptions=dataa.subscription_status[0]
+
+      setSubscribed(subscriptions)
+
+    });
+  } catch (error) {
+    Alert.alert('An error occurred while processing your request.');
+  }
+
+
+}
   const AllChats = async (id,type) => {
     // Your existing login logic
           if (id) {
@@ -153,7 +181,12 @@ useEffect(() => {
     />
   </View>
     </View>
- 
+     {subscribed?.subscription_status!=1?
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+                :null}
     </SafeAreaView>
     <View style={styles.container}>
     <FlatList

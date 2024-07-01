@@ -19,6 +19,7 @@ import {useNavigation, useIsFocused} from '@react-navigation/native';
 import HeaderDetails from '../components/HeaderDetails';
 import baseUrl from '../global';
 import Modal from 'react-native-modal';
+import Icons from '../components/Icons';
 export default function BartenderProfile({route}) {
   const isFocused = useIsFocused();
   const [rating, setRating] = useState(0);
@@ -197,7 +198,7 @@ export default function BartenderProfile({route}) {
               <View style={styles.section}>
                 <Text style={{color: 'black', fontWeight: '700'}}>Rating</Text>
 
-                <RatingCard rating={data?.average_rating} />
+                <RatingCard rating={data?.average_rating}  />
               </View>
               <View style={styles.rating}>
                 <Text
@@ -236,11 +237,11 @@ export default function BartenderProfile({route}) {
                   <TouchableOpacity
                     onPress={toggleBottomSheet}
                     style={{
-                      padding: 15,
+                      marginTop:20,
                       marginRight: 30,
                       borderRadius: 40,
                     }}>
-                    <Text>X</Text>
+                   <Icons.Ionicons name="close-sharp" color={"orange"} size={32} />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.containers}>

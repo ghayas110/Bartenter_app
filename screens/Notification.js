@@ -6,26 +6,52 @@ import Iconss from 'react-native-vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation ,useIsFocused} from '@react-navigation/native';
 import baseUrl from '../global';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 const Notification = () => {
   const { width, height } = Dimensions.get('window');
   const [userId, setuserId] = useState()
   const [datas, setData] = useState()
   const isFocused = useIsFocused();
-  
+  const [subscribed, setSubscribed] = useState();
   // const [data, setdata] = useState()
   const navigation = useNavigation();
   useEffect(() => {
     async function replacementFunction(){
       const value =  await AsyncStorage.getItem('data');
           setuserId(JSON.parse(value));
-      
+          ValidateUserSubscription(JSON.parse(value))
           handleSubmit(JSON.parse(value))
           handleSeen(JSON.parse(value))
     }
     replacementFunction()
   }, [isFocused]);
+  const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/7103746505' : "ca-app-pub-9019633061186947/8616138723";
+  const ValidateUserSubscription=async(userss)=>{
+
+
+    try {
+      fetch(`${baseUrl}/subscription/CheckSubscription`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key':'BarTenderAPI',
+          'accesstoken':`Bearer ${userss.access_token}`
+        },
+      })
+      .then(response => response.json())
+      .then(dataa => {
+     const subscriptions=dataa.subscription_status[0]
   
+        setSubscribed(subscriptions)
+  
+      });
+    } catch (error) {
+      Alert.alert('An error occurred while processing your request.');
+    }
+
+
+}
   const handleSubmit = async (userss) => {
     try {
       const response = await fetch(`https://bartender-backend.digitalmobix.com/notifications/GetNotifications`, {
@@ -92,7 +118,12 @@ const handleSeen = async (userss) => {
     <SafeAreaView style={{ flex:1}}>
       <Header title="Notification" headerShown={false} />
 
- 
+       {subscribed?.subscription_status!=1?
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+                :null}
     { datas && datas?.length > 0 ?
         <FlatList
           style={styles.flatlistBorder}

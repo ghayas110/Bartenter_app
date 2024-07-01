@@ -17,29 +17,29 @@ export default function AdminProfileDetails({name,email,number,signature_drink,p
         
       </ImageBackground>
  <View style={styles.section}>
- <Text>Name</Text>
- <Text>{name}</Text>
+ <Text style={{color:'black'}}>Name</Text>
+ <Text style={{color:'black'}}>{name}</Text>
  </View>
  <View style={styles.section}>
- <Text>Email</Text>
+ <Text style={{color:'black'}}>Email</Text>
  <Text style={{color:'#FFA500'}}>{email}</Text>
  </View>
  <View style={styles.section}>
- <Text>Speciality</Text>
- <Text>{speciality?speciality:""}</Text>
+ <Text style={{color:'black'}}>Speciality</Text>
+ <Text style={{color:'black'}}>{speciality?speciality:""}</Text>
  </View>
  <View style={styles.section}>
- <Text>Phone</Text>
+ <Text style={{color:'black'}}>Phone</Text>
  <Text style={{color:'#FFA500'}}>{number}</Text>
  </View>
 
  <View style={styles.section}>
- <Text>Personal Payment Link</Text>
- <Text>{payment_link?payment_link:""}</Text>
+ <Text style={{color:'black'}}>Personal Payment Link</Text>
+ <Text style={{color:'black'}}>{payment_link?payment_link:""}</Text>
  </View>
  <View style={styles.section}>
- <Text> Refer From</Text>
- <Text>{referal?referal:""}</Text>
+ <Text style={{color:'black'}}> Refer From</Text>
+ <Text style={{color:'black'}}>{referal?referal:""}</Text>
  </View>
     </ScrollView>
   );

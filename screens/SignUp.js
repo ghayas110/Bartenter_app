@@ -30,6 +30,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user_type, setUser_type] = useState(0);
+  const [buttonDisable, setButtonDisable] = useState(false);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [referral_code, setReferral_code] = useState('');
@@ -60,6 +61,7 @@ const SignUp = () => {
         });
         return;
       }
+      setButtonDisable(true); 
       try {
         fetch(`${baseUrl}/users/CreateUser`, {
           method: 'POST',
@@ -80,12 +82,14 @@ const SignUp = () => {
           .then(data => {
             console.log(data);
             if (data.message == 'Success') {
+              setButtonDisable(false)
               Toast.show({
                 type: 'success',
                 text1: `${data?.data}`,
               });
               navigation.navigate('Login');
             } else {
+                    setButtonDisable(false)
               Toast.show({
                 type: 'error',
                 text1: `${data?.message}`,
@@ -183,7 +187,7 @@ const SignUp = () => {
           />
           <View style={{paddingTop: 10}}>
             <SelectList
-              searchPlaceholder=" "
+              searchPlaceholder="search"
               setSelected={text => setReferral_code(text)}
               inputStyles={{color: 'grey'}}
               dropdownTextStyles={{color: 'grey'}}
@@ -192,6 +196,7 @@ const SignUp = () => {
               dropdownItemStyles={{color: 'grey'}}
               boxStyles={{color: 'grey'}}
               placeholder="Refered From"
+              search={false}
             />
           </View>
           <View style={{marginTop: 15}}>
@@ -226,7 +231,7 @@ const SignUp = () => {
               }}
             />
           </View>
-          <Text style={{marginLeft: 30,lineHeight:20.3}}>
+          <Text style={{marginLeft: 30,lineHeight:20.3,color:'black'}}>
             Are you sure you acccept{' '}
             <Text
               style={{color: 'orange', textDecorationLine: 'underline'}}
@@ -241,7 +246,7 @@ const SignUp = () => {
             </Text>
           </Text>
         </View>
-        <ButtonInput title={'Get Started!'} onPress={handleLogin} />
+        <ButtonInput title={'Get Started!'} onPress={handleLogin} disabled={buttonDisable}/>
       </View>
     </ScrollView>
       </SafeAreaView>
