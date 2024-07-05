@@ -92,10 +92,10 @@ const ValidateUserSubscription=async(userss)=>{
             setdatas(chat.user)
               // navigation.navigate('OtpS')
             } else {
-              Alert.alert("Chat","No Cat Found")
+          
             }
           }).catch(err=>{
-            console.log(err,"dddd")
+            // console.log(err,"dddd")
           })
       } catch (error) {
       console.log('An error occurred while processing your request.',error);

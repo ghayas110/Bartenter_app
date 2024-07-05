@@ -10,13 +10,11 @@ import FormTextInput from '../components/FormTextInput';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import baseUrl from '../global';
 import Geolocation from '@react-native-community/geolocation';
-const AllBartenders = () => {
+const JobList = () => {
 const [userId, setuserId] = useState(0)
  const [data, setdata] = useState()
- const [datas, setdatas] = useState()
- const [speciality, setspeciality] = useState("")
- const [availabilties, setavailabilties] = useState("1")
- const [ratings, setratings] = useState("null")
+ const [priceRangeMax, setPriceRangeMax] = useState(10000000000)
+ const [priceRangeMin, setPriceRangeMin] = useState(0)
  const [distance, setDistance] = useState(25)
  const [subscribed, setSubscribed] = useState(); 
  const [position, setPosition] = useState();
@@ -55,7 +53,7 @@ useEffect(() => {
     })
   }
   replacementFunction()
-}, [isFocused,availabilties,ratings,speciality]);
+}, [isFocused,priceRangeMax,priceRangeMin]);
 const adUnitId = Platform.OS=="android" ? 'ca-app-pub-9019633061186947/2536781695' : "ca-app-pub-9019633061186947/8118897977";
 const ValidateUserSubscription=async(userss)=>{
 
@@ -86,9 +84,10 @@ const ValidateUserSubscription=async(userss)=>{
     // Your existing login logic
    console.log(position)
     // &minRating=0
+    // GetAllBartenders?availability=${availabilties}&skills=${speciality}&minRating=${ratings}&lat=${position.latitude}&long=${position.longitude}&distance=${distance}
       try {
       
-          fetch(`${baseUrl}/users/GetAllBartenders?availability=${availabilties}&skills=${speciality}&minRating=${ratings}&lat=${position.latitude}&long=${position.longitude}&distance=${distance}`, {
+          fetch(`${baseUrl}/posts/GetPostsWithLocationAndPriceRange?price_max=${priceRangeMax}&lat=${position.latitude}&long=${position.longitude}&distance=${distance}&price_min=${priceRangeMin}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -107,7 +106,7 @@ const ValidateUserSubscription=async(userss)=>{
             setdatas(chat.users)
               // navigation.navigate('OtpS')
             } else {
-         
+            
             }
           }).catch(err=>{
             // console.log(err,"dddd")
@@ -155,63 +154,43 @@ const ValidateUserSubscription=async(userss)=>{
     </TouchableOpacity>
    
     </View>
-    <Text style={styles.headerText}>Bartenders</Text>
-
-  <View style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
-
-  
-  <SelectDropdown
-  buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
-  buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
-  defaultButtonText="Availability"
-	data={availabilty}
-	onSelect={(selectedItem, index) => {
-        setavailabilties(index)
-	}}
-	buttonTextAfterSelection={(selectedItem, index) => {
-		// text represented after item is selected
-		// if data array is an array of objects then return selectedItem.property to render after item is selected
-		return selectedItem
-	}}
-	rowTextForSelection={(item, index) => {
-		// text represented for each item in dropdown
-		// if data array is an array of objects then return item.property to represent item in dropdown
-		return item
-	}}
-/>
-<SelectDropdown
-  buttonStyle={{width:'40%',marginTop:10,borderRadius:50,backgroundColor: '#D98100',}}
-  buttonTextStyle={{fontSize:12,color:"white",fontWeight:'bold'}}
-  defaultButtonText="Rating"
-	data={rating}
-  onSelect={(selectedItem, index) => {
-        setratings(selectedItem)
-	}}
-	buttonTextAfterSelection={(selectedItem, index) => {
-		// text represented after item is selected
-		// if data array is an array of objects then return selectedItem.property to render after item is selected
-		return selectedItem
-	}}
-	rowTextForSelection={(item, index) => {
-		// text represented for each item in dropdown
-		// if data array is an array of objects then return item.property to represent item in dropdown
-		return item
-	}}
-/>
-
-</View>
-<View style={styles.searchContainer}>
+    <Text style={styles.headerText}>JobList</Text>
+    <View style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
+<View>
+<Text style={{color:'white'}}>Minimum Price Range</Text>
+    <View style={styles.searchContainers}>
     <Icon name="search" size={20} color="orange" />
     <TextInput
       style={styles.input}
-      placeholder="Speciality"
+      placeholder="PriceRangeMin"
       placeholderTextColor={"orange"}
-      value={speciality}
+      value={priceRangeMin}
       
-      onChangeText={handleSearch}
+      onChangeText={(text)=>setPriceRangeMin(text)}
+      
+    />
+
+  </View>
+  </View>
+  <View>
+<Text style={{color:'white'}}>Maximum Price Range</Text>
+    <View style={styles.searchContainers}>
+    <Icon name="search" size={20} color="orange" />
+    <TextInput
+      style={styles.input}
+      placeholder="PriceRangeMax"
+      placeholderTextColor={"orange"}
+      value={priceRangeMax}
+      
+      onChangeText={(text)=>setPriceRangeMax(text)}
       
     />
   </View>
+  </View>
+    </View>
+
+    <View>
+    <Text style={{color:'white'}}>Distance per Mile</Text>
   <View style={styles.searchContainer}>
     <Icon name="search" size={20} color="orange" />
     <TextInput
@@ -223,6 +202,7 @@ const ValidateUserSubscription=async(userss)=>{
       onChangeText={(text)=>setDistance(text)}
       
     />
+  </View>
   </View>
     </View>
  
@@ -246,7 +226,7 @@ const ValidateUserSubscription=async(userss)=>{
   )
 }
 
-export default AllBartenders
+export default JobList
 
 const styles = StyleSheet.create({
   container: {
@@ -293,6 +273,17 @@ const styles = StyleSheet.create({
             paddingHorizontal: 10,
             marginTop: 10,
             height:40,
+            borderRadius:10
+          },
+            searchContainers: {
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            backgroundColor: '#D98100',
+            paddingHorizontal: 10,
+            margin:5,
+            height:40,
+            width:"100%",
             borderRadius:10
           },
           input: {

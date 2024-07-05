@@ -172,7 +172,7 @@ console.log(dp,"dp");
                             <Text
                             style={{fontWeight: 'bold', fontSize: 18, color: 'black'}}>
                             {' '}
-                            Event Name : {userdata.post_title}
+                            Event Name : {userdata?.post_title}
                           </Text>
             
                         </View>
@@ -180,30 +180,30 @@ console.log(dp,"dp");
                           <Text style={styles.labels}># of People</Text>
                           <Text style={{fontWeight: 'bold', color: 'black'}}>
                             {' '}
-                            {userdata.no_of_people} or Less
+                            {userdata?.no_of_people} or Less
                           </Text>
                         </View>
                         <View style={styles.section}>
                           <Text style={styles.labels}>Theme</Text>
                           <Text style={{fontWeight: 'bold', color: 'black'}}>
                             {' '}
-                            {userdata.theme}{' '}
+                            {userdata?.theme}{' '}
                           </Text>
                         </View>
                         <View style={styles.section}>
                           <Text style={styles.labels}>Phone Number</Text>
                           <Text style={{fontWeight: 'bold', color: 'black'}}>
                             {' '}
-                            {userdata.contact_phone}
+                            {userdata?.contact_phone}
                           </Text>
                         </View>
                         <View style={styles.section}>
                           <Text style={styles.labels}>Date and Time</Text>
             
                           <Text style={{color: 'black', fontWeight: 'bold'}}>
-                          {`${moment(userdata.event_date).format(
+                          {`${moment(userdata?.event_date).format(
                             'MMMM Do YYYY'
-                          )}, ${moment(userdata.event_time, "HH:mm:ss").format(
+                          )}, ${moment(userdata?.event_time, "HH:mm:ss").format(
                             'LTS'
                           )}`}
                           </Text>
@@ -211,7 +211,7 @@ console.log(dp,"dp");
                         <View style={styles.section}>
                           <Text style={styles.labels}>Event Duration</Text>
                           <Text style={{color: 'black', fontWeight: 'bold'}}>
-                            {userdata.event_duration} hours{' '}
+                            {userdata?.event_duration} hours{' '}
                           </Text>
                         </View>
                         <View style={styles.section}>
@@ -225,13 +225,13 @@ console.log(dp,"dp");
                           <Text style={styles.labels}>Timestamp</Text>
                           <Text style={{color: 'black', fontWeight: 'bold'}}>
                             {' '}
-                            {userdata.event_time}
+                            {userdata?.event_time}
                           </Text>
                         </View>
                         <View style={{...styles.section,...styles.location}}>
                           <Text style={styles.labels}>Location</Text>
                           <Text style={{color: 'black', fontWeight: 'bold'}}>
-                            {userdata.event_location}{' '}
+                            {userdata?.event_location}{' '}
                           </Text>
                           </View>
                           <View

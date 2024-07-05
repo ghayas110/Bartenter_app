@@ -78,7 +78,7 @@ const App = () => {
     async function checkLoginStatus() {
       const value = await AsyncStorage.getItem('data');
    
-      setusers(JSON.parse(value).user_data[0].id)
+      setusers(JSON.parse(value)?.user_data[0].id)
       if (value !== null) {
 
         setIsLoggedIn(true);

@@ -2,13 +2,11 @@ import { Button, StyleSheet, Text, View,SafeAreaView, TouchableOpacity,FlatList,
 import React,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
-import { RadioButton } from 'react-native-paper';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { Checkbox } from 'react-native-paper';
+
 import { useSelector } from 'react-redux'
-import { decrement, increment } from './counterSlice'
-import AdminProfileDetails from '../components/AdminProfileDetails';
 import ProfileDetails from '../components/ProfileDetails';
 import UserDetails from '../components/UserDetails';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,7 +23,7 @@ const ProfileScreen = ({route}) => {
           setusers(JSON.parse(value));
           setuserState(JSON.parse(value)?.user_data[0]?.user_type);
           handleSubmit(JSON.parse(value));
-          ValidateUserSubscription(JSON.parse(value))
+         ValidateUserSubscription(JSON.parse(value)) 
     }
     replacementFunction()
   }, [route]);
@@ -44,6 +42,7 @@ const ProfileScreen = ({route}) => {
       })
       .then(response => response.json())
       .then(dataa => {
+      
      const subscriptions=dataa.subscription_status[0]
   
         setSubscribed(subscriptions)
@@ -115,7 +114,7 @@ const ProfileScreen = ({route}) => {
     
       <SafeAreaView style={{backgroundColor:"white", flex:1}}>
       <Header title="Profile"/>
-           {userState != 0 && subscribed?.subscription_status!=1?
+           {subscribed?.subscription_status!=1?
           <BannerAd
           unitId={adUnitId}
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}

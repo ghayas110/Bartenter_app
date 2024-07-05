@@ -12,8 +12,8 @@ export default function AdminProfileDetails({name,email,number,signature_drink,p
 
     <ScrollView style={styles.card}>
   
-      <ImageBackground source={image!=("" || " ")?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={styles.image}>
-        <Text style={styles.title}>{name}</Text>
+      <ImageBackground source={image!=("" || " ")?{uri:`${baseUrl}${image}`}:require('../assets/user.jpeg')} style={styles.image}>
+        <Text style={image!=("" || " ")?styles.title:styles.titles}>{name}</Text>
         
       </ImageBackground>
  <View style={styles.section}>
@@ -89,6 +89,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingLeft:10,
     color: '#fff' // white color for better visibility on image
+  },
+  titles: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    paddingLeft:10,
+    color: 'black' // white color for better visibility on image
   },
   text: {
     fontSize: 16,

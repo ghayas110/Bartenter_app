@@ -26,6 +26,7 @@ import AllBartenderProfile from "../screens/AllBartenderProfile";
 import AddJobScreen2 from "../screens/AddJobScreen2";
 import Notification from "../screens/Notification";
 import Notificationdetail from "../screens/NotificationDetail";
+import JobList from "../screens/JobList";
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -141,9 +142,15 @@ const JobStackNavigator = () => {
     <Stack.Navigator screenOptions={{
       headerShown: false
       }}>
+      <Stack.Screen name="JobList" component={JobList} screenOptions={{
+        headerShown: false
+        }} />
+    
       <Stack.Screen name="Jobs" component={Job} screenOptions={{
         headerShown: false
         }} />
+    
+      
       <Stack.Screen name="JobDetail" component={JobDetailsScreen} />
     
     </Stack.Navigator>

@@ -16,6 +16,9 @@ import {
   initConnection,
   purchaseUpdatedListener,
   requestSubscription,
+  getAvailablePurchases,
+  getPurchaseHistory
+  
 } from 'react-native-iap';
 import ButtonInput from '../components/ButtonInput';
 import Header from '../components/Header';
@@ -42,32 +45,15 @@ const Subscription = () => {
   const navigation = useNavigation()
   useEffect(() => {
     async function fetchData() {
+      
       const value = await AsyncStorage.getItem('data');
       setUsers(JSON.parse(value));
-      ValidateUserSubscription(JSON.parse(value));
+
     }
     fetchData();
+    
   }, []);
-  const ValidateUserSubscription = async user => {
-    try {
-      const response = await fetch(
-        `${baseUrl}/subscription/CheckSubscription`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': 'BarTenderAPI',
-            accesstoken: `Bearer ${user.access_token}`,
-          },
-        },
-      );
-      const data = await response.json();
-      const subscriptions = data.subscription_status[0];
-      setSubscribed(subscriptions);
-    } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
-    }
-  };
+
 
   const handleBuySubscription = async product => {
     try {
@@ -94,9 +80,9 @@ const Subscription = () => {
         })
           .then(res => {
             console.log(res, 'res');
-            // var  response = res[res.length - 1].transactionReceipt
+             var  response = res[res.length - 1].transactionReceipt
 
-            //   validate(JSON.parse(response).productId,product['title'])
+               validate(JSON.parse(response).productId,product['title'])
           })
           .then()
           .catch(err => console.log(err));
@@ -107,7 +93,7 @@ const Subscription = () => {
       Alert.alert('Error!', 'Failed to initiate the subscription.');
     }
   };
-  const validate = async (receipt, name) => {
+  const validate = async () => {
     try {
       const response = await fetch(
         'https://bartender-backend.digitalmobix.com/subscription/subscribePackage',
@@ -118,7 +104,7 @@ const Subscription = () => {
             accesstoken: `Bearer ${users?.access_token}`,
           },
           method: 'POST',
-          body: JSON.stringify({product_id: receipt}),
+          body: JSON.stringify({product_id: true}),
         },
       );
       const result = await response.json();
@@ -130,6 +116,7 @@ const Subscription = () => {
   const handleUnsubscribe = async () => {
     try {
       if (Platform.OS === 'android') {
+      console.log("aa")
         const response = await fetch(
           'https://bartender-backend.digitalmobix.com//subscription/Unsubscribe',
           {
@@ -142,12 +129,28 @@ const Subscription = () => {
           },
         );
         const result = await response.json();
+        console.log(result)
+        setPurchased(false)
         Linking.openURL(
           `https://play.google.com/store/account/subscriptions?package=${products[0].name}&sku=${products[0].productId}`,
         );
       } else if (Platform.OS === 'ios') {
         Linking.openURL('https://apps.apple.com/account/subscriptions');
-        setPurchased(false);
+         const response = await fetch(
+          'https://bartender-backend.digitalmobix.com//subscription/Unsubscribe',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': 'BarTenderAPI',
+              accesstoken: `Bearer ${users?.access_token}`,
+            },
+            method: 'GET',
+          },
+        );
+        const result = await response.json();
+        console.log(result)
+        setPurchased(false)
+       
       }
     } catch (error) {
       Alert.alert('Error!', error.message);
@@ -160,17 +163,20 @@ const Subscription = () => {
       })
       .then(async () => {
         console.log('connected to store');
+        const purchase = await getAvailablePurchases()
+        const history = await getPurchaseHistory()
+        console.log(purchase, "qw2")
+        // if(purchase==[]){setPurchased(false)}
         const subscriptions = await getSubscriptions(items);
         setProducts(subscriptions);
-        console.log(subscriptions);
+        console.log(subscriptions,"subscription");
       });
     purchaseUpdateSubscription = purchaseUpdatedListener(purchase => {
       try {
         const receipt = purchase.transactionReceipt;
-        // Alert.alert(purchase,"reciept")
-        //         var  response = res[res.length - 1].transactionReceipt
-
-        validate('Subscribed');
+      
+        console.log(purchase,"sss")
+      
         setPurchased(true);
       } catch (error) {}
     });

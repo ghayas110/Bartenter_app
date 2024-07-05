@@ -57,7 +57,7 @@ const navigation = useNavigation();
   const Item = ({ id, name,user_type,image, onPress }) => (
     <TouchableOpacity onPress={onPress} style={{justifyContent:'space-between', flexDirection: 'row', alignItems: 'center',padding: 10, }}>
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    <Image source={image!=""?{uri:`${baseUrl}${image}`}:require('../assets/userpic.jpg')} style={{ width: 50, height: 50,borderRadius:7 }} />
+    <Image source={image!=("" || " ")?{uri:`${baseUrl}${image}`}:require('../assets/user.jpeg')} style={{ width: 50, height: 50,borderRadius:7 }} />
 
 
    
