@@ -70,14 +70,14 @@ const LoginScreen = () => {
             }
           })
           .catch(error => {
-            console.log('An error occurred while processing your request.', error);
+            console.log('An error occurred while processing your request.', error,'ghg');
             Alert.alert('Error', 'An error occurred while processing your request.');
           })
           .finally(() => {
             setIsLoading(false); // Enable the button regardless of success or failure
           });
       } catch (error) {
-        console.log('An error occurred while processing your request.', error);
+        console.log('An error occurred while processing your request.', error,'okkks');
         Alert.alert('Error', 'An error occurred while processing your request.');
         setIsLoading(false); // Enable the button
       }

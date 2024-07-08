@@ -200,10 +200,11 @@ const[skeleton,setskeleton]=useState(false)
       <HeaderDetails title={"Messages"}/>
 
           {subscribed?.subscription_status!=1?
-          <BannerAd
-          unitId={adUnitId}
-          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        />
+            <></>
+            //   <BannerAd
+            //   unitId={adUnitId}
+            //   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            // />
                 :null}
       <View style={styles.container}>
         <FlatList

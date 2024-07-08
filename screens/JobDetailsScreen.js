@@ -1,43 +1,43 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React ,{useState,useEffect}from 'react';
+import React, {useState, useEffect} from 'react';
 import JobDetails from '../components/JobDetails';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const JobDetailsScreens = ({route}) => {
-  const [userType ,setUserType]= useState()
+  const [userType, setUserType] = useState();
   useEffect(() => {
     async function replacementFunction() {
       const value = await AsyncStorage.getItem('data');
-      AsyncStorage.setItem('data', value)
+      AsyncStorage.setItem('data', value);
 
       setUserType(JSON.parse(value)?.user_data[0]?.user_type);
     }
-    replacementFunction()
+    replacementFunction();
   }, [setUserType]);
 
-   const [details,setDetails] = useState(route.params)
-     return (
+  const [details, setDetails] = useState(route.params);
+  return (
     <View>
-    <JobDetails
-        post_title={"Conocation"}
-        hourlyRate={"12"}
-        timeStamp={"16 Jan 2024 6:56"}
+      <JobDetails
+        post_title={'Conocation'}
+        hourlyRate={'12'}
+        timeStamp={'16 Jan 2024 6:56'}
         noofpeople={12}
-        location={"Raleigh"}
-        uniqueId={"327834242941"}
-        contact_phone={"99999999999"}
-        event_date={"17 Jan 2024 5:50 PM"}
-        theme={"Red and White"}
+        location={'Raleigh'}
+        uniqueId={'327834242941'}
+        contact_phone={'99999999999'}
+        event_date={'17 Jan 2024 5:50 PM'}
+        theme={'Red and White'}
         userType={1}
-        latitude= {35.7796}
-        longitude= {-78.6382}
-        event_duration={"7"}
+        latitude={35.7796}
+        longitude={-78.6382}
+        event_duration={'7'}
       />
-</View>
+    </View>
   );
- };
+};
 
-export default JobDetailsScreen;
+export default JobDetailsScreens;
 // <View>
 // <JobDetails
 //   post_title={route.params.item.post_title}
@@ -48,13 +48,6 @@ export default JobDetailsScreen;
 //   event_duration={route.params.item.event_duration}
 // />
 // </View>
-
-
-
-
-
-
-
 
 // <JobDetails
 // post_title={details?.post_title}

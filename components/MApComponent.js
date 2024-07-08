@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Button, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import Icons from './Icons';
-import MapView, { Marker } from 'react-native-maps';
-import { useNavigation } from '@react-navigation/native';
+import MapView, {Marker} from 'react-native-maps';
+import {useNavigation} from '@react-navigation/native';
 import Geolocation from '@react-native-community/geolocation';
-const MapComponent = ({onPress,dataSend}) => {
-  var navigation=useNavigation()
-  const gMap = useRef(null)
+const MapComponent = ({onPress, dataSend}) => {
+  console.log(dataSend)
+  var navigation = useNavigation();
+  const gMap = useRef(null);
   const [position, setPosition] = useState({
     latitude: 10,
     longitude: 10,
@@ -16,62 +17,41 @@ const MapComponent = ({onPress,dataSend}) => {
 
   useEffect(() => {
     Geolocation.requestAuthorization();
-    
-    Geolocation.getCurrentPosition((pos) => {
+
+    Geolocation.getCurrentPosition(pos => {
       const crd = pos.coords;
-     
       setPosition({
         latitude: crd.latitude,
         longitude: crd.longitude,
         latitudeDelta: 0.0421,
         longitudeDelta: 0.0421,
       });
-    })
+    });
   }, []);
-
 
   return (
     <View style={styles.container}>
-      <MapView
-      ref={gMap}
-        style={styles.map}
-     region={position}
-        focusable
-   
-      >
-
-        {dataSend?.map((item,index) =>(
+      <MapView ref={gMap} style={styles.map} region={position} focusable>
+        {dataSend?.map((item, index) => (
           <View key={index}>
-       
-
-         
-          <Marker
-          key={index}
-          coordinate={{
-            latitude: item.event_lat,
-            longitude: item.event_lng,
-          }}
-          onPress={()=>navigation.navigate('JobDetail',item)}
-          // identifier={index}
-          title={item.post_title}
-          focusable
-       
-        />
-       
-         </View>
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: item.event_lat,
+                longitude: item.event_lng,
+              }}
+              onPress={() => navigation.navigate('JobDetail', item)}
+              // identifier={index}
+              title={item.post_title}
+              focusable
+            />
+          </View>
         ))}
-        <Marker
-        title='You are here'
-
-        coordinate={position}
-        >
-        <Icons.Entypo name="location-pin" size={40} color={"blue"}/>
+        <Marker title="You are here" coordinate={position}>
+          <Icons.Entypo name="location-pin" size={40} color={'blue'} />
         </Marker>
       </MapView>
-      <View style={styles.buttonContainer}>
-   
-     
-      </View>
+      <View style={styles.buttonContainer}></View>
     </View>
   );
 };
@@ -88,7 +68,7 @@ const styles = StyleSheet.create({
   mapicon: {
     width: 50,
     height: 50,
-    margin:10
+    margin: 10,
   },
   buttonContainer: {
     position: 'absolute', //Here is the trick

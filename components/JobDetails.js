@@ -40,8 +40,8 @@ const JobDetailsScreen = ({route}) => {
     }
     replacementFunction();
   }, []);
+
   const handleCancel = async postId => {
-   
     const JsonBody = {post_id: postId};
     try {
       await fetch(`${baseUrl}/posts/CancelBookedPost`, {
@@ -49,13 +49,13 @@ const JobDetailsScreen = ({route}) => {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'BarTenderAPI',
-          'accesstoken': `Bearer ${users.access_token}`
+          accesstoken: `Bearer ${users.access_token}`,
         },
         body: JSON.stringify(JsonBody),
       })
         .then(response => response.json())
         .then(dataa => {
-          if(dataa?.success==="Success"){         
+          if (dataa?.success === 'Success') {
             Toast.show({
               type: 'success',
               text1: 'Job Cancel',
@@ -63,12 +63,10 @@ const JobDetailsScreen = ({route}) => {
             });
             navigation.goBack();
           }
-    
         });
     } catch (error) {
       Alert.alert('An error occurred while processing your request.');
     }
-
   };
   const handleBookEvent = async postId => {
     const JsonBody = {post_id: postId};
@@ -120,7 +118,6 @@ const JobDetailsScreen = ({route}) => {
         .then(response => response.json())
         .then(dataa => {
           setActivityLoader(false);
-        
           setdata(dataa.posts);
         });
     } catch (error) {
@@ -131,35 +128,38 @@ const JobDetailsScreen = ({route}) => {
 
   var latitude = parseFloat(route.params?.event_lat);
   var longitude = parseFloat(route.params?.event_lng);
-  const Item = ({name, image, number, onPress}) => (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: 'whitesmoke',
-      }}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image
-          source={
-            image != ''
-              ? {uri: `${baseUrl}${image}`}
-              : require('../assets/userpic.jpg')
-          }
-          style={{width: 50, height: 50, borderRadius: 7}}
-        />
+  const Item = ({name, image, number, onPress}) => {
+    const imageuri = image.split('uploads');
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingVertical: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: 'whitesmoke',
+        }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Image
+            source={
+              image != ''
+                ? {uri: `${baseUrl}${imageuri[1]}`}
+                : require('../assets/userpic.jpg')
+            }
+            style={{width: 50, height: 50, borderRadius: 7}}
+          />
 
-        <View style={{marginLeft: 15}}>
-          <Text style={{color: 'grey'}}>{name}</Text>
-          <Text style={{color: 'grey'}}>{number}</Text>
+          <View style={{marginLeft: 15}}>
+            <Text style={{color: 'grey'}}>{name}</Text>
+            <Text style={{color: 'grey'}}>{number}</Text>
+          </View>
         </View>
-      </View>
-      <View></View>
-    </TouchableOpacity>
-  );
+        <View></View>
+      </TouchableOpacity>
+    );
+  };
   const renderItem = ({item}) => (
     <>
       <Item
@@ -189,7 +189,6 @@ const JobDetailsScreen = ({route}) => {
             return response.json();
           })
           .then(chat => {
-          
             setIsPasswordVisible(!isPasswordVisible);
           })
           .catch(err => {
@@ -259,11 +258,8 @@ const JobDetailsScreen = ({route}) => {
 
             <Text style={{color: 'black', fontWeight: 'bold'}}>
               {`${moment(route.params.event_date).format(
-                'MMMM Do YYYY'
-              )}, ${moment(route.params.event_time, "HH:mm:ss").format(
-                'LTS'
-              )}`}
-              
+                'MMMM Do YYYY',
+              )}, ${moment(route.params.event_time, 'HH:mm:ss').format('LTS')}`}
             </Text>
           </View>
           <View style={styles.section}>
@@ -279,16 +275,16 @@ const JobDetailsScreen = ({route}) => {
               $ {parseFloat(route?.params?.bartender_hourly_rate).toFixed(2)}
             </Text>
           </View>
-       
-          <View style={{...styles.section,...styles.location}}>
+
+          <View style={{...styles.section, ...styles.location}}>
             <Text style={styles.labels}>Location</Text>
             <Text style={{color: 'black', fontWeight: 'bold'}}>
               {route.params.event_location}{' '}
             </Text>
           </View>
-          <View style={styles.section}>
+          <View style={styles.section2}>
             {data?.length > 0 ? (
-              <Text style={{color: 'black', fontWeight: 'bold'}}>
+              <Text style={{color: 'grey', fontWeight: 'bold'}}>
                 Booked Bartender
               </Text>
             ) : (
@@ -301,8 +297,6 @@ const JobDetailsScreen = ({route}) => {
               keyExtractor={item => item.id}
             />
           </View>
-
-        
 
           <MapView
             style={styles.map}
@@ -328,32 +322,37 @@ const JobDetailsScreen = ({route}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-
-
-
-              {activityLoader?
+              {activityLoader ? (
                 <View style={styles.loaderWrapper}>
-                <ActivityIndicator />
+                  <ActivityIndicator />
                 </View>
-                :
-              <>
-                {data.length > 0 ? (
-                  <>
-                    <ButtonInput
-                      title={'Cancel Job'}
-                      onPress={() => handleCancel(route.params.post_id)}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <ButtonInput
-                      title={'Book Job'}
-                      onPress={() => handleBookEvent(route.params.post_id)}
-                    />
-                  </>
-                )}
-              </>
-              }
+              ) : (
+                <>
+                  {data?.length > 0 ? (
+                    <>
+                      <ButtonInput
+                        title={'Cancel Job'}
+                        onPress={() => handleCancel(route.params.post_id)}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <View
+                        style={{
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <ButtonInput
+                          title={'Book Job'}
+                          onPress={() => handleBookEvent(route.params.post_id)}
+                        />
+                        <ButtonInput title={'chat with user'} />
+                      </View>
+                    </>
+                  )}
+                </>
+              )}
             </View>
           ) : (
             ''
@@ -388,6 +387,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     margin: 5,
   },
+  section2: {
+    flexDirection: 'column',
+    width: '100%',
+    paddingTop: 10,
+    paddingHorizontal: 10,
+    margin: 5,
+  },
   sections: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -401,10 +407,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'grey',
   },
-  loaderWrapper:{
-    paddingTop:10
+  loaderWrapper: {
+    paddingTop: 10,
   },
-  location:{
-    flexWrap:'wrap'
-  }
+  location: {
+    flexWrap: 'wrap',
+  },
 });

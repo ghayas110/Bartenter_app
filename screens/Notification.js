@@ -119,10 +119,11 @@ const handleSeen = async (userss) => {
       <Header title="Notification" headerShown={false} />
 
        {subscribed?.subscription_status!=1?
-          <BannerAd
-          unitId={adUnitId}
-          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        />
+           <></>
+        //   <BannerAd
+        //   unitId={adUnitId}
+        //   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        // />
                 :null}
     { datas && datas?.length > 0 ?
         <FlatList
