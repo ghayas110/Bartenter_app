@@ -103,7 +103,7 @@ const ProfileScreen = ({route}) => {
     </View>
     </View>
     <View>
-    <Icon name="right" size={24} color="black" />
+    <Icon name="right" size={24} color="orange" />
     </View>
     </TouchableOpacity>
   );
