@@ -33,7 +33,7 @@ import baseUrl from './global';
 import messaging from '@react-native-firebase/messaging';
 import Deleteuser from './screens/Deleteuser';
 import { Alert } from 'react-native';
-
+import { LogBox } from 'react-native';
 
 
 const AuthStack = createStackNavigator();
@@ -71,6 +71,7 @@ const toastConfig = {
 };
 
 const App = () => {
+  LogBox.ignoreAllLogs();
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const Drawer = createDrawerNavigator();
   const [users, setusers] = useState();
@@ -151,8 +152,6 @@ const App = () => {
     const value = await AsyncStorage.getItem('data');
     const access_token1 = JSON.parse(value)
     try {
-      console.log(access_token1?.user_data[0].id,users,"userData")
-      console.log("Deleted USer")
       fetch(`${baseUrl}/users/DeleteUser`, {
       method:'POST',
       headers: {

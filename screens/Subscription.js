@@ -96,7 +96,7 @@ const Subscription = () => {
   const validate = async () => {
     try {
       const response = await fetch(
-        'https://bartender-backend.digitalmobix.com/subscription/subscribePackage',
+        `${baseUrl}/subscription/subscribePackage`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const Subscription = () => {
       if (Platform.OS === 'android') {
       console.log("aa")
         const response = await fetch(
-          'https://bartender-backend.digitalmobix.com//subscription/Unsubscribe',
+          `${baseUrl}/subscription/Unsubscribe`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ const Subscription = () => {
       } else if (Platform.OS === 'ios') {
         Linking.openURL('https://apps.apple.com/account/subscriptions');
          const response = await fetch(
-          'https://bartender-backend.digitalmobix.com//subscription/Unsubscribe',
+          `${baseUrl}/subscription/Unsubscribe`,
           {
             headers: {
               'Content-Type': 'application/json',

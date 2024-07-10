@@ -89,7 +89,6 @@ const PendingEvents = ({route}) => {
   };
 
   const getAllPosts = async userss => {
-    console.log(users?.access_token)
     const user_id = users.user_data[0].id;
     try {
       setIsLoading(true);
@@ -211,7 +210,6 @@ const PendingEvents = ({route}) => {
           )}
         </View>
       )}
-      {console.log(myEvents[0])}
     </>
   );
 };

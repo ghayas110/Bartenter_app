@@ -27,7 +27,7 @@ const Chats = () => {
   const [subscribed, setSubscribed] = useState();
   const [users, setusers] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const socketUrl = 'https://bartinder-socket.digitalmobix.com';
+  const socketUrl = 'http://192.168.200.163:3000';
 
   const handleSearch = text => {
     setSearchQuery(text);
@@ -48,10 +48,7 @@ const Chats = () => {
       setusers(JSON.parse(value));
       ValidateUserSubscription(JSON.parse(value));
       setuserId(JSON.parse(value).user_data[0].id);
-      AllChats(
-        JSON.parse(value).user_data[0].id,
-        JSON.parse(value).user_data[0].user_type,
-      );
+      AllChats(JSON.parse(value).user_data[0].id);
     }
     replacementFunction();
   }, [isFocused]);
@@ -79,39 +76,35 @@ const Chats = () => {
       Alert.alert('An error occurred while processing your request.');
     }
   };
-  const AllChats = async (id, type) => {
-    // Your existing login logic
-    if (id) {
-      try {
-        fetch(`${socketUrl}/alluser`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId: id,
-            userType: type,
-          }),
+  const AllChats = async id => {
+    setRefreshing(true);
+    try {
+      fetch(`${socketUrl}/getMyChats`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: id,
+        }),
+      })
+        .then(response => response.json())
+        .then(chat => {
+          if (chat.success) {
+            setdata(chat.users);
+            setdatas(chat.users);
+            setRefreshing(false);
+          } else {
+            setRefreshing(false);
+          }
         })
-          .then(response => {
-            return response.json();
-          })
-          .then(chat => {
-            if (chat.success) {
-              setdata(chat.user);
-              setdatas(chat.user);
-              // navigation.navigate('OtpS')
-            } else {
-            }
-          })
-          .catch(err => {
-            // console.log(err,"dddd")
-          });
-      } catch (error) {
-        console.log('An error occurred while processing your request.', error);
-      }
-    } else {
-      console.log('Please fill in all fields');
+        .catch(err => {
+          setRefreshing(false);
+          console.log('An error occurred while processing your request.', err);
+        });
+    } catch (error) {
+      setRefreshing(false);
+      console.log('An error occurred while processing your request.', error);
     }
   };
   const seenMessage = async sender => {
@@ -136,80 +129,52 @@ const Chats = () => {
       }
   };
 
-  // useEffect(() => {
-  //   AllChats(userId)
-  //     }, [userId])
-  const Item = ({
-    id,
-    name,
-    message,
-    role,
-    image,
-    onPress,
-    sender,
-    seen_status,
-  }) => (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: 'whitesmoke',
-      }}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <View style={{marginLeft: 15}}>
-          <Text style={{color: 'grey'}}>{name}</Text>
-          {message?.startsWith('/resources/static/assets/uploads/messages/') ? (
-            <Text
-              style={{
-                color: seen_status == 0 && sender != userId ? 'black' : 'grey',
-                fontWeight: seen_status == 0 && sender != userId ? 'bold' : 500,
-              }}>
-              attachment
-            </Text>
-          ) : (
-            <Text
-              style={{
-                color: seen_status == 0 && sender != userId ? 'black' : 'grey',
-                fontWeight: seen_status == 0 && sender != userId ? 'bold' : 500,
-              }}>
-              {message}
-            </Text>
-          )}
-          <Text style={{color: 'grey', fontSize: 12}}>{role}</Text>
+  const Item = ({name, image, onPress}) => {
+    const imageuri = image?.split('uploads');
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: 'whitesmoke',
+        }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Image
+            source={
+              image != '' && image != undefined && image != null
+                ? {uri: `${baseUrl}${imageuri[1]}`}
+                : require('../assets/userpic.jpg')
+            }
+            style={{width: 40, height: 40, borderRadius: 7}}
+          />
+          <View style={{marginLeft: 15}}>
+            <Text style={{color: 'black'}}>{name}</Text>
+          </View>
         </View>
-      </View>
-      <View>
-        <Image
-          source={
-            image != ''
-              ? {uri: `${baseUrl}${image}`}
-              : require('../assets/userpic.jpg')
-          }
-          style={{width: 50, height: 50, borderRadius: 7}}
-        />
-      </View>
-    </TouchableOpacity>
-  );
-  const renderItem = ({item}) => {
-    console.log(item, 'chats');
+      </TouchableOpacity>
+    );
+  };
+  const renderItem = items => {
     return (
       <Item
-        name={item.name}
-        sender={item.sender}
-        seen_status={item.seen_status}
-        message={item.message ? item.message : item.message_image}
-        role={item.role}
-        image={item.image}
+        name={items?.item.name}
+        image={items?.item.image}
         onPress={() => {
-          seenMessage(item.id);
-          navigation.navigate('Message', item);
+          seenMessage(items?.item.id);
+          navigation.navigate('Message', items?.item);
         }}
       />
     );
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    AllChats();
   };
   return (
     <SafeAreaView>
@@ -234,18 +199,20 @@ const Chats = () => {
           </View>
         </View>
         {subscribed?.subscription_status != 1 ? (
-           <></>
-        //   <BannerAd
+          <></>
+        ) : //   <BannerAd
         //   unitId={adUnitId}
         //   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
         // />
-        ) : null}
+        null}
       </SafeAreaView>
       <View style={styles.container}>
         <FlatList
           data={data}
           renderItem={renderItem}
           keyExtractor={item => item.id}
+          onRefresh={() => onRefresh()}
+          refreshing={refreshing}
         />
       </View>
     </SafeAreaView>

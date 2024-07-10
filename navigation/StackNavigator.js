@@ -142,12 +142,13 @@ const JobStackNavigator = () => {
     <Stack.Navigator screenOptions={{
       headerShown: false
       }}>
-      <Stack.Screen name="Jobs" component={Job} screenOptions={{
-        headerShown: false
-        }} />
       <Stack.Screen name="JobList" component={JobList} screenOptions={{
         headerShown: false
         }} />
+      <Stack.Screen name="Jobs" component={Job} screenOptions={{
+        headerShown: false
+        }} />
+      
       <Stack.Screen name="JobDetail" component={JobDetailsScreen} />
     
     </Stack.Navigator>

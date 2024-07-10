@@ -22,6 +22,7 @@ import notifee from '@notifee/react-native';
 import { withIAPContext } from "react-native-iap";
 import BookedDetails from "../screens/BookedDetails";
 import Analytics from "../screens/Analytics";
+import baseUrl from "../global";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -70,7 +71,7 @@ const BottomTabNavigator = () => {
 
   const handleSubmit = async (userss) => {
     try {
-      await fetch(`https://bartender-backend.digitalmobix.com/notifications/GetNotifications`, {
+      await fetch(`${baseUrl}/notifications/GetNotifications`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
