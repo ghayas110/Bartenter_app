@@ -4,26 +4,47 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import SearchInput from './SearchInput';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
-const HeaderDetails = ({title, headerShown}) => {
+const HeaderDetails = ({title, headerShown,deleteChat}) => {
   const navigation = useNavigation();
 
+
+
+  
   return (
     <SafeAreaView>
       <View style={styles.headerContainer}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={{display: "flex",flexDirection: "row",position: "absolute",left: 0, top:20}}>
+          style={{flexDirection: 'row', alignItems: 'center'}}>
           <Icon name="left" size={24} color="#fff" />
           <Text style={{color: '#fff', fontSize: 17}}>Back</Text>
         </TouchableOpacity>
 
         <Text style={styles.headerText}>{title}</Text>
-        
+
+        <TouchableOpacity onPress={()=>{
+          Alert.alert(
+            'Delete Account',
+            'Are you sure you want to delete your account permanently?',
+            [
+              {
+                text: 'Cancel',
+                onPress:  () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {text: 'Confirm', onPress: () => deleteChat()},
+            ],
+           
+            )
+        }}>
+          <Icon name="delete" color={'#fff'} size={24} />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -33,14 +54,14 @@ export default HeaderDetails;
 
 const styles = StyleSheet.create({
   headerContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     flexDirection: 'row',
-    position: "relative",
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    position: 'relative',
     backgroundColor: '#FFA500',
-    padding: 20,
-    paddingBottom: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    width: '100%',
   },
   headerText: {
     color: '#fff',

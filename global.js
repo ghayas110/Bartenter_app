@@ -1,4 +1,4 @@
-const baseUrl = 'http://192.168.200.163:3001';
-const socketUrl = 'https://bartinder-socket.digitalmobix.com'
+const baseUrl = 'https://dev.bartender.digitalmobix.com';
+const socketUrl = 'https://dev.bartinder-socket.digitalmobix.com'
 
 module.exports = baseUrl

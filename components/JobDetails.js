@@ -144,7 +144,7 @@ const JobDetailsScreen = ({route}) => {
           }
         });
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
+   //   Alert.alert('An error occurred while processing your request.');
     }
   };
   const handleBookEvent = async postId => {
@@ -171,7 +171,6 @@ const JobDetailsScreen = ({route}) => {
             });
             navigation.goBack();
           } else {
-            Alert.alert('Something Went Wrong');
           }
         });
     } catch (error) {

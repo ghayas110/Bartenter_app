@@ -184,20 +184,22 @@ console.log(error)
   }
   const handleSubmit = async () => {
     setIsLoading(true);
+        const newdate = new Date().getTime();
+      const datet = newdate;
     const file = {
       uri: imageUri,
       type: imageUriimage?.type,
-      name: `${new Date()}profile_image.jpg`,
+      name: `${datet}profile_image.jpg`,
     };
     const Certification = {
       uri: certificationUri,
       type: certificationUriimage?.type,
-      name: `${new Date()}certificate_image.pdf`,
+      name: `${datet}certificate_image.pdf`,
     };
     const Resume = {
       uri: resumeUri,
       type: resumeUriimage?.type,
-      name: `${new Date()}resume_image.pdf`,
+      name: `${datet}resume_image.pdf`,
     };
   
     const formData = new FormData();

@@ -71,26 +71,6 @@ const Job = ({route}) => {
     Platform.OS == 'android'
       ? 'ca-app-pub-9019633061186947/5846505152'
       : 'ca-app-pub-9019633061186947/6971884564';
-  // const ValidateUserSubscription = async userss => {
-  //   try {
-  //     fetch(`${baseUrl}/subscription/CheckSubscription`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'x-api-key': 'BarTenderAPI',
-  //         accesstoken: `Bearer ${userss.access_token}`,
-  //       },
-  //     })
-  //       .then(response => response.json())
-  //       .then(dataa => {
-  //         const subscriptions = dataa.subscription_status[0];
-
-  //         setSubscribed(subscriptions);
-  //       });
-  //   } catch (error) {
-  //     Alert.alert('An error occurred while processing your request.');
-  //   }
-  // };
   const navigation = useNavigation();
   const [data, setData] = useState();
   const count = useSelector(state => state.auth.user);
@@ -127,18 +107,18 @@ const Job = ({route}) => {
 
   
   return (
-    <SafeAreaView style={{backgroundColor: 'white', height: '100%'}}>
+    <SafeAreaView style={styles.container}>
       <Header
         title="Jobs"
         headerShown={false}
         onPress={() => handleSubmit(position)}
       />
       {subscribed?.subscription_status != 1 ? (
-         <></>
-        //   <BannerAd
-        //   unitId={adUnitId}
-        //   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        // />
+         
+          <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
       ) : null}
       <View>
         <MapComponent dataSend={data} />
@@ -151,26 +131,6 @@ export default Job;
 
 const styles = StyleSheet.create({
   container: {
-    width: 'auto',
-    height: '87%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  text: {
-    marginTop: 20,
-    fontSize: 18,
-    color: '#ccc',
-  },
-  button: {
-    position: 'absolute',
-    right: 20,
-    bottom: 20,
-    backgroundColor: '#F2994A',
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+backgroundColor: 'white', height: '100%'
   },
 });

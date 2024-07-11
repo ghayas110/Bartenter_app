@@ -42,7 +42,7 @@ const MyCalender = ({route}) => {
 
   const adUnitId =
     Platform.OS == 'android'
-      ? 'ca-app-pub-9019633061186947/4856704183'
+      ? 'ca-app-pub-9019633061186947/7789108378'
       : 'ca-app-pub-9019633061186947/1453616961';
   // const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-9019633061186947/9389211687';
   const [subscribed, setSubscribed] = useState();
@@ -203,12 +203,12 @@ const MyCalender = ({route}) => {
           ) : (
             <>
               <Header title="My Calender" />
-              {subscribed?.subscription_status != 1 ? (
-                <></>
-              ) : //   <BannerAd
-              //   unitId={adUnitId}
-              //   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-              // />
+              {subscribed?.subscription_status != 1 ? 
+                
+                 <BannerAd
+                unitId={adUnitId}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+              />:
               null}
               <Agenda
                 items={bookedEvents}

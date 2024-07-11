@@ -24,6 +24,9 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
 import baseUrl from '../global';
 import {RefreshControl} from 'react-native-gesture-handler';
+import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
+import { successToast } from '../toast';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -31,9 +34,10 @@ export default function Messagescreen({route}) {
   const [userId, setUserId] = useState(0);
   const [subscribed, setSubscribed] = useState();
   const [currentChatMessage, setCurrentChatMessage] = useState('');
+  const [token, setToken] = useState('');
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null);
-  const socketUrl = 'http://192.168.200.163:3000';
+  const socketUrl = 'https://dev.bartinder-socket.digitalmobix.com';
   // const socketUrl = 'http://192.168.200.163:3001'
   const [refreshing, setRefreshing] = useState(false);
 
@@ -43,6 +47,7 @@ export default function Messagescreen({route}) {
       AsyncStorage.setItem('data', value);
       setUserId(JSON.parse(value).user_data[0].id);
       ValidateUserSubscription(JSON.parse(value));
+      setToken(JSON.parse(value)?.access_token)
     }
     fetchData();
   }, []);
@@ -113,36 +118,83 @@ export default function Messagescreen({route}) {
     };
 
     launchImageLibrary(options, async response1 => {
-      const newdate = new Date();
+      const newdate = new Date().getTime();
+      const datet = newdate;
+
       const formData = new FormData();
       formData.append('sender', userId);
       formData.append('receiver', route.params.id);
       if (response1.assets) {
         formData.append('file', {
           uri: response1?.assets[0]?.uri,
-          name: `image.jpg`,
+          name: `${datet}.jpg`,
           type: 'image/jpeg',
         });
       }
-      const response = await fetch(`${baseUrl}/sendImage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-      });
-      const res = await response.json();
-      console.log(res);
+      try {
+        const response = await fetch(`${baseUrl}/sendImage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formData,
+        });
+        const res = await response.json();
+        console.log(res);
+        if (res.message == 'Success') {
+          const msgData = {
+            sender: userId,
+            receiver: route.params.id,
+            message: '',
+            messagebool: false,
+            image: res?.ImageUrl,
+          };
+
+          socket.current.emit('chat message', msgData);
+          setTimeout(() => {
+            setskeleton(false);
+          }, 1000);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     });
   };
+  const navigation = useNavigation();
 
   const KeyboardUpper = () => {
     scrollToBottom();
   };
+  const DeleteAllChats = async () => {
+    console.log('lol')
+    try {
+      fetch(`${socketUrl}/deleteChat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          accesstoken: `Bearer ${token}`,
+          'x-api-key': 'BarTenderAPI',
+        },
+        body: JSON.stringify({
+          sender_id: userId,
+          receiver_id: route.params.id,
+        }),
+      })
+        .then(response => response.json())
+        .then(responce => {
+            if(responce.message == "Chat deleted for sender"){
+              navigation.navigate('Chat')
+              successToast('Chat Delete','chat successfully deleted ')
+            }
+        });
+    } catch (error) {
+      console.log('An error occurred while processing your request.', error);
+    }
+  };
 
   return (
     <>
-      <HeaderDetails title={'Messages'} />
+      <HeaderDetails title={'Messages'} deleteChat={DeleteAllChats}/>
 
       {subscribed?.subscription_status != 1 ? (
         <></>
@@ -175,7 +227,8 @@ export default function Messagescreen({route}) {
             keyExtractor={(item, index) => index.toString()}
             renderItem={item => {
               const imageuri = item?.item?.thumbnail?.split('uploads');
-              console.log(messages?.length, item?.index);
+              console.log(messages[0], item?.index, 'ghayas');
+              const LastTime =new Date(item?.item?.sent_at)
               return (
                 <>
                   {item?.item?.image != 1 ? (
@@ -194,6 +247,20 @@ export default function Messagescreen({route}) {
                         }}>
                         {item?.item?.message}
                       </Text>
+                       <Text
+                        style={{
+                          color:
+                            item?.item?.sender === parseInt(userId)
+                              ? 'white'
+                              : 'black',
+                        }}>
+                     {`${moment(LastTime).format(
+                                'MMMM Do YYYY',
+                              )}, ${moment(
+                                LastTime,
+                                'HH:mm:ss',
+                              ).format('LTS')}`}
+                      </Text>
                     </View>
                   ) : (
                     <View
@@ -211,20 +278,34 @@ export default function Messagescreen({route}) {
                       ) : (
                         <>
                           <View
-                            style={
-                              item?.item?.sender === parseInt(userId)
-                                ? styles.rightMsg
-                                : styles.leftMsg
-                            }>
-                            <Image
-                              source={{uri: `${baseUrl}/${imageuri[1]}`}}
-                              style={{
-                                width: 125,
-                                height: 120,
-                                objectFit: 'contain',
-                              }}
-                              onLoad={() => setImageLoaded(true)}
-                            />
+                            style={{
+                              flexDirection: 'column',
+                              alignItems: 'flex-end',
+                            }}>
+                            <View
+                              style={
+                                item?.item?.sender === parseInt(userId)
+                                  ? styles.rightMsg
+                                  : styles.leftMsg
+                              }>
+                              <Image
+                                source={{uri: `${baseUrl}/${imageuri[1]}`}}
+                                style={{
+                                  width: 125,
+                                  height: 120,
+                                  objectFit: 'contain',
+                                }}
+                                onLoad={() => setImageLoaded(true)}
+                              />
+                            </View>
+                            <Text style={{color: 'black'}}>
+                              {`${moment(LastTime).format(
+                                'MMMM Do YYYY',
+                              )}, ${moment(
+                                LastTime,
+                                'HH:mm:ss',
+                              ).format('LTS')}`}
+                            </Text>
                           </View>
                           {messages?.length == item?.index - 1 ? (
                             <View
@@ -234,7 +315,7 @@ export default function Messagescreen({route}) {
                                   : styles.leftMsg
                               }></View>
                           ) : (
-                            <Text>66</Text>
+                           <></>
                           )}
                         </>
                       )}

@@ -63,7 +63,6 @@ const PendingEvents = ({route}) => {
           setSubscribed(subscriptions);
         });
     } catch (error) {
-      Alert.alert('An error occurred while processing your request.');
     }
   };
   const handleSubmit = async userss => {

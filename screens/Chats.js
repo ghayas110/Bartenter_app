@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
   Alert,
+  Dimensions,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from '../components/Header';
@@ -18,7 +19,11 @@ import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import baseUrl from '../global';
 import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+// Define the Chats component
 const Chats = () => {
+  // State variables
   const [userId, setuserId] = useState(0);
   const [data, setdata] = useState();
   const [datas, setdatas] = useState();
@@ -27,13 +32,16 @@ const Chats = () => {
   const [subscribed, setSubscribed] = useState();
   const [users, setusers] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const socketUrl = 'http://192.168.200.163:3000';
+  const socketUrl = 'https://dev.bartinder-socket.digitalmobix.com';
 
+  // Handle search input
   const handleSearch = text => {
     setSearchQuery(text);
     if (text === '') {
+      // Reset data to original state
       setdata(datas);
     } else {
+      // Filter data based on search query
       const filteredData = datas?.filter(item =>
         item.name?.toLowerCase().includes(text?.toLowerCase()),
       );
@@ -41,23 +49,33 @@ const Chats = () => {
     }
   };
 
+  // Use effect to fetch data when component is focused
   useEffect(() => {
     async function replacementFunction() {
+      // Get data from AsyncStorage
       const value = await AsyncStorage.getItem('data');
       AsyncStorage.setItem('data', value);
       setusers(JSON.parse(value));
+      // Validate user subscription
       ValidateUserSubscription(JSON.parse(value));
+      // Set user ID
       setuserId(JSON.parse(value).user_data[0].id);
+      // Fetch all chats
       AllChats(JSON.parse(value).user_data[0].id);
     }
     replacementFunction();
   }, [isFocused]);
+
+  // Ad unit ID
   const adUnitId =
     Platform.OS == 'android'
       ? 'ca-app-pub-9019633061186947/4712552739'
       : 'ca-app-pub-9019633061186947/7568233636';
+
+  // Validate user subscription
   const ValidateUserSubscription = async userss => {
     try {
+      // Fetch subscription status
       fetch(`${baseUrl}/subscription/CheckSubscription`, {
         method: 'GET',
         headers: {
@@ -69,16 +87,19 @@ const Chats = () => {
         .then(response => response.json())
         .then(dataa => {
           const subscriptions = dataa.subscription_status[0];
-
+          // Set subscription status
           setSubscribed(subscriptions);
         });
     } catch (error) {
       Alert.alert('An error occurred while processing your request.');
     }
   };
+
+  // Fetch all chats
   const AllChats = async id => {
     setRefreshing(true);
     try {
+      // Fetch chats from socket URL
       fetch(`${socketUrl}/getMyChats`, {
         method: 'POST',
         headers: {
@@ -91,7 +112,9 @@ const Chats = () => {
         .then(response => response.json())
         .then(chat => {
           if (chat.success) {
+            // Set data and original data
             setdata(chat.users);
+            console.log(chat.users);
             setdatas(chat.users);
             setRefreshing(false);
           } else {
@@ -107,9 +130,12 @@ const Chats = () => {
       console.log('An error occurred while processing your request.', error);
     }
   };
+
+  // Mark message as seen
   const seenMessage = async sender => {
     if (sender !== null)
       try {
+        // Mark message as read
         fetch(`${socketUrl}/messages/ReadMessages`, {
           method: 'POST',
           headers: {
@@ -129,6 +155,7 @@ const Chats = () => {
       }
   };
 
+  // Define Item component
   const Item = ({name, image, onPress}) => {
     const imageuri = image?.split('uploads');
     return (
@@ -158,6 +185,8 @@ const Chats = () => {
       </TouchableOpacity>
     );
   };
+
+  // Define renderItem function
   const renderItem = items => {
     return (
       <Item
@@ -171,11 +200,17 @@ const Chats = () => {
     );
   };
 
+  // State variable for refreshing
   const [refreshing, setRefreshing] = useState(false);
+
+  // On refresh function
   const onRefresh = () => {
     setRefreshing(true);
     AllChats();
   };
+
+  
+
   return (
     <SafeAreaView>
       {/* <Header title="Chat" headerShown={true}/> */}
@@ -207,13 +242,15 @@ const Chats = () => {
         null}
       </SafeAreaView>
       <View style={styles.container}>
-        <FlatList
+      {data?.length==0?(<View style={styles.notfound}><Text style={{color:"orange"}}>No Chat Found</Text></View>):
+      
+       ( <FlatList
           data={data}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           onRefresh={() => onRefresh()}
           refreshing={refreshing}
-        />
+        />)}
       </View>
     </SafeAreaView>
   );
@@ -226,6 +263,9 @@ const styles = StyleSheet.create({
     width: 'auto',
     height: '78.5%',
     backgroundColor: '#fff',
+  },
+   notfound:{
+  display:'flex',alignItems:'center',justifyContent:'center',height:windowHeight*0.5
   },
   text: {
     marginTop: 20,
@@ -246,7 +286,7 @@ const styles = StyleSheet.create({
   siders: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'pace-between',
     flexDirection: 'row',
   },
   headerContainer: {

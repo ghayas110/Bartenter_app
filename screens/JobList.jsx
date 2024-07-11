@@ -10,18 +10,18 @@ import {
   TextInput,
   Alert,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';  
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import SelectDropdown from 'react-native-select-dropdown';
-import FormTextInput from '../components/FormTextInput';
-import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
+
 import baseUrl from '../global';
 import Geolocation from '@react-native-community/geolocation';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const JobList = () => {
   const [userId, setuserId] = useState(0);
   const [data, setdata] = useState();
@@ -33,9 +33,6 @@ const JobList = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [users, setusers] = useState('');
-  const rating = ['1', '2', '3', '4', '5'];
-  const availabilty = ['No', 'Yes'];
-  const [searchQuery, setSearchQuery] = useState('');
   const [ListLoading, setListLoading] = useState(false);
 
   const handleSearch = text => {
@@ -51,7 +48,7 @@ const JobList = () => {
       setuserId(JSON.parse(value).user_data[0].id);
 
       Geolocation.requestAuthorization();
-      // ValidateUserSubscription(JSON.parse(value));
+
       Geolocation.getCurrentPosition(pos => {
         const crd = pos.coords;
         setPosition({
@@ -69,30 +66,7 @@ const JobList = () => {
     replacementFunction();
   }, [isFocused, priceRangeMax, priceRangeMin]);
 
-  const adUnitId =
-    Platform.OS == 'android'
-      ? 'ca-app-pub-9019633061186947/2536781695'
-      : 'ca-app-pub-9019633061186947/8118897977';
-  // const ValidateUserSubscription = async userss => {
-  //   try {
-  //     fetch(`${baseUrl}/subscription/CheckSubscription`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'x-api-key': 'BarTenderAPI',
-  //         accesstoken: `Bearer ${userss.access_token}`,
-  //       },
-  //     })
-  //       .then(response => response.json())
-  //       .then(dataa => {
-  //         const subscriptions = dataa.subscription_status[0];
-
-  //         setSubscribed(subscriptions);
-  //       });
-  //   } catch (error) {
-  //     Alert.alert('An error occurred while processing your request.');
-  //   }
-  // };
+  
 
   const LoadList = async (userss, pos) => {
     try {
@@ -126,18 +100,13 @@ const JobList = () => {
     }
   };
 
-  // useEffect(() => {
-  //   LoadList(userId)
-  //     }, [userId])
+  
   const Item = ({
-    id,
     name,
-    message,
     role,
     image,
     onPress,
-    sender,
-    seen_status,
+ 
   }) => (
     <TouchableOpacity
       onPress={onPress}
@@ -171,7 +140,7 @@ const JobList = () => {
   );
 
   const renderItem = ({item}) => (
-    // item.seen_status==0 && item.sender !==userId ?
+  
     <Item
       name={item.post_title}
       role={item.event_location}
@@ -182,7 +151,7 @@ const JobList = () => {
   );
   return (
     <SafeAreaView>
-      {/* <Header title="Chat" headerShown={true}/> */}
+   
       <SafeAreaView>
         <View style={styles.headerContainer}>
           <View style={styles.siders}>
@@ -265,13 +234,8 @@ const JobList = () => {
           </View>
         </View>
       </SafeAreaView>
-      {subscribed?.subscription_status != 1 ? (
-        <></>
-      ) : //   <BannerAd
-      //   unitId={adUnitId}
-      //   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-      // />
-      null}
+   
+     
       <View style={styles.container}>
         {ListLoading ? (
           <>
@@ -279,7 +243,8 @@ const JobList = () => {
               <ActivityIndicator />
             </View>
           </>
-        ) : (
+        ) :  data?.length==0?(<View style={styles.notfound}><Text style={{color:"orange"}}>No Job Found</Text></View>):(
+        
           <FlatList
             data={data}
             renderItem={renderItem}
@@ -298,6 +263,9 @@ const styles = StyleSheet.create({
     width: 'auto',
     height: '78.5%',
     backgroundColor: '#fff',
+  },
+  notfound:{
+  display:'flex',alignItems:'center',justifyContent:'center',height:windowHeight*0.5
   },
   text: {
     marginTop: 20,
